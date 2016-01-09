@@ -1,0 +1,18 @@
+exempi-rs
+
+Rust binding for Exempi, an XMP library.
+
+Exempi can be found at http://libopenraw.freedesktop.org/wiki/Exempi/
+
+It provide unsafe C API and a safer Rust API.
+
+exempi-rs source code is at:
+https://github.com/hfiguiere/exempi-rs
+
+Dependencies:
+exempi 2.2 must be installed and findable with pkg_config
+
+License: 2-clauses BSD.
+
+Maintainer:
+Hubert Figuière <hub@figuiere.net>
