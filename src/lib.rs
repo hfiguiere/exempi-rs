@@ -48,18 +48,15 @@ extern "C" {
 
 #[test]
 fn it_works() {
-    let inited: bool;
-    unsafe {
-        inited = xmp_init();
+    let inited = unsafe { xmp_init() };
 
-        assert!(inited);
+    assert!(inited);
 
-        let xf = xmp_files_new();
+    let xf = unsafe { xmp_files_new() };
 
-        assert!(!xf.is_null());
-        assert!(xmp_files_free(xf));
-        assert!(xmp_get_error() == 0);
+    assert!(!xf.is_null());
+    assert!(unsafe { xmp_files_free(xf) });
+    assert!(unsafe { xmp_get_error() } == 0);
 
-        xmp_terminate();
-    }
+    unsafe { xmp_terminate() };
 }
