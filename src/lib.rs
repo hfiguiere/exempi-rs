@@ -1,5 +1,7 @@
 
 pub mod c;
+pub mod xmp;
+pub mod xmpstring;
 pub mod xmpfile;
 
 /// Initialize the library

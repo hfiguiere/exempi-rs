@@ -39,9 +39,23 @@ extern "C" {
                           options: c_int) -> bool;
     pub fn xmp_files_close(xf: *mut XmpFile, options: c_int) -> bool;
 
+    pub fn xmp_files_get_new_xmp(xf: *mut XmpFile) -> *mut Xmp;
+    pub fn xmp_files_get_xmp(xf: *mut XmpFile, xmp: *mut Xmp) -> bool;
+    pub fn xmp_files_can_put_xmp(xf: *mut XmpFile, xmp: *mut Xmp) -> bool;
+    pub fn xmp_files_put_xmp(xf: *mut XmpFile, xmp: *mut Xmp) -> bool;
 
     pub fn xmp_files_free(xf: *mut XmpFile) -> bool;
 
+    pub fn xmp_files_get_file_info(xf: *mut XmpFile, fp: *mut XmpString,
+                                   options: *mut c_int, format: *mut c_int,
+                                   handler_flags: *mut c_int) -> bool;
+    pub fn xmp_files_check_file_format(p: *const c_char) -> c_int;
+
+    pub fn xmp_free(xmp: *mut Xmp) -> bool;
+
+    pub fn xmp_string_new() -> *mut XmpString;
+    pub fn xmp_string_free(s: *mut XmpString);
+    pub fn xmp_string_cstr(s: *mut XmpString) -> *const c_char;
 }
 
 #[test]
