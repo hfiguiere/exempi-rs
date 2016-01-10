@@ -10,7 +10,11 @@ exempi-rs source code is at:
 https://github.com/hfiguiere/exempi-rs
 
 Dependencies:
-exempi 2.2 must be installed and findable with pkg_config
+-Rust 1.5.0 (tested, other versions, YMMV)
+-exempi 2.2 must be installed and findable with pkg_config
+-crates (pulled by cargo):
+ -libc
+ -pkg-config
 
 License: 2-clauses BSD.
 
