@@ -24,7 +24,7 @@ impl XmpFile {
         }
     }
 
-    pub fn open(&self, p: &str, options: i32) -> bool {
+    pub fn open(&mut self, p: &str, options: i32) -> bool {
         if self.is_null() {
             return false;
         }
@@ -34,7 +34,7 @@ impl XmpFile {
         }
     }
 
-    pub fn close(&self, options: i32) -> bool {
+    pub fn close(&mut self, options: i32) -> bool {
         if self.is_null() {
             return false;
         }
@@ -57,7 +57,7 @@ impl XmpFile {
         if self.is_null() || xmp.is_null() {
             return false;
         }
-        unsafe { c::xmp_files_get_xmp(self.ptr, xmp.as_ptr()) }
+        unsafe { c::xmp_files_get_xmp(self.ptr, xmp.as_mut_ptr()) }
     }
 
     pub fn can_put_xmp(&self, xmp: &Xmp) -> bool {
@@ -66,7 +66,7 @@ impl XmpFile {
         }
         unsafe { c::xmp_files_can_put_xmp(self.ptr, xmp.as_ptr()) }
     }
-    pub fn put_xmp(&self, xmp: &Xmp) -> bool {
+    pub fn put_xmp(&mut self, xmp: &Xmp) -> bool {
         if self.is_null() || xmp.is_null() {
             return false;
         }
@@ -79,10 +79,10 @@ impl XmpFile {
         if self.is_null() {
             return false;
         }
-        let s: XmpString = XmpString::new();
+        let mut s: XmpString = XmpString::new();
 
         let result = unsafe {
-            c::xmp_files_get_file_info(self.ptr, s.as_ptr(),
+            c::xmp_files_get_file_info(self.ptr, s.as_mut_ptr(),
                                        options as *mut c_int,
                                        format as *mut c_int,
                                        handler_flags as *mut c_int)

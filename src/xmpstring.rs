@@ -16,7 +16,11 @@ impl XmpString {
         self.ptr.is_null()
     }
 
-    pub fn as_ptr(&self) -> *mut c::XmpString {
+    pub fn as_ptr(&self) -> *const c::XmpString {
+        self.ptr
+    }
+
+    pub fn as_mut_ptr(&mut self) -> *mut c::XmpString {
         self.ptr
     }
 
