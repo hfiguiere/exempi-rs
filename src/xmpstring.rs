@@ -1,4 +1,3 @@
-extern crate libc;
 
 use ::c;
 use std::str;
@@ -18,7 +17,7 @@ impl XmpString {
         self.ptr.is_null()
     }
 
-    pub fn ptr(&self) -> *mut c::XmpString {
+    pub fn c_ptr(&self) -> *mut c::XmpString {
         self.ptr
     }
 

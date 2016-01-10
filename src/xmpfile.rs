@@ -82,7 +82,7 @@ impl XmpFile {
         let s: XmpString = XmpString::new();
 
         let result = unsafe {
-            c::xmp_files_get_file_info(self.ptr, s.ptr(),
+            c::xmp_files_get_file_info(self.ptr, s.c_ptr(),
                                        options as *mut c_int,
                                        format as *mut c_int,
                                        handler_flags as *mut c_int)
