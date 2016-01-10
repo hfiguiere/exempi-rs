@@ -7,7 +7,6 @@ pub struct XmpString {
     ptr: *mut c::XmpString
 }
 
-
 impl XmpString {
     pub fn new() -> XmpString {
         XmpString { ptr: unsafe { c::xmp_string_new() } }
@@ -17,18 +16,17 @@ impl XmpString {
         self.ptr.is_null()
     }
 
-    pub fn c_ptr(&self) -> *mut c::XmpString {
+    pub fn as_ptr(&self) -> *mut c::XmpString {
         self.ptr
     }
 
     // XXX properly deal with the utf8 error
     pub fn to_str(&self) -> &str {
-        let s = unsafe { CStr::from_ptr(c::xmp_string_cstr(self.ptr)) };
-        let utf8 = str::from_utf8(s.to_bytes());
-        if utf8.is_ok() {
-            return utf8.unwrap();
+        unsafe {
+            let s = CStr::from_ptr(c::xmp_string_cstr(self.ptr));
+            // we are supposed to receive UTF8 from the library.
+            str::from_utf8_unchecked(s.to_bytes())
         }
-        ""
     }
 }
 

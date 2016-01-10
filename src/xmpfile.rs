@@ -57,20 +57,20 @@ impl XmpFile {
         if self.is_null() || xmp.is_null() {
             return false;
         }
-        unsafe { c::xmp_files_get_xmp(self.ptr, xmp.c_ptr()) }
+        unsafe { c::xmp_files_get_xmp(self.ptr, xmp.as_ptr()) }
     }
 
     pub fn can_put_xmp(&self, xmp: &Xmp) -> bool {
         if self.is_null() || xmp.is_null() {
             return false;
         }
-        unsafe { c::xmp_files_can_put_xmp(self.ptr, xmp.c_ptr()) }
+        unsafe { c::xmp_files_can_put_xmp(self.ptr, xmp.as_ptr()) }
     }
     pub fn put_xmp(&self, xmp: &Xmp) -> bool {
         if self.is_null() || xmp.is_null() {
             return false;
         }
-        unsafe { c::xmp_files_put_xmp(self.ptr, xmp.c_ptr()) }
+        unsafe { c::xmp_files_put_xmp(self.ptr, xmp.as_ptr()) }
     }
 
     pub fn get_file_info(&self, file_path: &mut String,
@@ -82,7 +82,7 @@ impl XmpFile {
         let s: XmpString = XmpString::new();
 
         let result = unsafe {
-            c::xmp_files_get_file_info(self.ptr, s.c_ptr(),
+            c::xmp_files_get_file_info(self.ptr, s.as_ptr(),
                                        options as *mut c_int,
                                        format as *mut c_int,
                                        handler_flags as *mut c_int)

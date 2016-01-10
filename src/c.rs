@@ -2,7 +2,7 @@
 #[link(name = "exempi")]
 
 extern crate libc;
-use self::libc::{c_int, c_char};
+use self::libc::{c_int, c_char, size_t};
 
 pub enum Xmp {}
 pub enum XmpFile {}
@@ -51,7 +51,24 @@ extern "C" {
                                    handler_flags: *mut c_int) -> bool;
     pub fn xmp_files_check_file_format(p: *const c_char) -> c_int;
 
+    pub fn xmp_register_namespace(uri: *const c_char, prefix: *const c_char,
+                                  reg_prefix: *mut XmpString) -> bool;
+    pub fn xmp_namespace_prefix(ns: *const c_char,
+                                prefix: *mut XmpString) -> bool;
+    pub fn xmp_prefix_namespace_uri(prefix: *const c_char,
+                                    ns: *mut XmpString) -> bool;
+
+    pub fn xmp_new_empty() -> *mut Xmp;
+    pub fn xmp_new(buffer: *const c_char, len: size_t) -> *mut Xmp;
+    pub fn xmp_copy(xmp: *mut Xmp) -> *mut Xmp;
     pub fn xmp_free(xmp: *mut Xmp) -> bool;
+    pub fn xmp_parse(xmp: *mut Xmp, buffer: *const c_char, len: size_t) -> bool;
+    pub fn xmp_serialize(xmp: *mut Xmp, buf: *mut XmpString, options: c_int,
+                         padding: u32) -> bool;
+    pub fn xmp_serialize_and_format(xmp: *mut Xmp, buf: *mut XmpString,
+                                    options: u32, padding: u32,
+                                    newline: *const c_char, tab: *const c_char,
+                                    indent: i32) -> bool;
 
     pub fn xmp_string_new() -> *mut XmpString;
     pub fn xmp_string_free(s: *mut XmpString);
