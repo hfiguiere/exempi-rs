@@ -41,3 +41,12 @@ impl Drop for XmpString {
         }
     }
 }
+
+impl Eq for XmpString {
+
+}
+impl PartialEq for XmpString {
+    fn eq(&self, other: &XmpString) -> bool {
+        self.to_str() == other.to_str()
+    }
+}
