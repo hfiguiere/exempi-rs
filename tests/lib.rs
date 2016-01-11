@@ -1,8 +1,6 @@
 extern crate exempi;
 
 use exempi::*;
-use exempi::xmpstring::XmpString;
-use exempi::xmp::Xmp;
 
 #[test]
 fn libary_tests() {

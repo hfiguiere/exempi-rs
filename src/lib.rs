@@ -8,6 +8,10 @@ pub mod xmpiterator;
 
 use std::ffi::{CString};
 use std::cmp::Ordering;
+pub use ::xmp::Xmp;
+pub use ::xmpfile::XmpFile;
+pub use ::xmpstring::XmpString;
+pub use ::xmpiterator::XmpIterator;
 
 /// Initialize the library
 pub fn init() -> bool {
@@ -96,3 +100,4 @@ impl Ord for XmpDateTime {
         }
     }
 }
+
