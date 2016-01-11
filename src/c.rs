@@ -179,7 +179,7 @@ extern "C" {
 }
 
 #[test]
-fn it_works() {
+fn native_call_works() {
     let inited = unsafe { xmp_init() };
 
     assert!(inited);
@@ -190,5 +190,11 @@ fn it_works() {
     assert!(unsafe { xmp_files_free(xf) });
     assert!(unsafe { xmp_get_error() } == 0);
 
-    unsafe { xmp_terminate() };
+    let xs = unsafe { xmp_string_new() };
+    assert!(!xs.is_null());
+    let s = unsafe { xmp_string_cstr(xs) };
+    assert!(!s.is_null());
+    unsafe { xmp_string_free(xs); }
+
+    unsafe { xmp_terminate(); }
 }
