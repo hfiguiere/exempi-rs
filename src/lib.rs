@@ -1,6 +1,6 @@
 extern crate libc;
+extern crate exempi_sys as c;
 
-pub mod c;
 pub mod xmp;
 pub mod xmpstring;
 pub mod xmpfile;

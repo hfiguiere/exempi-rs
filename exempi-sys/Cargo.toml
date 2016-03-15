@@ -1,10 +1,12 @@
 [package]
-name = "exempi"
+name = "exempi-sys"
 version = "2.3.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD"
-keyword = ["metadata", "tags", "xmp"]
+build = "build.rs"
 
 [dependencies]
 libc = "0.2"
-exempi-sys = { path = "exempi-sys", version = "2.3.0" }
+
+[build-dependencies]
+pkg-config = "0.3"

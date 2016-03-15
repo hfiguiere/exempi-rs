@@ -7,7 +7,7 @@ use std::ffi::{CString};
 use self::libc::{c_int};
 
 pub struct XmpFile {
-    ptr: * mut c::XmpFile
+    ptr: *mut c::XmpFile,
 }
 
 impl XmpFile {

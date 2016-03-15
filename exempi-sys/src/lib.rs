@@ -1,8 +1,8 @@
 
 #[link(name = "exempi")]
-
 extern crate libc;
-use self::libc::{c_int, c_char, size_t};
+
+use libc::{c_int, c_char, size_t};
 
 pub enum Xmp {}
 pub enum XmpFile {}
