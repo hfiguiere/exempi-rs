@@ -11,17 +11,26 @@ pub struct Xmp {
 }
 
 impl Xmp {
-    pub fn from_ptr(ptr: *mut c::Xmp) -> Xmp {
+    /// Construct from a native ptr. Will own it.
+    pub fn from(ptr: *mut c::Xmp) -> Xmp {
         Xmp { ptr: ptr }
     }
+    /// New Xmp object
     pub fn new() -> Xmp {
         Xmp { ptr: unsafe { c::xmp_new_empty() } }
     }
-    pub fn from_buffer(buf: &[u8]) -> Xmp {
-        Xmp { ptr: unsafe {
+    /// New Xmp object a byte buffer.
+    /// Return None if parsing failed.
+    pub fn from_buffer(buf: &[u8]) -> Option<Xmp> {
+        let ptr = unsafe {
             c::xmp_new(buf.as_ptr() as *const c_char, buf.len())
-        } }
+        };
+        if ptr.is_null() {
+            return None;
+        }
+        Some(Xmp::from(ptr))
     }
+    /// Parse buff into a Xmp
     pub fn parse(&mut self, buf: &[u8]) -> bool {
         unsafe {
             c::xmp_parse(self.ptr,
@@ -281,9 +290,9 @@ impl Clone for Xmp {
     fn clone(&self) -> Self {
         if self.is_null() {
             // inside ptr is NULL. cloning a null object.
-            return Xmp { ptr: self.ptr };
+            return Xmp::from(self.ptr);
         }
-        Xmp { ptr: unsafe { c::xmp_copy(self.ptr) } }
+        Xmp::from(unsafe { c::xmp_copy(self.ptr) })
     }
 }
 

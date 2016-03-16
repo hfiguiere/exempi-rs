@@ -1,17 +1,17 @@
 extern crate libc;
 extern crate exempi_sys as c;
 
-pub mod xmp;
-pub mod xmpstring;
-pub mod xmpfile;
-pub mod xmpiterator;
+mod xmp;
+mod xmpstring;
+mod xmpfile;
+mod xmpiterator;
 
 use std::ffi::{CString};
 use std::cmp::Ordering;
-pub use ::xmp::Xmp;
-pub use ::xmpfile::XmpFile;
-pub use ::xmpstring::XmpString;
-pub use ::xmpiterator::XmpIterator;
+pub use ::xmp::Xmp as Xmp;
+pub use ::xmpfile::XmpFile as XmpFile;
+pub use ::xmpstring::XmpString as XmpString;
+pub use ::xmpiterator::XmpIterator as XmpIterator;
 
 /// Initialize the library
 pub fn init() -> bool {
@@ -24,6 +24,7 @@ pub fn terminate() {
 }
 
 /// Get the last error code on the thread
+/// Set when a function return false or None.
 pub fn get_error() -> i32 {
     unsafe { c::xmp_get_error() as i32 }
 }
@@ -53,12 +54,14 @@ pub struct XmpDateTime {
 
 impl XmpDateTime {
     /// construct from the native C type
-    pub fn wrap(d: c::XmpDateTime) -> XmpDateTime {
+    pub fn from(d: c::XmpDateTime) -> XmpDateTime {
         XmpDateTime { c: d }
     }
+    /// Return the underlying pointer
     pub fn as_ptr(&self) -> *const c::XmpDateTime {
         &self.c as *const c::XmpDateTime
     }
+    /// Return the underlying mutable pointer
     pub fn as_mut_ptr(&mut self) -> *mut c::XmpDateTime {
         &mut self.c as *mut c::XmpDateTime
     }
