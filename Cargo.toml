@@ -3,7 +3,7 @@ name = "exempi"
 version = "2.3.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD"
-keyword = ["metadata", "tags", "xmp"]
+keywords = ["metadata", "tags", "xmp"]
 
 [dependencies]
 libc = "0.2"
