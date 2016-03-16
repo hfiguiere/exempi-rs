@@ -4,7 +4,10 @@ use ::c;
 use ::xmp::Xmp;
 use ::xmpstring::XmpString;
 use std::ffi::{CString};
-use self::libc::{c_int};
+use ::c::OpenFlags;
+use ::c::CloseFlags;
+use ::c::FileType;
+use ::c::FormatOptions;
 
 pub struct XmpFile {
     ptr: *mut c::XmpFile,
@@ -15,31 +18,31 @@ impl XmpFile {
         XmpFile { ptr: unsafe { c::xmp_files_new() } }
     }
 
-    pub fn open_new(p: &str, options: i32) -> XmpFile {
+    pub fn open_new(p: &str, options: OpenFlags) -> XmpFile {
         let pp: CString = CString::new(p).unwrap();
         XmpFile {
             ptr: unsafe {
-                c::xmp_files_open_new(pp.as_ptr(), options as c_int)
+                c::xmp_files_open_new(pp.as_ptr(), options)
             }
         }
     }
 
-    pub fn open(&mut self, p: &str, options: i32) -> bool {
+    pub fn open(&mut self, p: &str, options: OpenFlags) -> bool {
         if self.is_null() {
             return false;
         }
         let pp: CString = CString::new(p).unwrap();
         unsafe {
-            c::xmp_files_open(self.ptr, pp.as_ptr(), options as c_int)
+            c::xmp_files_open(self.ptr, pp.as_ptr(), options)
         }
     }
 
-    pub fn close(&mut self, options: i32) -> bool {
+    pub fn close(&mut self, options: CloseFlags) -> bool {
         if self.is_null() {
             return false;
         }
         unsafe {
-            c::xmp_files_close(self.ptr, options as c_int)
+            c::xmp_files_close(self.ptr, options)
         }
     }
 
@@ -74,8 +77,8 @@ impl XmpFile {
     }
 
     pub fn get_file_info(&self, file_path: &mut String,
-                         options: &mut i32, format: &mut i32,
-                         handler_flags: &mut i32) -> bool {
+                         options: &mut OpenFlags, format: &mut FileType,
+                         handler_flags: &mut FormatOptions) -> bool {
         if self.is_null() {
             return false;
         }
@@ -83,19 +86,24 @@ impl XmpFile {
 
         let result = unsafe {
             c::xmp_files_get_file_info(self.ptr, s.as_mut_ptr(),
-                                       options as *mut c_int,
-                                       format as *mut c_int,
-                                       handler_flags as *mut c_int)
+                                       options, format,
+                                       handler_flags)
         };
 
         file_path.push_str(s.to_str());
         result
     }
 
-    pub fn check_file_format(p: &str) -> i32 {
+    pub fn check_file_format(p: &str) -> FileType {
         let pp: CString = CString::new(p).unwrap();
         unsafe { c::xmp_files_check_file_format(pp.as_ptr()) }
     }
+
+    pub fn get_format_info(format: FileType,
+                           options: &mut FormatOptions) -> bool {
+        unsafe { c::xmp_files_get_format_info(format, options) }
+    }
+
 }
 
 impl Drop for XmpFile {

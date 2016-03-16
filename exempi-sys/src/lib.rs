@@ -24,23 +24,114 @@ pub struct XmpDateTime {
     pub nano_second: i32,
 }
 
-pub const XMP_OPEN_NOOPTION: c_int = 0x00000000;        /**< No open option */
-pub const XMP_OPEN_READ: c_int = 0x00000001;            /**< Open for read-only access. */
-pub const XMP_OPEN_FORUPDATE: c_int = 0x00000002;       /**< Open for reading and writing. */
-pub const XMP_OPEN_ONLYXMP: c_int = 0x00000004;         /**< Only the XMP is wanted, allows space/time optimizations. */
-pub const XMP_OPEN_CACHETNAIL: c_int = 0x00000008;      /**< Cache thumbnail if possible, GetThumbnail will be called. */
-pub const XMP_OPEN_STRICTLY: c_int = 0x00000010;        /**< Be strict about locating XMP and reconciling with other forms. */
-pub const XMP_OPEN_USESMARTHANDLER: c_int = 0x00000020; /**< Require the use of a smart handler. */
-pub const XMP_OPEN_USEPACKETSCANNING: c_int = 0x00000040; /**< Force packet scanning, don't use a smart handler. */
-pub const XMP_OPEN_LIMITSCANNING: c_int = 0x00000080;     /**< Only packet scan files "known" to need scanning. */
-pub const XMP_OPEN_REPAIR_FILE: c_int = 0x00000100; /**< Attempt to repair a file opened for update, default is to not open (throw an exception). */
-pub const XMP_OPEN_OPTIMIZEFILELAYOUT: c_int = 0x00000200; /**< Optimize MPEG4 to support stream when updating This can take some time */
-pub const XMP_OPEN_INBACKGROUND: c_int = 0x10000000; /**< Set if calling from background thread. */
+#[derive(Clone, Copy)]
+#[repr(u32)]
+pub enum OpenFlags {
+    /// No open option
+    None = 0x00000000,
+    /// Open for read-only access.
+    Read = 0x00000001,
+    /// Open for reading and writing.
+    ForUpdate = 0x00000002,
+    /// Only the XMP is wanted, allows space/time optimizations.
+    OnlyXmp = 0x00000004,
+    /// Cache thumbnail if possible, GetThumbnail will be called.
+    CacheThumbnail = 0x00000008,
+    /// Be strict about locating XMP and reconciling with other forms.
+    Strictly = 0x00000010,
+    /// Require the use of a smart handler.
+    UseSmartHandler = 0x00000020,
+    /// Force packet scanning, don't use a smart handler.
+    UsePacketScanning = 0x00000040,
+    /// Only packet scan files "known" to need scanning.
+    LimitScanning = 0x00000080,
+    /// Attempt to repair a file opened for update, default is to not open (throw an exception).
+    RepairFile = 0x00000100,
+    /// Optimize MPEG4 to support stream when updating This can take some time
+    OptimizeFileLayout = 0x00000200,
+    /// Set if calling from background thread.
+    InBackground = 0x10000000,
+}
+
+#[derive(Clone, Copy)]
+#[repr(u32)]
+/// Public file formats.
+pub enum FileType {
+    PDF = 0x50444620u32, /* 'PDF ' */
+    PS = 0x50532020u32,  /* 'PS  ', general PostScript following DSC
+                                  conventions. */
+    EPS = 0x45505320u32, /* 'EPS ', encapsulated PostScript. */
+
+    JPEG = 0x4A504547u32,   /* 'JPEG' */
+    JPEG2K = 0x4A505820u32, /* 'JPX ', ISO 15444-1 */
+    TIFF = 0x54494646u32,   /* 'TIFF' */
+    GIF = 0x47494620u32,    /* 'GIF ' */
+    PNG = 0x504E4720u32,    /* 'PNG ' */
+
+    SWF = 0x53574620u32, /* 'SWF ' */
+    FLA = 0x464C4120u32, /* 'FLA ' */
+    FLV = 0x464C5620u32, /* 'FLV ' */
+
+    MOV = 0x4D4F5620u32,   /* 'MOV ', Quicktime */
+    AVI = 0x41564920u32,   /* 'AVI ' */
+    CIN = 0x43494E20u32,   /* 'CIN ', Cineon */
+    WAV = 0x57415620u32,   /* 'WAV ' */
+    MP3 = 0x4D503320u32,   /* 'MP3 ' */
+    SES = 0x53455320u32,   /* 'SES ', Audition session */
+    CEL = 0x43454C20u32,   /* 'CEL ', Audition loop */
+    MPEG = 0x4D504547u32,  /* 'MPEG' */
+    MPEG2 = 0x4D503220u32, /* 'MP2 ' */
+    MPEG4 = 0x4D503420u32, /* 'MP4 ', ISO 14494-12 and -14 */
+    WMAV = 0x574D4156u32,  /* 'WMAV', Windows Media Audio and Video */
+    AIFF = 0x41494646u32,  /* 'AIFF' */
+
+    HTML = 0x48544D4Cu32, /* 'HTML' */
+    XML = 0x584D4C20u32,  /* 'XML ' */
+    TEXT = 0x74657874u32, /* 'text' */
+
+    /* Adobe application file formats. */
+    Photoshop = 0x50534420u32,   /* 'PSD ' */
+    Illustrator = 0x41492020u32, /* 'AI  ' */
+    InDesign = 0x494E4444u32,    /* 'INDD' */
+    AEProject = 0x41455020u32,   /* 'AEP ' */
+    AEProjTemplate =
+        0x41455420u32, /* 'AET ', After Effects Project Template */
+    AEFilterPreset = 0x46465820u32,  /* 'FFX ' */
+    EncoreProject = 0x4E434F52u32,   /* 'NCOR' */
+    PremiereProject = 0x5052504Au32, /* 'PRPJ' */
+    PremiereTitle = 0x5052544Cu32,   /* 'PRTL' */
+
+    /* Catch all. */
+    Unknown = 0x20202020u32 /* '    ' */
+}
+
+#[derive(Clone, Copy)]
+#[repr(u32)]
+pub enum FormatOptions {
+    CanInjectXMP = 0x00000001,
+    CanExpand = 0x00000002,
+    CanRewrite = 0x00000004,
+    PrefersInPlace = 0x00000008,
+    CanReconcile = 0x00000010,
+    AllowsOnlyXMP = 0x00000020,
+    ReturnsRawPacket = 0x00000040,
+    HandlerOwnsFile = 0x00000100,
+    AllowSafeUpdate = 0x00000200,
+    NeedsReadOnlyPacket = 0x00000400,
+    UseSidecarXMP = 0x00000800,
+    FolderBasedFormat = 0x00001000,
+}
 
 
+#[derive(Clone, Copy)]
+#[repr(u32)]
+pub enum CloseFlags {
+    /// No close option
+    None = 0x0000,
+    /// Write into a temporary file and swap for crash safety.
+    SafeUpdate = 0x0001,
+}
 
-pub const XMP_CLOSE_NOOPTION: c_int = 0x0000;  /**< No close option */
-pub const XMP_CLOSE_SAFEUPDATE: c_int = 0x0001; /**< Write into a temporary file and swap for crash safety. */
 
 extern "C" {
     pub fn xmp_init() -> bool;
@@ -49,10 +140,11 @@ extern "C" {
     pub fn xmp_get_error() -> c_int;
 
     pub fn xmp_files_new() -> *mut XmpFile;
-    pub fn xmp_files_open_new(p: *const c_char, options: c_int) -> *mut XmpFile;
+    pub fn xmp_files_open_new(p: *const c_char,
+                              options: OpenFlags) -> *mut XmpFile;
     pub fn xmp_files_open(xf: *mut XmpFile, p:  *const c_char,
-                          options: c_int) -> bool;
-    pub fn xmp_files_close(xf: *mut XmpFile, options: c_int) -> bool;
+                          options: OpenFlags) -> bool;
+    pub fn xmp_files_close(xf: *mut XmpFile, options: CloseFlags) -> bool;
 
     pub fn xmp_files_get_new_xmp(xf: *mut XmpFile) -> *mut Xmp;
     pub fn xmp_files_get_xmp(xf: *mut XmpFile, xmp: *mut Xmp) -> bool;
@@ -62,9 +154,13 @@ extern "C" {
     pub fn xmp_files_free(xf: *mut XmpFile) -> bool;
 
     pub fn xmp_files_get_file_info(xf: *mut XmpFile, fp: *mut XmpString,
-                                   options: *mut c_int, format: *mut c_int,
-                                   handler_flags: *mut c_int) -> bool;
-    pub fn xmp_files_check_file_format(p: *const c_char) -> c_int;
+                                   options: *mut OpenFlags,
+                                   format: *mut FileType,
+                                   handler_flags: *mut FormatOptions) -> bool;
+    pub fn xmp_files_check_file_format(path: *const c_char) -> FileType;
+
+    pub fn xmp_files_get_format_info(format: FileType,
+                                     options: *mut FormatOptions) -> bool;
 
     pub fn xmp_register_namespace(uri: *const c_char, prefix: *const c_char,
                                   reg_prefix: *mut XmpString) -> bool;
