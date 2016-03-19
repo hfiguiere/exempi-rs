@@ -32,18 +32,20 @@ fn libary_tests() {
 
     assert!(!xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
     assert!(xmpblock.set_property("http://rust.figuiere.net/ns/rust/", "test",
-                                   "foobar", 0));
+                                   "foobar", XmpPropBits::None));
     assert!(xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
     let mut value = XmpString::new();
-    let mut optionbits: u32 = 0;
+    let mut optionbits: XmpPropBits = XmpPropBits::None;
     assert!(xmpblock.get_property("http://rust.figuiere.net/ns/rust/", "test",
                                   &mut value, &mut optionbits));
     assert!(value.to_str() == "foobar");
-    assert!(optionbits == 0);
+    assert!(optionbits == XmpPropBits::None);
 
     let mut buffer = XmpString::new();
     // XXX we should use the constants... that we need to define.
-    assert!(xmpblock.serialize(&mut buffer, 0x50, 0));
+    assert!(xmpblock.serialize(&mut buffer,
+                               XmpSerializeBits::OmitPacketWrapper |
+                               XmpSerializeBits::UseCompactFormat, 0));
     println!("{}", buffer.to_str());
 
     exempi::terminate();

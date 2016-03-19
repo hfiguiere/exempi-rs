@@ -8,10 +8,17 @@ mod xmpiterator;
 
 use std::ffi::{CString};
 use std::cmp::Ordering;
-pub use ::xmp::Xmp as Xmp;
-pub use ::xmpfile::XmpFile as XmpFile;
-pub use ::xmpstring::XmpString as XmpString;
-pub use ::xmpiterator::XmpIterator as XmpIterator;
+pub use xmp::Xmp as Xmp;
+pub use xmpfile::XmpFile as XmpFile;
+pub use xmpstring::XmpString as XmpString;
+pub use xmpiterator::XmpIterator as XmpIterator;
+pub use c::PropBits as XmpPropBits;
+pub use c::SerializeBits as XmpSerializeBits;
+pub use c::OpenFlags as XmpOpenFlags;
+pub use c::CloseFlags as XmpCloseFlags;
+pub use c::FileType as XmpFileType;
+pub use c::IterBits as XmpIterBits;
+pub use c::IterSkipBits as XmpIterSkipBits;
 
 /// Initialize the library
 pub fn init() -> bool {
@@ -53,15 +60,15 @@ pub struct XmpDateTime {
 }
 
 impl XmpDateTime {
-    /// construct from the native C type
+    /// Construct from the native C type
     pub fn from(d: c::XmpDateTime) -> XmpDateTime {
         XmpDateTime { c: d }
     }
-    /// Return the underlying pointer
+    /// Return the native pointer
     pub fn as_ptr(&self) -> *const c::XmpDateTime {
         &self.c as *const c::XmpDateTime
     }
-    /// Return the underlying mutable pointer
+    /// Return the native mutable pointer
     pub fn as_mut_ptr(&mut self) -> *mut c::XmpDateTime {
         &mut self.c as *mut c::XmpDateTime
     }

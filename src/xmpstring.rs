@@ -1,5 +1,5 @@
 
-use ::c;
+use c;
 use std::str;
 use std::ffi::{CStr};
 
@@ -16,7 +16,7 @@ impl XmpString {
         XmpString { ptr: unsafe { c::xmp_string_new() } }
     }
 
-    /// Underlying string is NULL
+    /// Native pointer is NULL
     pub fn is_null(&self) -> bool {
         self.ptr.is_null()
     }

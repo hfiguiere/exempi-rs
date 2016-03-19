@@ -1,13 +1,13 @@
 extern crate libc;
 
-use ::c;
-use ::xmp::Xmp;
-use ::xmpstring::XmpString;
+use c;
+use xmp::Xmp;
+use xmpstring::XmpString;
 use std::ffi::{CString};
-use ::c::OpenFlags;
-use ::c::CloseFlags;
-use ::c::FileType;
-use ::c::FormatOptions;
+use c::OpenFlags;
+use c::CloseFlags;
+use c::FileType;
+use c::FormatOptionBits;
 
 pub struct XmpFile {
     ptr: *mut c::XmpFile,
@@ -97,7 +97,7 @@ impl XmpFile {
     /// Get info from the XmpFile.
     pub fn get_file_info(&self, file_path: &mut String,
                          options: &mut OpenFlags, format: &mut FileType,
-                         handler_flags: &mut FormatOptions) -> bool {
+                         handler_flags: &mut FormatOptionBits) -> bool {
         if self.is_null() {
             return false;
         }
@@ -121,7 +121,7 @@ impl XmpFile {
 
     /// Get FormatOptions for the FileType
     pub fn get_format_info(format: FileType,
-                           options: &mut FormatOptions) -> bool {
+                           options: &mut FormatOptionBits) -> bool {
         unsafe { c::xmp_files_get_format_info(format, options) }
     }
 
