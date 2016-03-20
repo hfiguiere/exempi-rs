@@ -1,5 +1,7 @@
 extern crate libc;
 extern crate exempi_sys as c;
+#[macro_use]
+extern crate bitflags;
 
 mod xmp;
 mod xmpstring;
@@ -9,16 +11,13 @@ mod xmpiterator;
 use std::ffi::{CString};
 use std::cmp::Ordering;
 pub use xmp::Xmp as Xmp;
+pub use xmp::flags::*;
 pub use xmpfile::XmpFile as XmpFile;
+pub use xmpfile::flags::*;
 pub use xmpstring::XmpString as XmpString;
 pub use xmpiterator::XmpIterator as XmpIterator;
-pub use c::PropBits as XmpPropBits;
-pub use c::SerializeBits as XmpSerializeBits;
-pub use c::OpenFlags as XmpOpenFlags;
-pub use c::CloseFlags as XmpCloseFlags;
 pub use c::FileType as XmpFileType;
-pub use c::IterBits as XmpIterBits;
-pub use c::IterSkipBits as XmpIterSkipBits;
+pub use xmpiterator::flags::*;
 
 /// Initialize the library
 pub fn init() -> bool {

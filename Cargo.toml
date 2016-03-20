@@ -6,5 +6,6 @@ license = "BSD"
 keywords = ["metadata", "tags", "xmp"]
 
 [dependencies]
+bitflags = "0.5.0"
 libc = "0.2"
 exempi-sys = { path = "exempi-sys", version = "2.3.0" }
