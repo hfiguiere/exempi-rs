@@ -245,6 +245,7 @@ extern "C" {
     pub fn xmp_string_new() -> *mut XmpString;
     pub fn xmp_string_free(s: *mut XmpString);
     pub fn xmp_string_cstr(s: *const XmpString) -> *const c_char;
+    pub fn xmp_string_len(s: *const XmpString) -> size_t;
 
     pub fn xmp_iterator_new() -> *mut XmpIterator;
     pub fn xmp_iterator_free(i: *mut XmpIterator) -> bool;

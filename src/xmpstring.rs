@@ -31,6 +31,14 @@ impl XmpString {
         self.ptr
     }
 
+    /// Return the length of the string
+    pub fn len(&self) -> usize {
+        if self.ptr.is_null() {
+            return 0;
+        }
+        unsafe { c::xmp_string_len(self.ptr) }
+    }
+
     /// Convert to a str
     // XXX properly deal with the utf8 error
     pub fn to_str(&self) -> &str {
