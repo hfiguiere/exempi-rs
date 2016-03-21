@@ -92,12 +92,17 @@ pub mod flags {
 	    const _UTF32_BIT           = 0x0004u32,
 
 	    const SERIAL_ENCODINGMASK        = 0x0007u32,
+            /// Serialize to UTF-8 (default)
 	    const SERIAL_ENCODEUTF8          = 0u32,
+            /// Serialize to UTF-16 BE (big endian)
 	    const SERIAL_ENCODEUTF16BIG      = _UTF16_BIT.bits,
+            /// Serialize to UTF-16 LE (little endian)
 	    const SERIAL_ENCODEUTF16LITTLE   =
                 _UTF16_BIT.bits
                 | _LITTLEENDIAN_BIT.bits,
+            /// Serialize to UTF-32 BE (big endian)
 	    const SERIAL_ENCODEUTF32BIG      = _UTF32_BIT.bits,
+            /// Serialize to UTF-32 LE (little endian)
 	    const SERIAL_ENCODEUTF32LITTLE   =
                 _UTF32_BIT.bits
                 | _LITTLEENDIAN_BIT.bits,

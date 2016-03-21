@@ -9,6 +9,7 @@ use c::XmpPacketInfo as PacketInfo;
 
 pub mod flags {
     bitflags! {
+        /// Flag options for opening files.
         pub flags OpenFlags: u32 {
             /// No open option
             const OPEN_NONE = 0x00000000,
@@ -38,6 +39,7 @@ pub mod flags {
     }
 
     bitflags! {
+        /// Flag options to close files.
         pub flags CloseFlags: u32 {
             /// No close option
             const CLOSE_NONE = 0x0000,
@@ -47,19 +49,32 @@ pub mod flags {
     }
 
     bitflags! {
+        /// Result flage for file / format infos.
         pub flags FormatOptionFlags: u32 {
             const FORMAT_NONE = 0,
+            /// Can inject first-time XMP into an existing file.
 	    const FORMAT_CAN_INJECT_XMP = 0x00000001,
+            /// Can expand XMP or other metadata in an existing file.
 	    const FORMAT_CAN_EXPAND = 0x00000002,
+            /// Can copy one file to another, writing new metadata.
 	    const FORMAT_CAN_REWRITE = 0x00000004,
+            /// Can expand, but prefers in-place update.
 	    const FORMAT_PREFERS_IN_PLACE = 0x00000008,
+            /// Supports reconciliation between XMP and other forms.
 	    const FORMAT_CAN_RECONCILE = 0x00000010,
+            /// Allows access to just the XMP, ignoring other forms.
 	    const FORMAT_ALLOWS_ONLY_XMP = 0x00000020,
+            /// File handler returns raw XMP packet information.
 	    const FORMAT_RETURNS_RAW_PACKET = 0x00000040,
+            /// The file handler does the file open and close.
 	    const FORMAT_HANDLER_OWNS_FILE = 0x00000100,
+            /// The file handler allows crash-safe file updates.
 	    const FORMAT_ALLOW_SAFE_UPDATE = 0x00000200,
+            /// The file format needs the XMP packet to be read-only.
 	    const FORMAT_NEEDS_READONLY_PACKET = 0x00000400,
+            /// The file handler uses a "sidecar" file for the XMP.
 	    const FORMAT_USE_SIDECAR_XMP = 0x00000800,
+            /// The format is folder oriented, for example the P2 video format.
 	    const FORMAT_FOLDER_BASED_FORMAT = 0x00001000,
         }
     }
