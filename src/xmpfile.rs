@@ -5,6 +5,7 @@ use xmp::Xmp;
 use xmpstring::XmpString;
 use std::ffi::{CString};
 use c::FileType;
+use c::XmpPacketInfo as PacketInfo;
 
 pub mod flags {
     bitflags! {
@@ -137,12 +138,42 @@ impl XmpFile {
         unsafe { c::xmp_files_get_xmp(self.ptr, xmp.as_mut_ptr()) }
     }
 
+    /// Get the xmp packet as a string.
+    pub fn get_xmp_xmpstring(&self, packet: &mut XmpString,
+                             info: &mut PacketInfo) -> bool {
+        if self.is_null() || packet.is_null() {
+            return false;
+        }
+        unsafe { c::xmp_files_get_xmp_xmpstring(self.ptr,
+                                                packet.as_mut_ptr(),
+                                                info as *mut PacketInfo) }
+    }
+
     /// Return true if it can put the Xmp into the XmpFile.
     pub fn can_put_xmp(&self, xmp: &Xmp) -> bool {
         if self.is_null() || xmp.is_null() {
             return false;
         }
         unsafe { c::xmp_files_can_put_xmp(self.ptr, xmp.as_ptr()) }
+    }
+
+    /// Return true if it can put the XmpString packet into the XmpFile.
+    pub fn can_put_xmp_xmpstring(&self, xmp_packet: &XmpString) -> bool {
+        if self.is_null() || xmp_packet.is_null() {
+            return false;
+        }
+        unsafe { c::xmp_files_can_put_xmp_xmpstring(self.ptr,
+                                                    xmp_packet.as_ptr()) }
+    }
+
+    /// Return true if it can put the XmpString packet into the XmpFile.
+    pub fn can_put_xmp_str(&self, xmp_packet: &str) -> bool {
+        if self.is_null() {
+            return false;
+        }
+        let pp = CString::new(xmp_packet).unwrap();
+        unsafe { c::xmp_files_can_put_xmp_cstr(self.ptr,
+                                               pp.as_ptr(), xmp_packet.len()) }
     }
 
     /// Put the Xmp into the XmpFile

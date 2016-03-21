@@ -35,6 +35,18 @@ pub struct XmpDateTime {
     pub nano_second: i32,
 }
 
+#[repr(C)]
+pub struct XmpPacketInfo {
+    pub offset: i64,
+    pub length: i32,
+    pub pad_size: i32,
+    pub char_form: u8,
+    pub writeable: bool,
+    pub has_wrapper: bool,
+    pub pad: u8,
+}
+
+
 #[derive(Clone, Copy, PartialEq)]
 #[repr(u32)]
 /// Public file formats.
@@ -103,8 +115,22 @@ extern "C" {
 
     pub fn xmp_files_get_new_xmp(xf: *mut XmpFile) -> *mut Xmp;
     pub fn xmp_files_get_xmp(xf: *mut XmpFile, xmp: *mut Xmp) -> bool;
+    pub fn xmp_files_get_xmp_xmpstring(xf: *mut XmpFile,
+                                       xmp_packet: *mut XmpString,
+                                       packet_info: *mut XmpPacketInfo) -> bool;
     pub fn xmp_files_can_put_xmp(xf: *mut XmpFile, xmp: *const Xmp) -> bool;
+    pub fn xmp_files_can_put_xmp_xmpstring(xf: *mut XmpFile,
+                                           xmp_packet: *const XmpString) -> bool;
+    pub fn xmp_files_can_put_xmp_cstr(xf: *mut XmpFile,
+                                      xmp_packet: *const c_char,
+                                      len: size_t) -> bool;
+
     pub fn xmp_files_put_xmp(xf: *mut XmpFile, xmp: *const Xmp) -> bool;
+    pub fn xmp_files_put_xmp_xmpstring(xf: *mut XmpFile,
+                                       xmp_packet: *const XmpString) -> bool;
+    pub fn xmp_files_put_xmp_cstr(xf: *mut XmpFile,
+                                  xmp_packet: *const c_char,
+                                  len: size_t) -> bool;
 
     pub fn xmp_files_free(xf: *mut XmpFile) -> bool;
 
