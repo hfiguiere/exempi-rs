@@ -2,8 +2,10 @@
 name = "exempi"
 version = "2.3.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
-license = "BSD"
+license = "BSD-2-Clause"
 keywords = ["metadata", "tags", "xmp"]
+description = "Safe Rust bindings to Exempi 2.3."
+repository = "https://github.com/hfiguiere/exempi-rs"
 
 [dependencies]
 bitflags = "0.5.0"
