@@ -9,21 +9,21 @@ fn libary_tests() {
     assert!(exempi::get_error() == 0);
 
     // namespace registration tests.
-    let mut prefix = XmpString::new();
-    assert!(!prefix.is_null());
-
-    assert!(exempi::register_namespace("http://rust.figuiere.net/ns/rust/",
-                                       "rust", &mut prefix));
+    let result = exempi::register_namespace("http://rust.figuiere.net/ns/rust/",
+                                     "rust");
+    assert!(result != None);
     assert!(exempi::get_error() == 0);
+    let prefix = result.unwrap();
     assert!(prefix.to_str() != "");
-    let mut prefix2 = XmpString::new();
-    assert!(exempi::namespace_prefix("http://rust.figuiere.net/ns/rust/",
-                                     &mut prefix2));
+    let result = exempi::namespace_prefix("http://rust.figuiere.net/ns/rust/");
+    assert!(result != None);
+    let prefix2 = result.unwrap();
     assert!(exempi::get_error() == 0);
     assert!(prefix2 == prefix);
 
-    let mut ns = XmpString::new();
-    assert!(exempi::prefix_namespace(prefix.to_str(), &mut ns));
+    let result = exempi::prefix_namespace(prefix.to_str());
+    assert!(result != None);
+    let ns = result.unwrap();
     assert!(exempi::get_error() == 0);
     assert!(ns.to_str() == "http://rust.figuiere.net/ns/rust/");
 
@@ -34,19 +34,17 @@ fn libary_tests() {
     assert!(xmpblock.set_property("http://rust.figuiere.net/ns/rust/", "test",
                                    "foobar", PROP_NONE));
     assert!(xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
-    let mut value = XmpString::new();
     let mut optionbits: PropFlags = PROP_NONE;
-    assert!(xmpblock.get_property("http://rust.figuiere.net/ns/rust/", "test",
-                                  &mut value, &mut optionbits));
-    assert!(value.to_str() == "foobar");
+    let value = xmpblock.get_property("http://rust.figuiere.net/ns/rust/",
+                                      "test", &mut optionbits);
+    assert!(value != None);
+    assert!(value.unwrap().to_str() == "foobar");
     assert!(optionbits == PROP_NONE);
 
-    let mut buffer = XmpString::new();
-    // XXX we should use the constants... that we need to define.
-    assert!(xmpblock.serialize(&mut buffer,
-                               SERIAL_OMITPACKETWRAPPER |
-                               SERIAL_USECOMPACTFORMAT, 0));
-    println!("{}", buffer.to_str());
+    let result = xmpblock.serialize(SERIAL_OMITPACKETWRAPPER |
+                                    SERIAL_USECOMPACTFORMAT, 0);
+    assert!(result != None);
+    println!("{}", result.unwrap().to_str());
 
     exempi::terminate();
 }

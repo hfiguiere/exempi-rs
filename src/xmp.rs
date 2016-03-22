@@ -3,7 +3,7 @@ extern crate libc;
 use c;
 use libc::c_char;
 use xmpstring::XmpString;
-use XmpDateTime;
+use DateTime;
 use std::ffi::CString;
 
 pub mod flags {
@@ -66,6 +66,29 @@ pub mod flags {
                 | PROP_ARRAY_FORM_MASK.bits,
             /// Reserved for transient use by the implementation.
 	    const IMPL_RESERVED_MASK    = 0x70000000u32
+        }
+    }
+
+    bitflags! {
+        pub flags ArrayFlags: u32 {
+            /// Default value, no option.
+            const ARRAY_NONE = 0u32,
+            /// Array is a ordered.
+	    const ARRAY_IS_ORDERED = 0x00000400u32,
+            /// Array is alternate values
+	    const ARRAY_IS_ALT    = 0x00000800u32,
+            /// Array is alternate text.
+	    const ARRAY_IS_ALTTEXT = 0x00001000u32,
+        }
+    }
+
+    bitflags! {
+        pub flags ItemFlags: u32 {
+            const ITEM_NONE = 0u32,
+            /// The value is a structure with nested fields.
+	    const ITEM_IS_STRUCT = 0x00000100u32,
+            /// The value is an array (RDF alt/bag/seq).
+	    const ITEM_IS_ARRAY  = 0x00000200u32,
         }
     }
 
@@ -144,127 +167,175 @@ impl Xmp {
                          buf.len())
         }
     }
-    pub fn serialize(&self, buffer: &mut XmpString,
-                     options: SerialFlags, padding: u32) -> bool {
-        if self.is_null() || buffer.is_null() {
-            return false;
+
+    /// Serialize the Xmp to an XmpString.
+    pub fn serialize(&self, options: SerialFlags,
+                     padding: u32) -> Option<XmpString> {
+        if self.is_null() {
+            return None;
         }
-        unsafe { c::xmp_serialize(self.ptr,
-                                  buffer.as_mut_ptr(), options.bits(),
-                                  padding) }
+        let mut buffer = XmpString::new();
+        if unsafe { c::xmp_serialize(self.ptr, buffer.as_mut_ptr(),
+                                     options.bits(), padding) } {
+            return Some(buffer);
+        }
+        None
     }
-    pub fn serialize_and_format(&self, buffer: &mut XmpString,
-                                options: SerialFlags,
+
+    /// Serialize the Xmp to an XmpString with some formatting options.
+    pub fn serialize_and_format(&self, options: SerialFlags,
                                 padding: u32, newline: &str, tab: &str,
-                                indent: i32) -> bool {
-        if self.is_null() || buffer.is_null() {
-            return false;
+                                indent: i32) -> Option<XmpString> {
+        if self.is_null() {
+            return None;
         }
         let s_newline = CString::new(newline).unwrap();
         let s_tab = CString::new(tab).unwrap();
-        unsafe { c::xmp_serialize_and_format(self.ptr, buffer.as_mut_ptr(),
-                                             options.bits(), padding,
-                                             s_newline.as_ptr(), s_tab.as_ptr(),
-                                             indent) }
+        let mut buffer = XmpString::new();
+        if unsafe { c::xmp_serialize_and_format(self.ptr, buffer.as_mut_ptr(),
+                                                options.bits(), padding,
+                                                s_newline.as_ptr(),
+                                                s_tab.as_ptr(), indent) } {
+            return Some(buffer);
+        }
+        None
     }
 
+    /// Get property as a XmpString.
     pub fn get_property(&self, schema: &str, name: &str,
-                        property: &mut XmpString,
-                        propsbits: &mut PropFlags) -> bool {
+                        propsbits: &mut PropFlags) -> Option<XmpString> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
+        let mut property = XmpString::new();
         let result = unsafe {
             c::xmp_get_property(self.ptr, s_schema.as_ptr(), s_name.as_ptr(),
                                 property.as_mut_ptr(), &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
-        result
+        if result {
+            Some(property)
+        } else {
+            None
+        }
     }
 
+    /// Get DateTime property.
     pub fn get_property_date(&self, schema: &str, name: &str,
-                             property: &mut XmpDateTime,
-                             propsbits: &mut PropFlags) -> bool {
+                             propsbits: &mut PropFlags) -> Option<DateTime> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
+        let mut property = DateTime::new();
         let result = unsafe {
             c::xmp_get_property_date(self.ptr, s_schema.as_ptr(),
                                      s_name.as_ptr(),
                                      property.as_mut_ptr(),
                                      &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
-        result
+        *propsbits = PropFlags::from_bits(raw_propsbits)
+            .unwrap_or(PropFlags::empty());
+        if result {
+            Some(property)
+        } else {
+            None
+        }
     }
 
+    /// Get float property
     pub fn get_property_float(&self, schema: &str, name: &str,
-                              property: &mut f64,
-                              propsbits: &mut PropFlags) -> bool {
+                              propsbits: &mut PropFlags) -> Option<f64> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
+        let mut property = 0f64;
         let result = unsafe {
             c::xmp_get_property_float(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(),
-                                      property as *mut f64,
+                                      &mut property as *mut f64,
                                       &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
-        result
+        if result {
+            Some(property)
+        } else {
+            None
+        }
     }
 
+    /// Get bool property
     pub fn get_property_bool(&self, schema: &str, name: &str,
-                             property: &mut bool,
-                             propsbits: &mut PropFlags) -> bool {
+                             propsbits: &mut PropFlags) -> Option<bool> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
+        let mut property = false;
         let result = unsafe {
             c::xmp_get_property_bool(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(),
-                                      property as *mut bool,
+                                      &mut property as *mut bool,
                                       &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
-        result
+        *propsbits = PropFlags::from_bits(raw_propsbits)
+            .unwrap_or(PropFlags::empty());
+        if result {
+            Some(property)
+        } else {
+            None
+        }
     }
-    pub fn get_property_int32(&self, schema: &str, name: &str,
-                              property: &mut i32,
-                              propsbits: &mut PropFlags) -> bool {
+
+    /// Get i32 property
+    pub fn get_property_i32(&self, schema: &str, name: &str,
+                            propsbits: &mut PropFlags) -> Option<i32> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
+        let mut property = 0i32;
         let result = unsafe {
             c::xmp_get_property_int32(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(),
-                                      property as *mut i32,
+                                      &mut property as *mut i32,
                                       &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
-        result
+        *propsbits = PropFlags::from_bits(raw_propsbits)
+            .unwrap_or(PropFlags::empty());
+        if result {
+            Some(property)
+        } else {
+            None
+        }
     }
-    pub fn get_property_int64(&self, schema: &str, name: &str,
-                              property: &mut i64,
-                              propsbits: &mut PropFlags) -> bool {
+
+    /// Get i64 property
+    pub fn get_property_i64(&self, schema: &str, name: &str,
+                              propsbits: &mut PropFlags) -> Option<i64> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
+        let mut property = 0i64;
         let result = unsafe {
             c::xmp_get_property_int64(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(),
-                                      property as *mut i64,
+                                      &mut property as *mut i64,
                                       &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
-        result
+        if result {
+            Some(property)
+        } else {
+            None
+        }
     }
+
+    /// Get array item property
     pub fn get_array_item(&self, schema: &str, name: &str, index: i32,
-                                   property: &mut XmpString,
-                                   propsbits: &mut PropFlags) -> bool {
+                          propsbits: &mut PropFlags)
+                          -> Option<XmpString> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
+        let mut property = XmpString::new();
         let result = unsafe {
             c::xmp_get_array_item(self.ptr, s_schema.as_ptr(),
                                            s_name.as_ptr(), index,
@@ -272,9 +343,14 @@ impl Xmp {
                                            &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
-        result
+        if result {
+            Some(property)
+        } else {
+            None
+        }
     }
 
+    /// Set a string property value
     pub fn set_property(&mut self, schema: &str, name: &str,
                         value: &str, optionbits: PropFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
@@ -286,8 +362,10 @@ impl Xmp {
                                 optionbits.bits())
         }
     }
+
+    /// Set a date property value
     pub fn set_property_date(&mut self, schema: &str, name: &str,
-                             value: &XmpDateTime, optionbits: PropFlags) -> bool {
+                             value: &DateTime, optionbits: PropFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         unsafe {
@@ -297,6 +375,8 @@ impl Xmp {
                                      optionbits.bits())
         }
     }
+
+    /// Set a float property value
     pub fn set_property_float(&mut self, schema: &str, name: &str,
                               value: f64, optionbits: PropFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
@@ -306,6 +386,8 @@ impl Xmp {
                                       s_name.as_ptr(), value, optionbits.bits())
         }
     }
+
+    /// Set a bool property value
     pub fn set_property_bool(&mut self, schema: &str, name: &str,
                               value: bool, optionbits: PropFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
@@ -315,7 +397,9 @@ impl Xmp {
                                      s_name.as_ptr(), value, optionbits.bits())
         }
     }
-    pub fn set_property_int32(&mut self, schema: &str, name: &str,
+
+    /// Set an i32 property value
+    pub fn set_property_i32(&mut self, schema: &str, name: &str,
                               value: i32, optionbits: PropFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
@@ -325,7 +409,9 @@ impl Xmp {
                                       optionbits.bits())
         }
     }
-    pub fn set_property_int64(&mut self, schema: &str, name: &str,
+
+    /// Set an i64 property value
+    pub fn set_property_i64(&mut self, schema: &str, name: &str,
                               value: i64, optionbits: PropFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
@@ -336,18 +422,22 @@ impl Xmp {
         }
     }
 
+    // XXX figure out the array options...
+    /// Append an array item.
     pub fn append_array_item(&mut self, schema: &str, name: &str,
-                             array_options: u32, value: &str,
-                             optionsbits: PropFlags) -> bool {
+                             array_options: ArrayFlags, value: &str,
+                             item_options: ItemFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_value = CString::new(value).unwrap();
         unsafe {
             c::xmp_append_array_item(self.ptr, s_schema.as_ptr(),
-                                     s_name.as_ptr(), array_options,
-                                     s_value.as_ptr(), optionsbits.bits())
+                                     s_name.as_ptr(), array_options.bits(),
+                                     s_value.as_ptr(), item_options.bits())
         }
     }
+
+    /// Delete a property
     pub fn delete_property(&mut self, schema: &str, name: &str) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
@@ -355,6 +445,8 @@ impl Xmp {
             c::xmp_delete_property(self.ptr, s_schema.as_ptr(), s_name.as_ptr())
         }
     }
+
+    /// Has a property
     pub fn has_property(&self, schema: &str, name: &str) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
@@ -362,7 +454,8 @@ impl Xmp {
             c::xmp_has_property(self.ptr, s_schema.as_ptr(), s_name.as_ptr())
         }
     }
-    // localized text
+
+    /// Get localized text.
     pub fn get_localized_text(&self, schema: &str, name: &str, gen_lang: &str,
                               spec_lang: &str, actual_lang: &mut XmpString,
                               value: &mut XmpString,
@@ -371,7 +464,7 @@ impl Xmp {
         let s_name = CString::new(name).unwrap();
         let s_gen_lang = CString::new(gen_lang).unwrap();
         let s_spec_lang = CString::new(spec_lang).unwrap();
-        let mut raw_propsbits : u32 = 0;
+        let mut raw_propsbits = 0u32;
         let result = unsafe {
             c::xmp_get_localized_text(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(), s_gen_lang.as_ptr(),
@@ -383,6 +476,8 @@ impl Xmp {
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
         result
     }
+
+    /// Set localized text.
     pub fn set_localized_text(&mut self, schema: &str, name: &str,
                               gen_lang: &str, spec_lang: &str, value: &str,
                               propbits: PropFlags) -> bool {
@@ -398,6 +493,8 @@ impl Xmp {
                                       propbits.bits())
         }
     }
+
+    /// Delete localize text.
     pub fn delete_localized_text(&mut self, schema: &str, name: &str,
                                  gen_lang: &str, spec_lang: &str) -> bool {
         let s_schema = CString::new(schema).unwrap();
@@ -411,16 +508,20 @@ impl Xmp {
         }
     }
 
+    /// Return if the native pointer is null.
     pub fn is_null(&self) -> bool {
         self.ptr.is_null()
     }
+
+    /// Return the native pointer.
     pub fn as_ptr(&self) -> *const c::Xmp {
         self.ptr
     }
+
+    /// Return the mutable native pointer.
     pub fn as_mut_ptr(&mut self) -> *mut c::Xmp {
         self.ptr
     }
-
 }
 
 impl Clone for Xmp {
@@ -434,7 +535,7 @@ impl Clone for Xmp {
 }
 
 impl Drop for Xmp {
-    /// Drop the Xmp.
+    /// Will release the Xmp native pointer on Drop.
     fn drop(&mut self) {
         if !self.is_null() {
             unsafe { c::xmp_free(self.ptr) };

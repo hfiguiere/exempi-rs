@@ -11,12 +11,13 @@ mod xmpiterator;
 use std::ffi::{CString};
 use std::cmp::Ordering;
 pub use xmp::Xmp as Xmp;
-pub use xmp::flags::*;
 pub use xmpfile::XmpFile as XmpFile;
-pub use xmpfile::flags::*;
 pub use xmpstring::XmpString as XmpString;
 pub use xmpiterator::XmpIterator as XmpIterator;
-pub use c::FileType as XmpFileType;
+pub use c::FileType as FileType;
+// all the flags.
+pub use xmpfile::flags::*;
+pub use xmp::flags::*;
 pub use xmpiterator::flags::*;
 
 /// Initialize the library
@@ -35,33 +36,51 @@ pub fn get_error() -> i32 {
     unsafe { c::xmp_get_error() as i32 }
 }
 
-pub fn register_namespace(uri: &str, prefix: &str,
-                          reg_prefix: &mut xmpstring::XmpString) -> bool {
+/// Register namespace with uri and suggested prefix
+/// Returns the actual registered prefix.
+pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
     let s_uri = CString::new(uri).unwrap();
     let s_prefix = CString::new(prefix).unwrap();
-    unsafe { c::xmp_register_namespace(s_uri.as_ptr(), s_prefix.as_ptr(),
-                                       reg_prefix.as_mut_ptr()) }
+    let mut reg_prefix = XmpString::new();
+    if unsafe { c::xmp_register_namespace(s_uri.as_ptr(), s_prefix.as_ptr(),
+                                          reg_prefix.as_mut_ptr()) } {
+        return Some(reg_prefix);
+    }
+    None
 }
 
-pub fn namespace_prefix(uri: &str, prefix: &mut xmpstring::XmpString) -> bool {
+/// Return the prefix for the namespace uri.
+pub fn namespace_prefix(uri: &str) -> Option<XmpString> {
     let s = CString::new(uri).unwrap();
-    unsafe { c::xmp_namespace_prefix(s.as_ptr(), prefix.as_mut_ptr()) }
+    let mut prefix = XmpString::new();
+    if unsafe { c::xmp_namespace_prefix(s.as_ptr(), prefix.as_mut_ptr()) } {
+        return Some(prefix);
+    }
+    None
 }
 
-pub fn prefix_namespace(prefix: &str, uri: &mut xmpstring::XmpString) -> bool {
+/// Return the namespace uri for the prefix.
+pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
     let s = CString::new(prefix).unwrap();
-    unsafe { c::xmp_prefix_namespace_uri(s.as_ptr(), uri.as_mut_ptr()) }
+    let mut uri = XmpString::new();
+    if unsafe { c::xmp_prefix_namespace_uri(s.as_ptr(), uri.as_mut_ptr()) } {
+        return Some(uri);
+    }
+    None
 }
 
-/// A wrapper around the C type XmpDateTime
-pub struct XmpDateTime {
+/// A wrapper around the C type DateTime
+pub struct DateTime {
     c: c::XmpDateTime
 }
 
-impl XmpDateTime {
+impl DateTime {
+    pub fn new() -> Self {
+        DateTime { c: c::XmpDateTime::default() }
+    }
     /// Construct from the native C type
-    pub fn from(d: c::XmpDateTime) -> XmpDateTime {
-        XmpDateTime { c: d }
+    pub fn from(d: c::XmpDateTime) -> DateTime {
+        DateTime { c: d }
     }
     /// Return the native pointer
     pub fn as_ptr(&self) -> *const c::XmpDateTime {
@@ -73,16 +92,16 @@ impl XmpDateTime {
     }
 }
 
-impl PartialEq for XmpDateTime {
-    fn eq(&self, other: &XmpDateTime) -> bool {
+impl PartialEq for DateTime {
+    fn eq(&self, other: &DateTime) -> bool {
         unsafe {
             c::xmp_datetime_compare(&self.c as *const c::XmpDateTime,
                                     &other.c as *const c::XmpDateTime) == 0
         }
     }
 }
-impl PartialOrd for XmpDateTime {
-    fn partial_cmp(&self, other: &XmpDateTime) -> Option<Ordering> {
+impl PartialOrd for DateTime {
+    fn partial_cmp(&self, other: &DateTime) -> Option<Ordering> {
         match unsafe {
             c::xmp_datetime_compare(&self.c as *const c::XmpDateTime,
                                     &other.c as *const c::XmpDateTime)
@@ -94,11 +113,11 @@ impl PartialOrd for XmpDateTime {
         }
     }
 }
-impl Eq for XmpDateTime {
+impl Eq for DateTime {
 
 }
-impl Ord for XmpDateTime {
-    fn cmp(&self, other: &XmpDateTime) -> Ordering {
+impl Ord for DateTime {
+    fn cmp(&self, other: &DateTime) -> Ordering {
         match unsafe {
             c::xmp_datetime_compare(&self.c as *const c::XmpDateTime,
                                     &other.c as *const c::XmpDateTime)

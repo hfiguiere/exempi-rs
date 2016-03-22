@@ -35,6 +35,12 @@ pub struct XmpDateTime {
     pub nano_second: i32,
 }
 
+impl Default for XmpDateTime {
+    fn default() -> Self {
+        unsafe { ::std::mem::zeroed() }
+    }
+}
+
 #[repr(C)]
 pub struct XmpPacketInfo {
     pub offset: i64,
@@ -45,7 +51,6 @@ pub struct XmpPacketInfo {
     pub has_wrapper: bool,
     pub pad: u8,
 }
-
 
 #[derive(Clone, Copy, PartialEq)]
 #[repr(u32)]
