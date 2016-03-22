@@ -254,6 +254,8 @@ impl Drop for XmpFile {
 
 #[test]
 fn it_works() {
+    use c::XmpError;
+
     let inited = ::init();
 
     assert!(inited);
@@ -261,7 +263,7 @@ fn it_works() {
     let xf = XmpFile::new();
     assert!(!xf.is_null());
 
-    assert!(::get_error() == 0);
+    assert!(::get_error() == XmpError::Unknown);
 
     ::terminate();
 }

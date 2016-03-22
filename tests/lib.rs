@@ -6,25 +6,25 @@ use exempi::*;
 fn libary_tests() {
     assert!(exempi::init());
 
-    assert!(exempi::get_error() == 0);
+    assert!(exempi::get_error() == Error::Unknown);
 
     // namespace registration tests.
     let result = exempi::register_namespace("http://rust.figuiere.net/ns/rust/",
                                      "rust");
     assert!(result != None);
-    assert!(exempi::get_error() == 0);
+    assert!(exempi::get_error() == Error::Unknown);
     let prefix = result.unwrap();
     assert!(prefix.to_str() != "");
     let result = exempi::namespace_prefix("http://rust.figuiere.net/ns/rust/");
     assert!(result != None);
     let prefix2 = result.unwrap();
-    assert!(exempi::get_error() == 0);
+    assert!(exempi::get_error() == Error::Unknown);
     assert!(prefix2 == prefix);
 
     let result = exempi::prefix_namespace(prefix.to_str());
     assert!(result != None);
     let ns = result.unwrap();
-    assert!(exempi::get_error() == 0);
+    assert!(exempi::get_error() == Error::Unknown);
     assert!(ns.to_str() == "http://rust.figuiere.net/ns/rust/");
 
     let mut xmpblock = Xmp::new();

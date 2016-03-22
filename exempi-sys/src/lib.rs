@@ -11,6 +11,91 @@ pub enum XmpIterator {}
 
 #[derive(Clone, Copy, PartialEq)]
 #[repr(i32)]
+/// XMP errors.
+pub enum XmpError {
+    /* More or less generic error codes. */
+    /// Generic unknown error.
+    Unknown          =   0,
+    /// Generic undefined error.
+    TBD              =   -1,
+    /// Generic unavailable error.
+    Unavailable      =   -2,
+    /// Generic bad object error.
+    BadObject        =   -3,
+    /// Generic bad parameter error.
+    BadParam         =   -4,
+    /// Generic bad value error.
+    BadValue         =   -5,
+    /// Generic assertion failure.
+    AssertFailure    =   -6,
+    /// Generic enforcement failure.
+    EnforceFailure   =   -7,
+    /// Generic unimplemented error.
+    Unimplemented    =   -8,
+    /// Generic internal failure.
+    InternalFailure  =   -9,
+    /// Generic deprecated error.
+    Deprecated       =  -10,
+    /// Generic external failure.
+    ExternalFailure  =  -11,
+    /// Generic user abort error.
+    UserAbort        =  -12,
+    /// Generic standard exception.
+    StdException     =  -13,
+    /// Generic unknown exception.
+    UnknownException =  -14,
+    /// Generic out-of-memory error.
+    NoMemory         =  -15,
+
+    /* More specific parameter error codes.  */
+    /// Bad schema parameter.
+    BadSchema        = -101,
+    /// Bad XPath parameter.
+    BadXPath         = -102,
+    /// Bad options parameter.
+    BadOptions       = -103,
+    /// Bad index parameter.
+    BadIndex         = -104,
+    /// Bad iteration position.
+    BadIterPosition  = -105,
+    /// XML parsing error.
+    BadParse         = -106,
+    /// Serialization error.
+    BadSerialize     = -107,
+    /// File format error.
+    BadFileFormat    = -108,
+    /// No file handler found for format.
+    NoFileHandler    = -109,
+    /// Data too large for JPEG file format.
+    TooLargeForJPEG  = -110,
+
+    /* File format and internal structure error codes. */
+    /// XML format error.
+    BadXML           = -201,
+    /// RDF format error.
+    BadRDF           = -202,
+    /// XMP format error.
+    BadXMP           = -203,
+    /// Empty iterator.
+    EmptyIterator    = -204,
+    /// Unicode error.
+    BadUnicode       = -205,
+    /// TIFF format error.
+    BadTIFF          = -206,
+    /// JPEG format error.
+    BadJPEG          = -207,
+    /// PSD format error.
+    BadPSD           = -208,
+    /// PSIR format error.
+    BadPSIR          = -209,
+    /// IPTC format error.
+    BadIPTC          = -210,
+    /// MPEG format error.
+    BadMPEG          = -211,
+}
+
+#[derive(Clone, Copy, PartialEq)]
+#[repr(i32)]
 pub enum TzSign {
     /// West of UTC
     West = -1,

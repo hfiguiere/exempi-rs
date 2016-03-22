@@ -10,11 +10,13 @@ mod xmpiterator;
 
 use std::ffi::{CString};
 use std::cmp::Ordering;
+use std::mem::transmute;
 pub use xmp::Xmp as Xmp;
 pub use xmpfile::XmpFile as XmpFile;
 pub use xmpstring::XmpString as XmpString;
 pub use xmpiterator::XmpIterator as XmpIterator;
 pub use c::FileType as FileType;
+pub use c::XmpError as Error;
 // all the flags.
 pub use xmpfile::flags::*;
 pub use xmp::flags::*;
@@ -32,8 +34,14 @@ pub fn terminate() {
 
 /// Get the last error code on the thread
 /// Set when a function return false or None.
-pub fn get_error() -> i32 {
-    unsafe { c::xmp_get_error() as i32 }
+pub fn get_error() -> Error {
+    let err = unsafe { c::xmp_get_error() };
+    match err {
+        -15...0 |
+        -110...-101 |
+        -211...-201 => unsafe { transmute(err) },
+        _ => Error::TBD
+    }
 }
 
 /// Register namespace with uri and suggested prefix
