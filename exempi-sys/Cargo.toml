@@ -2,8 +2,11 @@
 name = "exempi-sys"
 version = "2.3.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
-license = "BSD"
+license = "BSD-2-Clause"
 build = "build.rs"
+description = "Unsafe Rust bindings to Exempi 2.3. Part of exempi-rs."
+keywords = ["xmp", "metadata"]
+repository = "https://github.com/hfiguiere/exempi-rs"
 
 [dependencies]
 libc = "0.2"
