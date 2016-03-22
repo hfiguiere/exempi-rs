@@ -1,11 +1,30 @@
 
 use c;
+use std::fmt;
 use std::str;
 use std::ffi::{CStr};
 
-/// The string wrapper from Exempi.
-/// It is meant to be used for output parameter.
+/// The string wrapper from Exempi. It is meant to be used for output parameter.
 /// But gives you ownership of the string.
+/// Because of the way the C API of Exempi is implemented, we provide
+/// this type instead of using std::string::String to avoid copying of strings
+/// until needed.
+/// They are mostly returned in an Option<XmpString> enum.
+/// XmpString support several of the standard traits.
+///
+/// ```no_run
+/// use exempi::{Xmp,PropFlags};
+///
+/// let xmp = Xmp::new();
+/// let mut flags = PropFlags::empty();
+///
+/// if let Some(ref xmpstring) = xmp.get_property("http://rust.figuiere.net/ns/rust/", "rust", &mut flags) {
+///    println!("property value is {}, flags {}", xmpstring, flags.bits());
+///    println!("string len: {}", xmpstring.len());
+///    let s = String::from(xmpstring.to_str());
+///    println!("converted to std::String: {}", s);
+/// }
+/// ```
 pub struct XmpString {
     ptr: *mut c::XmpString
 }
@@ -50,12 +69,6 @@ impl XmpString {
     }
 }
 
-impl ToString for XmpString {
-    fn to_string(&self) -> String {
-        String::from(self.to_str())
-    }
-}
-
 impl Drop for XmpString {
     /// Will deallocate properly the underlying object
     fn drop(&mut self) {
@@ -71,5 +84,11 @@ impl Eq for XmpString {
 impl PartialEq for XmpString {
     fn eq(&self, other: &XmpString) -> bool {
         self.to_str() == other.to_str()
+    }
+}
+
+impl fmt::Display for XmpString {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_str())
     }
 }
