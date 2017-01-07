@@ -1,12 +1,13 @@
 [package]
 name = "exempi-sys"
-version = "2.3.0"
+version = "2.4.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 build = "build.rs"
-description = "Unsafe Rust bindings to Exempi 2.3. Part of exempi-rs."
+description = "Unsafe Rust bindings to Exempi 2.4. Part of exempi-rs."
 keywords = ["xmp", "metadata"]
 repository = "https://github.com/hfiguiere/exempi-rs"
+homepage = "https://libopenraw.freedesktop.org/wiki/Exempi/"
 
 [dependencies]
 libc = "0.2"
