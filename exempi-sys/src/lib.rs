@@ -151,6 +151,7 @@ pub enum FileType {
     TIFF = 0x54494646u32,   /* 'TIFF' */
     GIF = 0x47494620u32,    /* 'GIF ' */
     PNG = 0x504E4720u32,    /* 'PNG ' */
+    WEBP = 0x57454250u32,   /* 'WEBP' */
 
     SWF = 0x53574620u32, /* 'SWF ' */
     FLA = 0x464C4120u32, /* 'FLA ' */
