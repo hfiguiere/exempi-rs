@@ -52,9 +52,10 @@ pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
     let mut reg_prefix = XmpString::new();
     if unsafe { c::xmp_register_namespace(s_uri.as_ptr(), s_prefix.as_ptr(),
                                           reg_prefix.as_mut_ptr()) } {
-        return Some(reg_prefix);
+        Some(reg_prefix)
+    } else {
+        None
     }
-    None
 }
 
 /// Return the prefix for the namespace uri.
@@ -62,9 +63,10 @@ pub fn namespace_prefix(uri: &str) -> Option<XmpString> {
     let s = CString::new(uri).unwrap();
     let mut prefix = XmpString::new();
     if unsafe { c::xmp_namespace_prefix(s.as_ptr(), prefix.as_mut_ptr()) } {
-        return Some(prefix);
+        Some(prefix)
+    } else {
+        None
     }
-    None
 }
 
 /// Return the namespace uri for the prefix.
@@ -72,9 +74,10 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
     let s = CString::new(prefix).unwrap();
     let mut uri = XmpString::new();
     if unsafe { c::xmp_prefix_namespace_uri(s.as_ptr(), uri.as_mut_ptr()) } {
-        return Some(uri);
+        Some(uri)
+    } else {
+        None
     }
-    None
 }
 
 /// A wrapper around the C type DateTime
