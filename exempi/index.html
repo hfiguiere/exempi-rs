@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `exempi` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, exempi">
+
+    <title>exempi - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'exempi', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>exempi</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/exempi/src/lib.rs.html#1-141' title='goto source code'>[src]</a></span></h1>
+<h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ArrayFlags.html'
+                                  title='exempi::ArrayFlags'>ArrayFlags</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CloseFlags.html'
+                                  title='exempi::CloseFlags'>CloseFlags</a></td>
+                           <td class='docblock-short'>
+                                <p>Flag options to close files.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DateTime.html'
+                                  title='exempi::DateTime'>DateTime</a></td>
+                           <td class='docblock-short'>
+                                <p>A wrapper around the C type DateTime</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.FormatOptionFlags.html'
+                                  title='exempi::FormatOptionFlags'>FormatOptionFlags</a></td>
+                           <td class='docblock-short'>
+                                <p>Result flage for file / format infos.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.ItemFlags.html'
+                                  title='exempi::ItemFlags'>ItemFlags</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.IterFlags.html'
+                                  title='exempi::IterFlags'>IterFlags</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.IterSkipFlags.html'
+                                  title='exempi::IterSkipFlags'>IterSkipFlags</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.OpenFlags.html'
+                                  title='exempi::OpenFlags'>OpenFlags</a></td>
+                           <td class='docblock-short'>
+                                <p>Flag options for opening files.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.PropFlags.html'
+                                  title='exempi::PropFlags'>PropFlags</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.SerialFlags.html'
+                                  title='exempi::SerialFlags'>SerialFlags</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Xmp.html'
+                                  title='exempi::Xmp'>Xmp</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.XmpFile.html'
+                                  title='exempi::XmpFile'>XmpFile</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.XmpIterator.html'
+                                  title='exempi::XmpIterator'>XmpIterator</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.XmpString.html'
+                                  title='exempi::XmpString'>XmpString</a></td>
+                           <td class='docblock-short'>
+                                <p>The string wrapper from Exempi. It is meant to be used for output parameter.
+But gives you ownership of the string.
+Because of the way the C API of Exempi is implemented, we provide
+this type instead of using std::string::String to avoid copying of strings
+until needed.
+They are mostly returned in an Option<XmpString> enum.
+XmpString support several of the standard traits.</p>
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.Error.html'
+                                  title='exempi::Error'>Error</a></td>
+                           <td class='docblock-short'>
+                                <p>XMP errors.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.FileType.html'
+                                  title='exempi::FileType'>FileType</a></td>
+                           <td class='docblock-short'>
+                                <p>Public file formats.</p>
+                           </td>
+                       </tr></table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ARRAY_IS_ALT.html'
+                                  title='exempi::ARRAY_IS_ALT'>ARRAY_IS_ALT</a></td>
+                           <td class='docblock-short'>
+                                <p>Array is alternate values</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ARRAY_IS_ALTTEXT.html'
+                                  title='exempi::ARRAY_IS_ALTTEXT'>ARRAY_IS_ALTTEXT</a></td>
+                           <td class='docblock-short'>
+                                <p>Array is alternate text.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ARRAY_IS_ORDERED.html'
+                                  title='exempi::ARRAY_IS_ORDERED'>ARRAY_IS_ORDERED</a></td>
+                           <td class='docblock-short'>
+                                <p>Array is a ordered.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ARRAY_NONE.html'
+                                  title='exempi::ARRAY_NONE'>ARRAY_NONE</a></td>
+                           <td class='docblock-short'>
+                                <p>Default value, no option.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.CLOSE_NONE.html'
+                                  title='exempi::CLOSE_NONE'>CLOSE_NONE</a></td>
+                           <td class='docblock-short'>
+                                <p>No close option</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.CLOSE_SAFE_UPDATE.html'
+                                  title='exempi::CLOSE_SAFE_UPDATE'>CLOSE_SAFE_UPDATE</a></td>
+                           <td class='docblock-short'>
+                                <p>Write into a temporary file and swap for crash safety.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_ALLOWS_ONLY_XMP.html'
+                                  title='exempi::FORMAT_ALLOWS_ONLY_XMP'>FORMAT_ALLOWS_ONLY_XMP</a></td>
+                           <td class='docblock-short'>
+                                <p>Allows access to just the XMP, ignoring other forms.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_ALLOW_SAFE_UPDATE.html'
+                                  title='exempi::FORMAT_ALLOW_SAFE_UPDATE'>FORMAT_ALLOW_SAFE_UPDATE</a></td>
+                           <td class='docblock-short'>
+                                <p>The file handler allows crash-safe file updates.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_CAN_EXPAND.html'
+                                  title='exempi::FORMAT_CAN_EXPAND'>FORMAT_CAN_EXPAND</a></td>
+                           <td class='docblock-short'>
+                                <p>Can expand XMP or other metadata in an existing file.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_CAN_INJECT_XMP.html'
+                                  title='exempi::FORMAT_CAN_INJECT_XMP'>FORMAT_CAN_INJECT_XMP</a></td>
+                           <td class='docblock-short'>
+                                <p>Can inject first-time XMP into an existing file.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_CAN_RECONCILE.html'
+                                  title='exempi::FORMAT_CAN_RECONCILE'>FORMAT_CAN_RECONCILE</a></td>
+                           <td class='docblock-short'>
+                                <p>Supports reconciliation between XMP and other forms.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_CAN_REWRITE.html'
+                                  title='exempi::FORMAT_CAN_REWRITE'>FORMAT_CAN_REWRITE</a></td>
+                           <td class='docblock-short'>
+                                <p>Can copy one file to another, writing new metadata.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_FOLDER_BASED_FORMAT.html'
+                                  title='exempi::FORMAT_FOLDER_BASED_FORMAT'>FORMAT_FOLDER_BASED_FORMAT</a></td>
+                           <td class='docblock-short'>
+                                <p>The format is folder oriented, for example the P2 video format.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_HANDLER_OWNS_FILE.html'
+                                  title='exempi::FORMAT_HANDLER_OWNS_FILE'>FORMAT_HANDLER_OWNS_FILE</a></td>
+                           <td class='docblock-short'>
+                                <p>The file handler does the file open and close.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_NEEDS_READONLY_PACKET.html'
+                                  title='exempi::FORMAT_NEEDS_READONLY_PACKET'>FORMAT_NEEDS_READONLY_PACKET</a></td>
+                           <td class='docblock-short'>
+                                <p>The file format needs the XMP packet to be read-only.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_NONE.html'
+                                  title='exempi::FORMAT_NONE'>FORMAT_NONE</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_PREFERS_IN_PLACE.html'
+                                  title='exempi::FORMAT_PREFERS_IN_PLACE'>FORMAT_PREFERS_IN_PLACE</a></td>
+                           <td class='docblock-short'>
+                                <p>Can expand, but prefers in-place update.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_RETURNS_RAW_PACKET.html'
+                                  title='exempi::FORMAT_RETURNS_RAW_PACKET'>FORMAT_RETURNS_RAW_PACKET</a></td>
+                           <td class='docblock-short'>
+                                <p>File handler returns raw XMP packet information.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.FORMAT_USE_SIDECAR_XMP.html'
+                                  title='exempi::FORMAT_USE_SIDECAR_XMP'>FORMAT_USE_SIDECAR_XMP</a></td>
+                           <td class='docblock-short'>
+                                <p>The file handler uses a &quot;sidecar&quot; file for the XMP.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.IMPL_RESERVED_MASK.html'
+                                  title='exempi::IMPL_RESERVED_MASK'>IMPL_RESERVED_MASK</a></td>
+                           <td class='docblock-short'>
+                                <p>Reserved for transient use by the implementation.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITEM_IS_ARRAY.html'
+                                  title='exempi::ITEM_IS_ARRAY'>ITEM_IS_ARRAY</a></td>
+                           <td class='docblock-short'>
+                                <p>The value is an array (RDF alt/bag/seq).</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITEM_IS_STRUCT.html'
+                                  title='exempi::ITEM_IS_STRUCT'>ITEM_IS_STRUCT</a></td>
+                           <td class='docblock-short'>
+                                <p>The value is a structure with nested fields.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITEM_NONE.html'
+                                  title='exempi::ITEM_NONE'>ITEM_NONE</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_ALIASES.html'
+                                  title='exempi::ITER_ALIASES'>ITER_ALIASES</a></td>
+                           <td class='docblock-short'>
+                                <p>Iterate the global alias table.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_CLASS_MASK.html'
+                                  title='exempi::ITER_CLASS_MASK'>ITER_CLASS_MASK</a></td>
+                           <td class='docblock-short'>
+                                <p>The low 8 bits are an enum of what data structure to iterate.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_INCLUDE_ALIASES.html'
+                                  title='exempi::ITER_INCLUDE_ALIASES'>ITER_INCLUDE_ALIASES</a></td>
+                           <td class='docblock-short'>
+                                <p>Include aliases, default is justactual properties.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_JUST_CHILDREN.html'
+                                  title='exempi::ITER_JUST_CHILDREN'>ITER_JUST_CHILDREN</a></td>
+                           <td class='docblock-short'>
+                                <p>Just do the immediate children of the root, default is subtree.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_JUST_LEAF_NAME.html'
+                                  title='exempi::ITER_JUST_LEAF_NAME'>ITER_JUST_LEAF_NAME</a></td>
+                           <td class='docblock-short'>
+                                <p>Return just the leaf part of the path, default is the full path.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_JUST_LEAF_NODES.html'
+                                  title='exempi::ITER_JUST_LEAF_NODES'>ITER_JUST_LEAF_NODES</a></td>
+                           <td class='docblock-short'>
+                                <p>Just do the leaf nodes, default is all nodes in the subtree.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_NAMESPACES.html'
+                                  title='exempi::ITER_NAMESPACES'>ITER_NAMESPACES</a></td>
+                           <td class='docblock-short'>
+                                <p>Iterate the global namespace table.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_NONE.html'
+                                  title='exempi::ITER_NONE'>ITER_NONE</a></td>
+                           <td class='docblock-short'>
+                                <p>No iterator flag</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_OMIT_QUALIFIERS.html'
+                                  title='exempi::ITER_OMIT_QUALIFIERS'>ITER_OMIT_QUALIFIERS</a></td>
+                           <td class='docblock-short'>
+                                <p>Omit all qualifiers.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_PROPERTIES.html'
+                                  title='exempi::ITER_PROPERTIES'>ITER_PROPERTIES</a></td>
+                           <td class='docblock-short'>
+                                <p>Iterate the property tree of a Xmp object.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_SKIP_NONE.html'
+                                  title='exempi::ITER_SKIP_NONE'>ITER_SKIP_NONE</a></td>
+                           <td class='docblock-short'>
+                                <p>Not flags.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_SKIP_SIBLINGS.html'
+                                  title='exempi::ITER_SKIP_SIBLINGS'>ITER_SKIP_SIBLINGS</a></td>
+                           <td class='docblock-short'>
+                                <p>Skip the subtree below and remaining siblings
+of the current node.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.ITER_SKIP_SUBTREE.html'
+                                  title='exempi::ITER_SKIP_SUBTREE'>ITER_SKIP_SUBTREE</a></td>
+                           <td class='docblock-short'>
+                                <p>Skip the subtree below the current node.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_CACHE_TNAIL.html'
+                                  title='exempi::OPEN_CACHE_TNAIL'>OPEN_CACHE_TNAIL</a></td>
+                           <td class='docblock-short'>
+                                <p>Cache thumbnail if possible, GetThumbnail will be called.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_FOR_UPDATE.html'
+                                  title='exempi::OPEN_FOR_UPDATE'>OPEN_FOR_UPDATE</a></td>
+                           <td class='docblock-short'>
+                                <p>Open for reading and writing.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_IN_BACKGROUND.html'
+                                  title='exempi::OPEN_IN_BACKGROUND'>OPEN_IN_BACKGROUND</a></td>
+                           <td class='docblock-short'>
+                                <p>Set if calling from background thread.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_LIMITED_SCANNING.html'
+                                  title='exempi::OPEN_LIMITED_SCANNING'>OPEN_LIMITED_SCANNING</a></td>
+                           <td class='docblock-short'>
+                                <p>Only packet scan files &quot;known&quot; to need scanning.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_NONE.html'
+                                  title='exempi::OPEN_NONE'>OPEN_NONE</a></td>
+                           <td class='docblock-short'>
+                                <p>No open option</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_ONLY_XMP.html'
+                                  title='exempi::OPEN_ONLY_XMP'>OPEN_ONLY_XMP</a></td>
+                           <td class='docblock-short'>
+                                <p>Only the XMP is wanted, allows space/time optimizations.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_OPTIMIZE_FILE_LAYOUT.html'
+                                  title='exempi::OPEN_OPTIMIZE_FILE_LAYOUT'>OPEN_OPTIMIZE_FILE_LAYOUT</a></td>
+                           <td class='docblock-short'>
+                                <p>Optimize MPEG4 to support stream when updating This can take some time</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_READ.html'
+                                  title='exempi::OPEN_READ'>OPEN_READ</a></td>
+                           <td class='docblock-short'>
+                                <p>Open for read-only access.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_REPAIR_FILE.html'
+                                  title='exempi::OPEN_REPAIR_FILE'>OPEN_REPAIR_FILE</a></td>
+                           <td class='docblock-short'>
+                                <p>Attempt to repair a file opened for update, default is to not open (throw an exception).</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_STRICTLY.html'
+                                  title='exempi::OPEN_STRICTLY'>OPEN_STRICTLY</a></td>
+                           <td class='docblock-short'>
+                                <p>Be strict about locating XMP and reconciling with other forms.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_USE_PACKET_SCANNING.html'
+                                  title='exempi::OPEN_USE_PACKET_SCANNING'>OPEN_USE_PACKET_SCANNING</a></td>
+                           <td class='docblock-short'>
+                                <p>Force packet scanning, don&#39;t use a smart handler.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.OPEN_USE_SMART_HANDLER.html'
+                                  title='exempi::OPEN_USE_SMART_HANDLER'>OPEN_USE_SMART_HANDLER</a></td>
+                           <td class='docblock-short'>
+                                <p>Require the use of a smart handler.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_ARRAY_FORM_MASK.html'
+                                  title='exempi::PROP_ARRAY_FORM_MASK'>PROP_ARRAY_FORM_MASK</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_ARRAY_INSERT_AFTER.html'
+                                  title='exempi::PROP_ARRAY_INSERT_AFTER'>PROP_ARRAY_INSERT_AFTER</a></td>
+                           <td class='docblock-short'>
+                                <p>Used by array functions. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_ARRAY_INSERT_BEFORE.html'
+                                  title='exempi::PROP_ARRAY_INSERT_BEFORE'>PROP_ARRAY_INSERT_BEFORE</a></td>
+                           <td class='docblock-short'>
+                                <p>Used by array functions.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_ARRAY_IS_ALT.html'
+                                  title='exempi::PROP_ARRAY_IS_ALT'>PROP_ARRAY_IS_ALT</a></td>
+                           <td class='docblock-short'>
+                                <p>Implies XMP_PropArrayIsOrdered, items are alternates.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_ARRAY_IS_ALTTEXT.html'
+                                  title='exempi::PROP_ARRAY_IS_ALTTEXT'>PROP_ARRAY_IS_ALTTEXT</a></td>
+                           <td class='docblock-short'>
+                                <p>Additional struct and array options.
+Implies kXMP_PropArrayIsAlternate, items are localized text.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_ARRAY_IS_ORDERED.html'
+                                  title='exempi::PROP_ARRAY_IS_ORDERED'>PROP_ARRAY_IS_ORDERED</a></td>
+                           <td class='docblock-short'>
+                                <p>Implies XMP_PropValueIsArray, item order matters.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_ARRAY_IS_UNORDERED.html'
+                                  title='exempi::PROP_ARRAY_IS_UNORDERED'>PROP_ARRAY_IS_UNORDERED</a></td>
+                           <td class='docblock-short'>
+                                <p>The item order does not matter.*/</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_COMPOSITE_MASK.html'
+                                  title='exempi::PROP_COMPOSITE_MASK'>PROP_COMPOSITE_MASK</a></td>
+                           <td class='docblock-short'>
+                                <p>Is it simple or composite (array or struct)?</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_HAS_ALIASES.html'
+                                  title='exempi::PROP_HAS_ALIASES'>PROP_HAS_ALIASES</a></td>
+                           <td class='docblock-short'>
+                                <p>This property is the base value for a set of aliases.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_HAS_LANG.html'
+                                  title='exempi::PROP_HAS_LANG'>PROP_HAS_LANG</a></td>
+                           <td class='docblock-short'>
+                                <p>Implies XMP_PropHasQualifiers, property has xml:lang.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_HAS_QUALIFIERS.html'
+                                  title='exempi::PROP_HAS_QUALIFIERS'>PROP_HAS_QUALIFIERS</a></td>
+                           <td class='docblock-short'>
+                                <p>Options relating to qualifiers attached to a property.
+The property has qualifiers, includes rdf:type and xml:lang.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_HAS_TYPE.html'
+                                  title='exempi::PROP_HAS_TYPE'>PROP_HAS_TYPE</a></td>
+                           <td class='docblock-short'>
+                                <p>Implies XMP_PropHasQualifiers, property has rdf:type.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_IS_ALIAS.html'
+                                  title='exempi::PROP_IS_ALIAS'>PROP_IS_ALIAS</a></td>
+                           <td class='docblock-short'>
+                                <p>This property is an alias name for another property.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_IS_DERIVED.html'
+                                  title='exempi::PROP_IS_DERIVED'>PROP_IS_DERIVED</a></td>
+                           <td class='docblock-short'>
+                                <p>This property is derived from the document content.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_IS_INTERNAL.html'
+                                  title='exempi::PROP_IS_INTERNAL'>PROP_IS_INTERNAL</a></td>
+                           <td class='docblock-short'>
+                                <p>This property is an &quot;internal&quot; property, owned by applications.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_IS_QUALIFIER.html'
+                                  title='exempi::PROP_IS_QUALIFIER'>PROP_IS_QUALIFIER</a></td>
+                           <td class='docblock-short'>
+                                <p>This is a qualifier, includes rdf:type and xml:lang.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_IS_STABLE.html'
+                                  title='exempi::PROP_IS_STABLE'>PROP_IS_STABLE</a></td>
+                           <td class='docblock-short'>
+                                <p>This property is not derived from the document content.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_NONE.html'
+                                  title='exempi::PROP_NONE'>PROP_NONE</a></td>
+                           <td class='docblock-short'>
+                                <p>The property has no bit set.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_VALUE_IS_ARRAY.html'
+                                  title='exempi::PROP_VALUE_IS_ARRAY'>PROP_VALUE_IS_ARRAY</a></td>
+                           <td class='docblock-short'>
+                                <p>The value is an array (RDF alt/bag/seq).</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_VALUE_IS_STRUCT.html'
+                                  title='exempi::PROP_VALUE_IS_STRUCT'>PROP_VALUE_IS_STRUCT</a></td>
+                           <td class='docblock-short'>
+                                <p>The value is a structure with nested fields.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.PROP_VALUE_IS_URI.html'
+                                  title='exempi::PROP_VALUE_IS_URI'>PROP_VALUE_IS_URI</a></td>
+                           <td class='docblock-short'>
+                                <p>The value is a URI, use rdf:resource attribute. DISCOURAGED</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_ENCODEUTF16BIG.html'
+                                  title='exempi::SERIAL_ENCODEUTF16BIG'>SERIAL_ENCODEUTF16BIG</a></td>
+                           <td class='docblock-short'>
+                                <p>Serialize to UTF-16 BE (big endian)</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_ENCODEUTF16LITTLE.html'
+                                  title='exempi::SERIAL_ENCODEUTF16LITTLE'>SERIAL_ENCODEUTF16LITTLE</a></td>
+                           <td class='docblock-short'>
+                                <p>Serialize to UTF-16 LE (little endian)</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_ENCODEUTF32BIG.html'
+                                  title='exempi::SERIAL_ENCODEUTF32BIG'>SERIAL_ENCODEUTF32BIG</a></td>
+                           <td class='docblock-short'>
+                                <p>Serialize to UTF-32 BE (big endian)</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_ENCODEUTF32LITTLE.html'
+                                  title='exempi::SERIAL_ENCODEUTF32LITTLE'>SERIAL_ENCODEUTF32LITTLE</a></td>
+                           <td class='docblock-short'>
+                                <p>Serialize to UTF-32 LE (little endian)</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_ENCODEUTF8.html'
+                                  title='exempi::SERIAL_ENCODEUTF8'>SERIAL_ENCODEUTF8</a></td>
+                           <td class='docblock-short'>
+                                <p>Serialize to UTF-8 (default)</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_ENCODINGMASK.html'
+                                  title='exempi::SERIAL_ENCODINGMASK'>SERIAL_ENCODINGMASK</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_EXACTPACKETLENGTH.html'
+                                  title='exempi::SERIAL_EXACTPACKETLENGTH'>SERIAL_EXACTPACKETLENGTH</a></td>
+                           <td class='docblock-short'>
+                                <p>The padding parameter is the overall packet length. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_INCLUDETHUMBNAILPAD.html'
+                                  title='exempi::SERIAL_INCLUDETHUMBNAILPAD'>SERIAL_INCLUDETHUMBNAILPAD</a></td>
+                           <td class='docblock-short'>
+                                <p>Include a padding allowance for a thumbnail image. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_OMITALLFORMATTING.html'
+                                  title='exempi::SERIAL_OMITALLFORMATTING'>SERIAL_OMITALLFORMATTING</a></td>
+                           <td class='docblock-short'>
+                                <p>Omit all formatting whitespace. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_OMITPACKETWRAPPER.html'
+                                  title='exempi::SERIAL_OMITPACKETWRAPPER'>SERIAL_OMITPACKETWRAPPER</a></td>
+                           <td class='docblock-short'>
+                                <p>Omit the XML packet wrapper. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_READONLYPACKET.html'
+                                  title='exempi::SERIAL_READONLYPACKET'>SERIAL_READONLYPACKET</a></td>
+                           <td class='docblock-short'>
+                                <p>Default is a writeable packet. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_USECOMPACTFORMAT.html'
+                                  title='exempi::SERIAL_USECOMPACTFORMAT'>SERIAL_USECOMPACTFORMAT</a></td>
+                           <td class='docblock-short'>
+                                <p>Use a compact form of RDF. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant.SERIAL_WRITEALIASCOMMENTS.html'
+                                  title='exempi::SERIAL_WRITEALIASCOMMENTS'>SERIAL_WRITEALIASCOMMENTS</a></td>
+                           <td class='docblock-short'>
+                                <p>Show aliases as XML comments. */</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant._LITTLEENDIAN_BIT.html'
+                                  title='exempi::_LITTLEENDIAN_BIT'>_LITTLEENDIAN_BIT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant._UTF16_BIT.html'
+                                  title='exempi::_UTF16_BIT'>_UTF16_BIT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='constant' href='constant._UTF32_BIT.html'
+                                  title='exempi::_UTF32_BIT'>_UTF32_BIT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.get_error.html'
+                                  title='exempi::get_error'>get_error</a></td>
+                           <td class='docblock-short'>
+                                <p>Get the last error code on the thread
+Set when a function return false or None.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.init.html'
+                                  title='exempi::init'>init</a></td>
+                           <td class='docblock-short'>
+                                <p>Initialize the library</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.namespace_prefix.html'
+                                  title='exempi::namespace_prefix'>namespace_prefix</a></td>
+                           <td class='docblock-short'>
+                                <p>Return the prefix for the namespace uri.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.prefix_namespace.html'
+                                  title='exempi::prefix_namespace'>prefix_namespace</a></td>
+                           <td class='docblock-short'>
+                                <p>Return the namespace uri for the prefix.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.register_namespace.html'
+                                  title='exempi::register_namespace'>register_namespace</a></td>
+                           <td class='docblock-short'>
+                                <p>Register namespace with uri and suggested prefix
+Returns the actual registered prefix.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.terminate.html'
+                                  title='exempi::terminate'>terminate</a></td>
+                           <td class='docblock-short'>
+                                <p>Terminate the library</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "exempi";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
