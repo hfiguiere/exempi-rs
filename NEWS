@@ -1,4 +1,4 @@
-2.4.1 -
+2.4.1 - 2017/06/04
 
 -XmpIterator::new() declaration was wrong. Also xmp_iterator_new()
 -Export NS_* from the -sys crate.
