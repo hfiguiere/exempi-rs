@@ -1,6 +1,6 @@
 [package]
 name = "exempi"
-version = "2.4.0"
+version = "2.4.1"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 keywords = ["metadata", "tags", "xmp"]
@@ -11,4 +11,4 @@ homepage = "https://libopenraw.freedesktop.org/wiki/Exempi/"
 [dependencies]
 bitflags = "0.5.0"
 libc = "0.2"
-exempi-sys = { path = "exempi-sys", version = "2.4.0" }
+exempi-sys = { path = "exempi-sys", version = "2.4.1" }

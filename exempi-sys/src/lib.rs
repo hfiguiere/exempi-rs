@@ -4,6 +4,10 @@ extern crate libc;
 
 use libc::{c_int, c_char, size_t};
 
+pub mod consts;
+
+pub use consts::*;
+
 pub enum Xmp {}
 pub enum XmpFile {}
 pub enum XmpString {}
@@ -338,7 +342,9 @@ extern "C" {
     pub fn xmp_string_cstr(s: *const XmpString) -> *const c_char;
     pub fn xmp_string_len(s: *const XmpString) -> size_t;
 
-    pub fn xmp_iterator_new() -> *mut XmpIterator;
+    pub fn xmp_iterator_new(xmp: *mut Xmp, schema: *const c_char,
+                            name: *const c_char,
+                            optionbits: u32 /*IterFlags*/) -> *mut XmpIterator;
     pub fn xmp_iterator_free(i: *mut XmpIterator) -> bool;
     pub fn xmp_iterator_next(i: *mut XmpIterator, schema: *mut XmpString,
                              name: *mut XmpString, value: *mut XmpString,
@@ -350,6 +356,7 @@ extern "C" {
                                 right: *const XmpDateTime) -> c_int;
 }
 
+#[cfg(test)]
 #[test]
 fn native_call_works() {
     let inited = unsafe { xmp_init() };
@@ -361,6 +368,12 @@ fn native_call_works() {
     assert!(!xf.is_null());
     assert!(unsafe { xmp_files_free(xf) });
     assert!(unsafe { xmp_get_error() } == 0);
+
+    let xmp = unsafe { xmp_new_empty() };
+    let xmpiter = unsafe { xmp_iterator_new(xmp, NS_DC.as_ptr(), "keywords".as_ptr() as *const c_char, 0) };
+
+    unsafe { xmp_iterator_free(xmpiter); }
+    unsafe { xmp_free(xmp); }
 
     let xs = unsafe { xmp_string_new() };
     assert!(!xs.is_null());

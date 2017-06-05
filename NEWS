@@ -1,4 +1,9 @@
-2.4.0 -
+2.4.1 -
+
+-XmpIterator::new() declaration was wrong. Also xmp_iterator_new()
+-Export NS_* from the -sys crate.
+
+2.4.0 - 2017/01/07
 
 -Added WEBP type.
 

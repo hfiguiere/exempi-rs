@@ -1,6 +1,8 @@
 
 use c;
+use std::ffi::CString;
 use xmpstring::XmpString;
+use xmp::Xmp;
 
 pub mod flags {
     bitflags! {
@@ -50,8 +52,16 @@ pub struct XmpIterator {
 impl XmpIterator {
 
     /// Construct a new `XmpIterator` from a native pointer
-    pub fn new() -> XmpIterator {
-        XmpIterator { ptr: unsafe { c::xmp_iterator_new() } }
+    pub fn new(xmp: &mut Xmp, schema: &str, name: &str,
+               propsbits: IterFlags) -> XmpIterator {
+        let s_schema = CString::new(schema).unwrap();
+        let s_name = CString::new(name).unwrap();
+        XmpIterator {
+            ptr: unsafe {
+                c::xmp_iterator_new(xmp.as_mut_ptr(), s_schema.as_ptr(),
+                                    s_name.as_ptr(), propsbits.bits())
+            }
+        }
     }
 
     /// Whether native pointer is null
@@ -93,4 +103,13 @@ impl Drop for XmpIterator {
             unsafe { c::xmp_iterator_free(self.ptr) };
         }
     }
+}
+
+#[cfg(test)]
+#[test]
+fn iterator_works() {
+
+    let mut xmp = Xmp::new();
+    XmpIterator::new(&mut xmp, "http://ns/ns", "keyword",
+                     IterFlags::from_bits(0).unwrap_or(ITER_NONE));
 }
