@@ -18,6 +18,7 @@ pub use xmpiterator::XmpIterator as XmpIterator;
 pub use c::FileType as FileType;
 pub use c::XmpError as Error;
 pub use c::consts::*;
+pub use c::TzSign as XmpTzSign;
 // all the flags.
 pub use xmpfile::flags::*;
 pub use xmp::flags::*;
