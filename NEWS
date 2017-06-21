@@ -1,3 +1,7 @@
+2.4.2 - 2017/06/20
+
+-XmpDateTime: the c struct is public.
+
 2.4.1 - 2017/06/04
 
 -XmpIterator::new() declaration was wrong. Also xmp_iterator_new()
