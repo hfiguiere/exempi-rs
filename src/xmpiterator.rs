@@ -108,8 +108,7 @@ impl Drop for XmpIterator {
 #[cfg(test)]
 #[test]
 fn iterator_works() {
-
     let mut xmp = Xmp::new();
-    XmpIterator::new(&mut xmp, "http://ns/ns", "keyword",
+    XmpIterator::new(&mut xmp, "http://ns.adobe.com/xap/1.0/", "keyword",
                      IterFlags::from_bits(0).unwrap_or(ITER_NONE));
 }
