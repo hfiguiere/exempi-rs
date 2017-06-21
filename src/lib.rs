@@ -83,7 +83,7 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
 
 /// A wrapper around the C type DateTime
 pub struct DateTime {
-    c: c::XmpDateTime
+    pub c: c::XmpDateTime
 }
 
 impl DateTime {
