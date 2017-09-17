@@ -65,27 +65,15 @@ pub mod flags {
 	    const PROP_COMPOSITE_MASK   = PROP_VALUE_IS_STRUCT.bits
                 | PROP_ARRAY_FORM_MASK.bits,
             /// Reserved for transient use by the implementation.
-	    const IMPL_RESERVED_MASK    = 0x70000000u32
-        }
-    }
+	    const IMPL_RESERVED_MASK    = 0x70000000u32,
 
-    bitflags! {
-        pub flags ArrayFlags: u32 {
-            /// Default value, no option.
-            const ARRAY_NONE = 0u32,
             /// Array is a ordered.
 	    const ARRAY_IS_ORDERED = 0x00000400u32,
             /// Array is alternate values
 	    const ARRAY_IS_ALT    = 0x00000800u32,
             /// Array is alternate text.
 	    const ARRAY_IS_ALTTEXT = 0x00001000u32,
-        }
-    }
 
-    bitflags! {
-        pub flags ItemFlags: u32 {
-            const ITEM_NONE = 0u32,
-            /// The value is a structure with nested fields.
 	    const ITEM_IS_STRUCT = 0x00000100u32,
             /// The value is an array (RDF alt/bag/seq).
 	    const ITEM_IS_ARRAY  = 0x00000200u32,
@@ -425,8 +413,8 @@ impl Xmp {
     // XXX figure out the array options...
     /// Append an array item.
     pub fn append_array_item(&mut self, schema: &str, name: &str,
-                             array_options: ArrayFlags, value: &str,
-                             item_options: ItemFlags) -> bool {
+                             array_options: PropFlags, value: &str,
+                             item_options: PropFlags) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_value = CString::new(value).unwrap();
