@@ -98,7 +98,7 @@ pub enum XmpError {
     BadMPEG          = -211,
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 #[repr(i32)]
 pub enum TzSign {
     /// West of UTC
@@ -110,6 +110,7 @@ pub enum TzSign {
 }
 
 // the C defined struct.
+#[derive(Clone, Copy, Debug)]
 #[repr(C)]
 pub struct XmpDateTime {
     pub year: i32,

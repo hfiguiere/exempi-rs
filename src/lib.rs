@@ -83,6 +83,7 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
 }
 
 /// A wrapper around the C type DateTime
+#[derive(Clone, Debug)]
 pub struct DateTime {
     pub c: c::XmpDateTime
 }
