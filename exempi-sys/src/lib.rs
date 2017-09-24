@@ -343,7 +343,7 @@ extern "C" {
     pub fn xmp_string_cstr(s: *const XmpString) -> *const c_char;
     pub fn xmp_string_len(s: *const XmpString) -> size_t;
 
-    pub fn xmp_iterator_new(xmp: *mut Xmp, schema: *const c_char,
+    pub fn xmp_iterator_new(xmp: *const Xmp, schema: *const c_char,
                             name: *const c_char,
                             optionbits: u32 /*IterFlags*/) -> *mut XmpIterator;
     pub fn xmp_iterator_free(i: *mut XmpIterator) -> bool;

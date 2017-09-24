@@ -52,13 +52,13 @@ pub struct XmpIterator {
 impl XmpIterator {
 
     /// Construct a new `XmpIterator` from a native pointer
-    pub fn new(xmp: &mut Xmp, schema: &str, name: &str,
+    pub fn new(xmp: &Xmp, schema: &str, name: &str,
                propsbits: IterFlags) -> XmpIterator {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         XmpIterator {
             ptr: unsafe {
-                c::xmp_iterator_new(xmp.as_mut_ptr(), s_schema.as_ptr(),
+                c::xmp_iterator_new(xmp.as_ptr(), s_schema.as_ptr(),
                                     s_name.as_ptr(), propsbits.bits())
             }
         }
