@@ -3,6 +3,7 @@ use c;
 use std::ffi::CString;
 use xmpstring::XmpString;
 use xmp::Xmp;
+use xmp::flags::*;
 
 pub mod flags {
     bitflags! {
@@ -74,15 +75,20 @@ impl XmpIterator {
         self.ptr
     }
 
-    /// Iterate to the next element following the option bitset from `IterBits`
+    /// Iterate to the next element following the option set by the iterator
+    ///
+    /// schema, name, value will be output with the respective info
+    /// option will be output with property flags.
+    /// return false when reaching the end
+    ///
     pub fn next(&mut self, schema: &mut XmpString, name: &mut XmpString,
-                value: &mut XmpString, option: &mut IterFlags) -> bool {
+                value: &mut XmpString, option: &mut PropFlags) -> bool {
         let mut raw_option : u32 = 0;
         let result = unsafe { c::xmp_iterator_next(self.ptr, schema.as_mut_ptr(),
                                                    name.as_mut_ptr(),
                                                    value.as_mut_ptr(),
                                                    &mut raw_option) };
-        *option = IterFlags::from_bits(raw_option).unwrap_or(ITER_NONE);
+        *option = PropFlags::from_bits(raw_option).unwrap_or(PROP_NONE);
         result
     }
 
