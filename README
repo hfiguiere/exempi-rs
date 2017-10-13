@@ -11,11 +11,7 @@ Rust API.
 Versioning
 ----------
 
-The crate version is x.y.z. Where x.y to match the x.y of the C
-library. The .z will be increased to denote changes to the Rust
-wrappers.
-
-Example: 2.3.0 is for Exempi 2.3.x.
+The Rust crate will not match the upstream version.
 
 Source
 ------
