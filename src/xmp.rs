@@ -53,9 +53,9 @@ pub mod flags {
 	    const PROP_IS_STABLE        = 0x00100000u32,
             /// This property is derived from the document content.
 	    const PROP_IS_DERIVED       = 0x00200000u32,
-	    /* kXMPUtil_AllowCommas   = 0x10000000u32,  ! Used by TXMPUtils::CatenateArrayItems and ::SeparateArrayItems. */
-	    /* kXMP_DeleteExisting    = 0x20000000u32,  ! Used by TXMPMeta::SetXyz functions to delete any pre-existing property. */
-	    /* kXMP_SchemaNode        = 0x80000000u32,  ! Returned by iterators - #define to avoid warnings */
+	    // kXMPUtil_AllowCommas   = 0x10000000u32,  ! Used by TXMPUtils::CatenateArrayItems and ::SeparateArrayItems.
+	    // kXMP_DeleteExisting    = 0x20000000u32,  ! Used by TXMPMeta::SetXyz functions to delete any pre-existing property.
+	    // kXMP_SchemaNode        = 0x80000000u32,  ! Returned by iterators - #define to avoid warnings
 
 	    /* Masks that are multiple flags. */
 	    const PROP_ARRAY_FORM_MASK  =
@@ -82,19 +82,19 @@ pub mod flags {
 
     bitflags! {
         pub flags SerialFlags: u32 {
-            /// Omit the XML packet wrapper. */
+            /// Omit the XML packet wrapper.
             const SERIAL_OMITPACKETWRAPPER   = 0x0010u32,
-            /// Default is a writeable packet. */
+            /// Default is a writeable packet.
 	    const SERIAL_READONLYPACKET      = 0x0020u32,
-            /// Use a compact form of RDF. */
+            /// Use a compact form of RDF.
 	    const SERIAL_USECOMPACTFORMAT    = 0x0040u32,
-            /// Include a padding allowance for a thumbnail image. */
+            /// Include a padding allowance for a thumbnail image.
 	    const SERIAL_INCLUDETHUMBNAILPAD = 0x0100u32,
-            /// The padding parameter is the overall packet length. */
+            /// The padding parameter is the overall packet length.
 	    const SERIAL_EXACTPACKETLENGTH   = 0x0200u32,
-            /// Show aliases as XML comments. */
+            /// Show aliases as XML comments.
 	    const SERIAL_WRITEALIASCOMMENTS  = 0x0400u32,
-            /// Omit all formatting whitespace. */
+            /// Omit all formatting whitespace.
 	    const SERIAL_OMITALLFORMATTING   = 0x0800u32,
 
             /* ! Don't use directly, see the combined values below! */
@@ -407,6 +407,20 @@ impl Xmp {
             c::xmp_set_property_int64(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(), value,
                                       optionbits.bits())
+        }
+    }
+
+    /// Set an array item
+    pub fn set_array_item(&mut self, schema: &str, name: &str,
+                          index: i32, value: &str,
+                          item_options: PropFlags) -> bool {
+        let s_schema = CString::new(schema).unwrap();
+        let s_name = CString::new(name).unwrap();
+        let s_value = CString::new(value).unwrap();
+        unsafe {
+            c::xmp_set_array_item(self.ptr, s_schema.as_ptr(),
+                                  s_name.as_ptr(), index,
+                                  s_value.as_ptr(), item_options.bits())
         }
     }
 
