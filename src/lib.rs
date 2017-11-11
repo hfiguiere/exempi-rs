@@ -11,6 +11,8 @@ mod xmpiterator;
 use std::ffi::{CString};
 use std::cmp::Ordering;
 use std::mem::transmute;
+use std::sync::{Once, ONCE_INIT};
+
 pub use xmp::Xmp as Xmp;
 pub use xmpfile::XmpFile as XmpFile;
 pub use xmpstring::XmpString as XmpString;
@@ -20,13 +22,21 @@ pub use c::XmpError as Error;
 pub use c::consts::*;
 pub use c::TzSign as XmpTzSign;
 // all the flags.
+pub use ns::*;
 pub use xmpfile::flags::*;
 pub use xmp::flags::*;
 pub use xmpiterator::flags::*;
 
+static START: Once = ONCE_INIT;
+
 /// Initialize the library
 pub fn init() -> bool {
-    unsafe { c::xmp_init() }
+    let mut inited = true;
+    START.call_once(|| {
+        // run initialization here
+        inited = unsafe { c::xmp_init() };
+    });
+    inited
 }
 
 /// Terminate the library

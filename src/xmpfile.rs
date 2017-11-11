@@ -264,6 +264,4 @@ fn it_works() {
     assert!(!xf.is_null());
 
     assert!(::get_error() == XmpError::Unknown);
-
-    ::terminate();
 }
