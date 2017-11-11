@@ -18,9 +18,9 @@ pub mod flags {
 	    const PROP_HAS_QUALIFIERS   = 0x00000010u32,
             /// This is a qualifier, includes rdf:type and xml:lang.
 	    const PROP_IS_QUALIFIER     = 0x00000020u32,
-            /// Implies XMP_PropHasQualifiers, property has xml:lang.
+            /// Implies `PROP_HAS_QUALIFIERS`, property has xml:lang.
 	    const PROP_HAS_LANG         = 0x00000040u32,
-            /// Implies XMP_PropHasQualifiers, property has rdf:type.
+            /// Implies `PROP_HAS_QUALIFIERS`, property has rdf:type.
 	    const PROP_HAS_TYPE         = 0x00000080u32,
 
 	    /* Options relating to the data structure form. */
@@ -30,12 +30,12 @@ pub mod flags {
 	    const PROP_VALUE_IS_ARRAY  = 0x00000200u32,
             /// The item order does not matter.*/
 	    const PROP_ARRAY_IS_UNORDERED = PROP_VALUE_IS_ARRAY.bits,
-            /// Implies XMP_PropValueIsArray, item order matters.
+            /// Implies `PROP_VALUE_IS_ARRAY`, item order matters.
 	    const PROP_ARRAY_IS_ORDERED = 0x00000400u32,
-            /// Implies XMP_PropArrayIsOrdered, items are alternates.
+            /// Implies `PROP_ARRAY_IS_ORDERED`, items are alternates.
 	    const PROP_ARRAY_IS_ALT    = 0x00000800u32,
 	    /** Additional struct and array options. */
-            /// Implies kXMP_PropArrayIsAlternate, items are localized text.
+            /// Implies `PROP_ARRAY_IS_ALT`, items are localized text.
 	    const PROP_ARRAY_IS_ALTTEXT = 0x00001000u32,
             /// Used by array functions.
 	    const PROP_ARRAY_INSERT_BEFORE = 0x00004000u32,
