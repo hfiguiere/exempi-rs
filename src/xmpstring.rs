@@ -25,6 +25,7 @@ use std::ffi::{CStr};
 ///    println!("converted to std::String: {}", s);
 /// }
 /// ```
+#[derive(Debug)]
 pub struct XmpString {
     ptr: *mut c::XmpString
 }
