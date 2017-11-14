@@ -29,7 +29,10 @@ pub use xmpiterator::flags::*;
 
 static START: Once = ONCE_INIT;
 
-/// Initialize the library
+/// Initialize the library.
+///
+/// This will ensure xmp_init() is called only once so that
+/// concurrent calls are exclusive.
 pub fn init() -> bool {
     let mut inited = true;
     START.call_once(|| {
@@ -39,7 +42,18 @@ pub fn init() -> bool {
     inited
 }
 
-/// Terminate the library
+/// Force initialize the library.
+///
+/// Can be safely called more than once or after `init()`
+/// but can't be called concurrently from different threads.
+pub fn force_init() -> bool {
+    unsafe { c::xmp_init() }
+}
+
+/// Terminate the library. (use is discouraged)
+///
+/// As a side effect, you can't counter balance it with a `init()`
+/// hence its use is discouraged.
 pub fn terminate() {
     unsafe { c::xmp_terminate() }
 }
