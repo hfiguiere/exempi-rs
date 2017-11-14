@@ -22,7 +22,6 @@ pub use c::XmpError as Error;
 pub use c::consts::*;
 pub use c::TzSign as XmpTzSign;
 // all the flags.
-pub use ns::*;
 pub use xmpfile::flags::*;
 pub use xmp::flags::*;
 pub use xmpiterator::flags::*;
