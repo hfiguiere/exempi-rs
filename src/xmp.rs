@@ -12,47 +12,47 @@ pub mod flags {
             /// The property has no bit set.
             const PROP_NONE = 0,
             /// The value is a URI, use rdf:resource attribute. DISCOURAGED
-            const PROP_VALUE_IS_URI     = 0x00000002u32,
+            const PROP_VALUE_IS_URI     = 0x0000_0002u32,
 	    /** Options relating to qualifiers attached to a property. */
             /// The property has qualifiers, includes rdf:type and xml:lang.
-	    const PROP_HAS_QUALIFIERS   = 0x00000010u32,
+	    const PROP_HAS_QUALIFIERS   = 0x0000_0010u32,
             /// This is a qualifier, includes rdf:type and xml:lang.
-	    const PROP_IS_QUALIFIER     = 0x00000020u32,
+	    const PROP_IS_QUALIFIER     = 0x0000_0020u32,
             /// Implies `PROP_HAS_QUALIFIERS`, property has xml:lang.
-	    const PROP_HAS_LANG         = 0x00000040u32,
+	    const PROP_HAS_LANG         = 0x0000_0040u32,
             /// Implies `PROP_HAS_QUALIFIERS`, property has rdf:type.
-	    const PROP_HAS_TYPE         = 0x00000080u32,
+	    const PROP_HAS_TYPE         = 0x0000_0080u32,
 
 	    /* Options relating to the data structure form. */
             /// The value is a structure with nested fields.
-	    const PROP_VALUE_IS_STRUCT = 0x00000100u32,
+	    const PROP_VALUE_IS_STRUCT = 0x0000_0100u32,
             /// The value is an array (RDF alt/bag/seq).
-	    const PROP_VALUE_IS_ARRAY  = 0x00000200u32,
+	    const PROP_VALUE_IS_ARRAY  = 0x0000_0200u32,
             /// The item order does not matter.*/
 	    const PROP_ARRAY_IS_UNORDERED = PROP_VALUE_IS_ARRAY.bits,
             /// Implies `PROP_VALUE_IS_ARRAY`, item order matters.
-	    const PROP_ARRAY_IS_ORDERED = 0x00000400u32,
+	    const PROP_ARRAY_IS_ORDERED = 0x0000_0400u32,
             /// Implies `PROP_ARRAY_IS_ORDERED`, items are alternates.
-	    const PROP_ARRAY_IS_ALT    = 0x00000800u32,
+	    const PROP_ARRAY_IS_ALT    = 0x0000_0800u32,
 	    /** Additional struct and array options. */
             /// Implies `PROP_ARRAY_IS_ALT`, items are localized text.
-	    const PROP_ARRAY_IS_ALTTEXT = 0x00001000u32,
+	    const PROP_ARRAY_IS_ALTTEXT = 0x0000_1000u32,
             /// Used by array functions.
-	    const PROP_ARRAY_INSERT_BEFORE = 0x00004000u32,
+	    const PROP_ARRAY_INSERT_BEFORE = 0x0000_4000u32,
             /// Used by array functions. */
-	    const PROP_ARRAY_INSERT_AFTER = 0x00008000u32,
+	    const PROP_ARRAY_INSERT_AFTER = 0x0000_8000u32,
 
 	    /* Other miscellaneous options. */
             /// This property is an alias name for another property.
-	    const PROP_IS_ALIAS         = 0x00010000u32,
+	    const PROP_IS_ALIAS         = 0x0001_0000u32,
             /// This property is the base value for a set of aliases.
-	    const PROP_HAS_ALIASES      = 0x00020000u32,
+	    const PROP_HAS_ALIASES      = 0x0002_0000u32,
             /// This property is an "internal" property, owned by applications.
-	    const PROP_IS_INTERNAL      = 0x00040000u32,
+	    const PROP_IS_INTERNAL      = 0x0004_0000u32,
             /// This property is not derived from the document content.
-	    const PROP_IS_STABLE        = 0x00100000u32,
+	    const PROP_IS_STABLE        = 0x0010_0000u32,
             /// This property is derived from the document content.
-	    const PROP_IS_DERIVED       = 0x00200000u32,
+	    const PROP_IS_DERIVED       = 0x0020_0000u32,
 	    // kXMPUtil_AllowCommas   = 0x10000000u32,  ! Used by TXMPUtils::CatenateArrayItems and ::SeparateArrayItems.
 	    // kXMP_DeleteExisting    = 0x20000000u32,  ! Used by TXMPMeta::SetXyz functions to delete any pre-existing property.
 	    // kXMP_SchemaNode        = 0x80000000u32,  ! Returned by iterators - #define to avoid warnings
@@ -65,18 +65,18 @@ pub mod flags {
 	    const PROP_COMPOSITE_MASK   = PROP_VALUE_IS_STRUCT.bits
                 | PROP_ARRAY_FORM_MASK.bits,
             /// Reserved for transient use by the implementation.
-	    const IMPL_RESERVED_MASK    = 0x70000000u32,
+	    const IMPL_RESERVED_MASK    = 0x7000_0000u32,
 
             /// Array is a ordered.
-	    const ARRAY_IS_ORDERED = 0x00000400u32,
+	    const ARRAY_IS_ORDERED = 0x0000_0400u32,
             /// Array is alternate values
-	    const ARRAY_IS_ALT    = 0x00000800u32,
+	    const ARRAY_IS_ALT    = 0x0000_0800u32,
             /// Array is alternate text.
-	    const ARRAY_IS_ALTTEXT = 0x00001000u32,
+	    const ARRAY_IS_ALTTEXT = 0x0000_1000u32,
 
-	    const ITEM_IS_STRUCT = 0x00000100u32,
+	    const ITEM_IS_STRUCT = 0x0000_0100u32,
             /// The value is an array (RDF alt/bag/seq).
-	    const ITEM_IS_ARRAY  = 0x00000200u32,
+	    const ITEM_IS_ARRAY  = 0x0000_0200u32,
         }
     }
 
@@ -127,14 +127,19 @@ pub struct Xmp {
     ptr: *mut c::Xmp
 }
 
+impl Default for Xmp {
+    fn default() -> Xmp {
+        Xmp { ptr: unsafe { c::xmp_new_empty() } }
+    }
+}
 impl Xmp {
     /// Construct from a native ptr. Will own it.
     pub fn from(ptr: *mut c::Xmp) -> Xmp {
-        Xmp { ptr: ptr }
+        Xmp { ptr }
     }
     /// New Xmp object
     pub fn new() -> Xmp {
-        Xmp { ptr: unsafe { c::xmp_new_empty() } }
+        Xmp::default()
     }
     /// New Xmp object a byte buffer.
     /// Return None if parsing failed.
@@ -200,7 +205,7 @@ impl Xmp {
             c::xmp_get_property(self.ptr, s_schema.as_ptr(), s_name.as_ptr(),
                                 property.as_mut_ptr(), &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
+        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
             Some(property)
         } else {
@@ -222,7 +227,7 @@ impl Xmp {
                                      &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits)
-            .unwrap_or(PropFlags::empty());
+            .unwrap_or_else(PropFlags::empty);
         if result {
             Some(property)
         } else {
@@ -243,7 +248,7 @@ impl Xmp {
                                       &mut property as *mut f64,
                                       &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
+        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
             Some(property)
         } else {
@@ -265,7 +270,7 @@ impl Xmp {
                                       &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits)
-            .unwrap_or(PropFlags::empty());
+            .unwrap_or_else(PropFlags::empty);
         if result {
             Some(property)
         } else {
@@ -287,7 +292,7 @@ impl Xmp {
                                       &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits)
-            .unwrap_or(PropFlags::empty());
+            .unwrap_or_else(PropFlags::empty);
         if result {
             Some(property)
         } else {
@@ -308,7 +313,7 @@ impl Xmp {
                                       &mut property as *mut i64,
                                       &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
+        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
             Some(property)
         } else {
@@ -330,7 +335,7 @@ impl Xmp {
                                            property.as_mut_ptr(),
                                            &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
+        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
             Some(property)
         } else {
@@ -475,7 +480,7 @@ impl Xmp {
                                       value.as_mut_ptr(),
                                       &mut raw_propsbits)
         };
-        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or(PropFlags::empty());
+        *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         result
     }
 

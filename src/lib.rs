@@ -106,14 +106,14 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
 }
 
 /// A wrapper around the C type DateTime
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct DateTime {
     pub c: c::XmpDateTime
 }
 
 impl DateTime {
     pub fn new() -> Self {
-        DateTime { c: c::XmpDateTime::default() }
+        DateTime::default()
     }
     /// Construct from the native C type
     pub fn from(d: c::XmpDateTime) -> DateTime {

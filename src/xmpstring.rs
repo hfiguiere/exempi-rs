@@ -30,10 +30,16 @@ pub struct XmpString {
     ptr: *mut c::XmpString
 }
 
+impl Default for XmpString {
+    fn default() -> XmpString {
+        XmpString { ptr: unsafe { c::xmp_string_new() } }
+    }
+}
+
 impl XmpString {
     /// Create a new XmpString
     pub fn new() -> XmpString {
-        XmpString { ptr: unsafe { c::xmp_string_new() } }
+        XmpString::default()
     }
 
     /// Native pointer is NULL
@@ -57,6 +63,10 @@ impl XmpString {
             return 0;
         }
         unsafe { c::xmp_string_len(self.ptr) }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
     }
 
     /// Convert to a str
