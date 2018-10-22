@@ -11,6 +11,7 @@ mod xmpiterator;
 use std::ffi::{CString};
 use std::cmp::Ordering;
 use std::mem::transmute;
+use std::result;
 use std::sync::{Once, ONCE_INIT};
 
 pub use xmp::Xmp as Xmp;
@@ -25,6 +26,9 @@ pub use c::TzSign as XmpTzSign;
 pub use xmpfile::flags::*;
 pub use xmp::flags::*;
 pub use xmpiterator::flags::*;
+
+/// Result type
+pub type Result<T> = result::Result<T, Error>;
 
 static START: Once = ONCE_INIT;
 

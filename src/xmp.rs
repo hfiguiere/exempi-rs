@@ -5,6 +5,7 @@ use libc::c_char;
 use xmpstring::XmpString;
 use DateTime;
 use std::ffi::CString;
+use super::Result;
 
 pub mod flags {
     bitflags! {
@@ -132,7 +133,9 @@ impl Default for Xmp {
         Xmp { ptr: unsafe { c::xmp_new_empty() } }
     }
 }
+
 impl Xmp {
+
     /// Construct from a native ptr. Will own it.
     pub fn from(ptr: *mut c::Xmp) -> Xmp {
         Xmp { ptr }
@@ -143,44 +146,48 @@ impl Xmp {
     }
     /// New Xmp object a byte buffer.
     /// Return None if parsing failed.
-    pub fn from_buffer(buf: &[u8]) -> Option<Xmp> {
+    pub fn from_buffer(buf: &[u8]) -> Result<Xmp> {
         let ptr = unsafe {
             c::xmp_new(buf.as_ptr() as *const c_char, buf.len())
         };
         if ptr.is_null() {
-            return None;
+            return Err(super::get_error());
         }
-        Some(Xmp::from(ptr))
+        Ok(Xmp::from(ptr))
     }
     /// Parse buff into a Xmp
-    pub fn parse(&mut self, buf: &[u8]) -> bool {
-        unsafe {
+    pub fn parse(&mut self, buf: &[u8]) -> Result<()> {
+        if unsafe {
             c::xmp_parse(self.ptr,
                          buf.as_ptr() as *const c_char,
                          buf.len())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Serialize the Xmp to an XmpString.
     pub fn serialize(&self, options: SerialFlags,
-                     padding: u32) -> Option<XmpString> {
+                     padding: u32) -> Result<XmpString> {
         if self.is_null() {
-            return None;
+            return Err(super::Error::BadObject);
         }
         let mut buffer = XmpString::new();
         if unsafe { c::xmp_serialize(self.ptr, buffer.as_mut_ptr(),
                                      options.bits(), padding) } {
-            return Some(buffer);
+            return Ok(buffer);
         }
-        None
+        Err(super::get_error())
     }
 
     /// Serialize the Xmp to an XmpString with some formatting options.
     pub fn serialize_and_format(&self, options: SerialFlags,
                                 padding: u32, newline: &str, tab: &str,
-                                indent: i32) -> Option<XmpString> {
+                                indent: i32) -> Result<XmpString> {
         if self.is_null() {
-            return None;
+            return Err(super::Error::BadObject);
         }
         let s_newline = CString::new(newline).unwrap();
         let s_tab = CString::new(tab).unwrap();
@@ -189,14 +196,14 @@ impl Xmp {
                                                 options.bits(), padding,
                                                 s_newline.as_ptr(),
                                                 s_tab.as_ptr(), indent) } {
-            return Some(buffer);
+            return Ok(buffer);
         }
-        None
+        Err(super::get_error())
     }
 
     /// Get property as a XmpString.
     pub fn get_property(&self, schema: &str, name: &str,
-                        propsbits: &mut PropFlags) -> Option<XmpString> {
+                        propsbits: &mut PropFlags) -> Result<XmpString> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let mut raw_propsbits = 0u32;
@@ -207,15 +214,15 @@ impl Xmp {
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
-            Some(property)
+            Ok(property)
         } else {
-            None
+            Err(super::get_error())
         }
     }
 
     /// Get DateTime property.
     pub fn get_property_date(&self, schema: &str, name: &str,
-                             propsbits: &mut PropFlags) -> Option<DateTime> {
+                             propsbits: &mut PropFlags) -> Result<DateTime> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let mut raw_propsbits = 0u32;
@@ -229,15 +236,15 @@ impl Xmp {
         *propsbits = PropFlags::from_bits(raw_propsbits)
             .unwrap_or_else(PropFlags::empty);
         if result {
-            Some(property)
+            Ok(property)
         } else {
-            None
+            Err(super::get_error())
         }
     }
 
     /// Get float property
     pub fn get_property_float(&self, schema: &str, name: &str,
-                              propsbits: &mut PropFlags) -> Option<f64> {
+                              propsbits: &mut PropFlags) -> Result<f64> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let mut raw_propsbits = 0u32;
@@ -250,15 +257,15 @@ impl Xmp {
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
-            Some(property)
+            Ok(property)
         } else {
-            None
+            Err(super::get_error())
         }
     }
 
     /// Get bool property
     pub fn get_property_bool(&self, schema: &str, name: &str,
-                             propsbits: &mut PropFlags) -> Option<bool> {
+                             propsbits: &mut PropFlags) -> Result<bool> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let mut raw_propsbits = 0u32;
@@ -272,15 +279,15 @@ impl Xmp {
         *propsbits = PropFlags::from_bits(raw_propsbits)
             .unwrap_or_else(PropFlags::empty);
         if result {
-            Some(property)
+            Ok(property)
         } else {
-            None
+            Err(super::get_error())
         }
     }
 
     /// Get i32 property
     pub fn get_property_i32(&self, schema: &str, name: &str,
-                            propsbits: &mut PropFlags) -> Option<i32> {
+                            propsbits: &mut PropFlags) -> Result<i32> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let mut raw_propsbits = 0u32;
@@ -294,15 +301,15 @@ impl Xmp {
         *propsbits = PropFlags::from_bits(raw_propsbits)
             .unwrap_or_else(PropFlags::empty);
         if result {
-            Some(property)
+            Ok(property)
         } else {
-            None
+            Err(super::get_error())
         }
     }
 
     /// Get i64 property
     pub fn get_property_i64(&self, schema: &str, name: &str,
-                              propsbits: &mut PropFlags) -> Option<i64> {
+                              propsbits: &mut PropFlags) -> Result<i64> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let mut raw_propsbits = 0u32;
@@ -315,16 +322,16 @@ impl Xmp {
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
-            Some(property)
+            Ok(property)
         } else {
-            None
+            Err(super::get_error())
         }
     }
 
     /// Get array item property
     pub fn get_array_item(&self, schema: &str, name: &str, index: i32,
                           propsbits: &mut PropFlags)
-                          -> Option<XmpString> {
+                          -> Result<XmpString> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let mut raw_propsbits = 0u32;
@@ -337,95 +344,123 @@ impl Xmp {
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
         if result {
-            Some(property)
+            Ok(property)
         } else {
-            None
+            Err(super::get_error())
         }
     }
 
     /// Set a string property value
     pub fn set_property(&mut self, schema: &str, name: &str,
-                        value: &str, optionbits: PropFlags) -> bool {
+                        value: &str, optionbits: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_value = CString::new(value).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_property(self.ptr, s_schema.as_ptr(),
                                 s_name.as_ptr(), s_value.as_ptr(),
                                 optionbits.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Set a date property value
     pub fn set_property_date(&mut self, schema: &str, name: &str,
-                             value: &DateTime, optionbits: PropFlags) -> bool {
+                             value: &DateTime, optionbits: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_property_date(self.ptr, s_schema.as_ptr(),
                                      s_name.as_ptr(),
                                      value.as_ptr(),
                                      optionbits.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Set a float property value
     pub fn set_property_float(&mut self, schema: &str, name: &str,
-                              value: f64, optionbits: PropFlags) -> bool {
+                              value: f64, optionbits: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_property_float(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(), value, optionbits.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Set a bool property value
     pub fn set_property_bool(&mut self, schema: &str, name: &str,
-                              value: bool, optionbits: PropFlags) -> bool {
+                              value: bool, optionbits: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_property_bool(self.ptr, s_schema.as_ptr(),
                                      s_name.as_ptr(), value, optionbits.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Set an i32 property value
     pub fn set_property_i32(&mut self, schema: &str, name: &str,
-                              value: i32, optionbits: PropFlags) -> bool {
+                              value: i32, optionbits: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_property_int32(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(), value,
                                       optionbits.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Set an i64 property value
     pub fn set_property_i64(&mut self, schema: &str, name: &str,
-                              value: i64, optionbits: PropFlags) -> bool {
+                              value: i64, optionbits: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_property_int64(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(), value,
                                       optionbits.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Set an array item
     pub fn set_array_item(&mut self, schema: &str, name: &str,
                           index: i32, value: &str,
-                          item_options: PropFlags) -> bool {
+                          item_options: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_value = CString::new(value).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_array_item(self.ptr, s_schema.as_ptr(),
                                   s_name.as_ptr(), index,
                                   s_value.as_ptr(), item_options.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
@@ -433,23 +468,31 @@ impl Xmp {
     /// Append an array item.
     pub fn append_array_item(&mut self, schema: &str, name: &str,
                              array_options: PropFlags, value: &str,
-                             item_options: PropFlags) -> bool {
+                             item_options: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_value = CString::new(value).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_append_array_item(self.ptr, s_schema.as_ptr(),
                                      s_name.as_ptr(), array_options.bits(),
                                      s_value.as_ptr(), item_options.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Delete a property
-    pub fn delete_property(&mut self, schema: &str, name: &str) -> bool {
+    pub fn delete_property(&mut self, schema: &str, name: &str) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_delete_property(self.ptr, s_schema.as_ptr(), s_name.as_ptr())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
@@ -464,13 +507,16 @@ impl Xmp {
 
     /// Get localized text.
     pub fn get_localized_text(&self, schema: &str, name: &str, gen_lang: &str,
-                              spec_lang: &str, actual_lang: &mut XmpString,
-                              value: &mut XmpString,
-                              propsbits: &mut PropFlags) -> bool {
+                              spec_lang: &str,
+                              propsbits: &mut PropFlags) -> Result<(XmpString, XmpString)> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_gen_lang = CString::new(gen_lang).unwrap();
         let s_spec_lang = CString::new(spec_lang).unwrap();
+
+        let mut actual_lang = XmpString::new();
+        let mut value = XmpString::new();
+
         let mut raw_propsbits = 0u32;
         let result = unsafe {
             c::xmp_get_localized_text(self.ptr, s_schema.as_ptr(),
@@ -481,37 +527,49 @@ impl Xmp {
                                       &mut raw_propsbits)
         };
         *propsbits = PropFlags::from_bits(raw_propsbits).unwrap_or_else(PropFlags::empty);
-        result
+        if result {
+            Ok((actual_lang, value))
+        } else {
+            Err(super::get_error())
+        }
     }
 
     /// Set localized text.
     pub fn set_localized_text(&mut self, schema: &str, name: &str,
                               gen_lang: &str, spec_lang: &str, value: &str,
-                              propbits: PropFlags) -> bool {
+                              propbits: PropFlags) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_gen_lang = CString::new(gen_lang).unwrap();
         let s_spec_lang = CString::new(spec_lang).unwrap();
         let s_value = CString::new(value).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_set_localized_text(self.ptr, s_schema.as_ptr(),
                                       s_name.as_ptr(), s_gen_lang.as_ptr(),
                                       s_spec_lang.as_ptr(), s_value.as_ptr(),
                                       propbits.bits())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 
     /// Delete localize text.
     pub fn delete_localized_text(&mut self, schema: &str, name: &str,
-                                 gen_lang: &str, spec_lang: &str) -> bool {
+                                 gen_lang: &str, spec_lang: &str) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         let s_gen_lang = CString::new(gen_lang).unwrap();
         let s_spec_lang = CString::new(spec_lang).unwrap();
-        unsafe {
+        if unsafe {
             c::xmp_delete_localized_text(self.ptr, s_schema.as_ptr(),
                                          s_name.as_ptr(), s_gen_lang.as_ptr(),
                                          s_spec_lang.as_ptr())
+        } {
+            Ok(())
+        } else {
+            Err(super::get_error())
         }
     }
 

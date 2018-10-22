@@ -13,7 +13,7 @@ pub enum XmpFile {}
 pub enum XmpString {}
 pub enum XmpIterator {}
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 #[repr(i32)]
 /// XMP errors.
 pub enum XmpError {

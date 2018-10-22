@@ -18,7 +18,7 @@ use std::ffi::{CStr};
 /// let xmp = Xmp::new();
 /// let mut flags = PropFlags::empty();
 ///
-/// if let Some(ref xmpstring) = xmp.get_property("http://rust.figuiere.net/ns/rust/", "rust", &mut flags) {
+/// if let Ok(ref xmpstring) = xmp.get_property("http://rust.figuiere.net/ns/rust/", "rust", &mut flags) {
 ///    println!("property value is {}, flags {}", xmpstring, flags.bits());
 ///    println!("string len: {}", xmpstring.len());
 ///    let s = String::from(xmpstring.to_str());

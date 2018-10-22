@@ -32,18 +32,18 @@ fn libary_tests() {
 
     assert!(!xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
     assert!(xmpblock.set_property("http://rust.figuiere.net/ns/rust/", "test",
-                                   "foobar", PROP_NONE));
+                                   "foobar", PROP_NONE).is_ok());
     assert!(xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
     let mut optionbits: PropFlags = PROP_NONE;
     let value = xmpblock.get_property("http://rust.figuiere.net/ns/rust/",
                                       "test", &mut optionbits);
-    assert!(value != None);
+    assert!(value.is_ok());
     assert!(value.unwrap().to_str() == "foobar");
     assert!(optionbits == PROP_NONE);
 
     let result = xmpblock.serialize(SERIAL_OMITPACKETWRAPPER |
                                     SERIAL_USECOMPACTFORMAT, 0);
-    assert!(result != None);
+    assert!(result.is_ok());
     println!("{}", result.unwrap().to_str());
 
     exempi::terminate();
