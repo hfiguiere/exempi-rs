@@ -152,6 +152,24 @@ impl DateTime {
         self.c.tz_minute = min;
         self.c.has_tz = 1;
     }
+    pub fn year(&self) -> i32 {
+        self.c.year
+    }
+    pub fn month(&self) -> i32 {
+        self.c.month
+    }
+    pub fn day(&self) -> i32 {
+        self.c.day
+    }
+    pub fn hour(&self) -> i32 {
+        self.c.hour
+    }
+    pub fn minute(&self) -> i32 {
+        self.c.minute
+    }
+    pub fn second(&self) -> i32 {
+        self.c.second
+    }
 }
 
 impl PartialEq for DateTime {
