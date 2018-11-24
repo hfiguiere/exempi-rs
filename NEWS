@@ -1,6 +1,7 @@
 2.5.0 -
 
 - DateTime now has standard derive Clone and Debug
+  - Fixed ffi struct.
 - xmp_iterator_new() now take a const Xmp
 - XmpIterator::next() outputs a PropFlags, not an IterFlags
 - Xmp::set_array_item() was missing.

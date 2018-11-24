@@ -1,6 +1,6 @@
 [package]
 name = "exempi-sys"
-version = "2.4.1"
+version = "2.5.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 build = "build.rs"

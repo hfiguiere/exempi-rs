@@ -103,7 +103,7 @@ impl XmpFile {
 
     /// Create and open a new XmpFile
     /// Equivalent to calling new then open.
-    /// Return None in case of failure
+    /// Return Err in case of failure
     pub fn open_new(p: &str, options: OpenFlags) -> Result<XmpFile> {
         let pp = CString::new(p).unwrap();
         let ptr = unsafe {

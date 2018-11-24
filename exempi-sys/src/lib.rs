@@ -99,7 +99,7 @@ pub enum XmpError {
 }
 
 #[derive(Clone, Copy, PartialEq, Debug)]
-#[repr(i32)]
+#[repr(i8)]
 pub enum TzSign {
     /// West of UTC
     West = -1,
@@ -119,6 +119,9 @@ pub struct XmpDateTime {
     pub hour: i32,
     pub minute: i32,
     pub second: i32,
+    pub has_date: i8,
+    pub has_time: i8,
+    pub has_tz: i8,
     pub tz_sign: TzSign,
     pub tz_hour: i32,
     pub tz_minute: i32,
