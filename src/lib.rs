@@ -112,7 +112,7 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
 /// A wrapper around the C type DateTime
 #[derive(Clone, Debug, Default)]
 pub struct DateTime {
-    pub c: c::XmpDateTime
+    c: c::XmpDateTime
 }
 
 impl DateTime {
@@ -130,6 +130,27 @@ impl DateTime {
     /// Return the native mutable pointer
     pub fn as_mut_ptr(&mut self) -> *mut c::XmpDateTime {
         &mut self.c as *mut c::XmpDateTime
+    }
+    /// Set date
+    pub fn set_date(&mut self, year: i32, month: i32, day: i32) {
+        self.c.year = year;
+        self.c.month = month;
+        self.c.day = day;
+        self.c.has_date = 1;
+    }
+    /// Set time
+    pub fn set_time(&mut self, hour: i32, min: i32, sec: i32) {
+        self.c.hour = hour;
+        self.c.minute = min;
+        self.c.second = sec;
+        self.c.has_time = 1;
+    }
+    /// Set Timezone
+    pub fn set_timezone(&mut self, sign: XmpTzSign, hour: i32, min: i32) {
+        self.c.tz_sign = sign;
+        self.c.tz_hour = hour;
+        self.c.tz_minute = min;
+        self.c.has_tz = 1;
     }
 }
 
