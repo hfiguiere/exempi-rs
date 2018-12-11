@@ -145,6 +145,10 @@ impl DateTime {
         self.c.second = sec;
         self.c.has_time = 1;
     }
+    /// Set nano_second
+    pub fn set_nano_second(&mut self, nano_second: i32) {
+        self.c.nano_second = nano_second;
+    }
     /// Set Timezone
     pub fn set_timezone(&mut self, sign: XmpTzSign, hour: i32, min: i32) {
         self.c.tz_sign = sign;
@@ -169,6 +173,9 @@ impl DateTime {
     }
     pub fn second(&self) -> i32 {
         self.c.second
+    }
+    pub fn nano_second(&self) -> i32 {
+        self.c.nano_second
     }
 }
 
