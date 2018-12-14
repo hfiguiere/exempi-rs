@@ -50,8 +50,7 @@ extern "C" {
 }
 extern "C" {
     #[link_name = "NS_CAMERA_RAW_SAVED_SETTINGS"]
-    pub static mut NS_CAMERA_RAW_SAVED_SETTINGS:
-               [::std::os::raw::c_char; 0usize];
+    pub static mut NS_CAMERA_RAW_SAVED_SETTINGS: [::std::os::raw::c_char; 0usize];
 }
 extern "C" {
     #[link_name = "NS_IPTC4XMP"]
