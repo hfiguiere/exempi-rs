@@ -1,9 +1,8 @@
-
 use c;
 use std::ffi::CString;
-use xmpstring::XmpString;
-use xmp::Xmp;
 use xmp::flags::*;
+use xmp::Xmp;
+use xmpstring::XmpString;
 
 pub mod flags {
     bitflags! {
@@ -47,21 +46,23 @@ pub mod flags {
 use self::flags::*;
 
 pub struct XmpIterator {
-    ptr: *mut c::XmpIterator
+    ptr: *mut c::XmpIterator,
 }
 
 impl XmpIterator {
-
     /// Construct a new `XmpIterator` from a native pointer
-    pub fn new(xmp: &Xmp, schema: &str, name: &str,
-               propsbits: IterFlags) -> XmpIterator {
+    pub fn new(xmp: &Xmp, schema: &str, name: &str, propsbits: IterFlags) -> XmpIterator {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         XmpIterator {
             ptr: unsafe {
-                c::xmp_iterator_new(xmp.as_ptr(), s_schema.as_ptr(),
-                                    s_name.as_ptr(), propsbits.bits())
-            }
+                c::xmp_iterator_new(
+                    xmp.as_ptr(),
+                    s_schema.as_ptr(),
+                    s_name.as_ptr(),
+                    propsbits.bits(),
+                )
+            },
         }
     }
 
@@ -81,13 +82,23 @@ impl XmpIterator {
     /// option will be output with property flags.
     /// return false when reaching the end
     ///
-    pub fn next(&mut self, schema: &mut XmpString, name: &mut XmpString,
-                value: &mut XmpString, option: &mut PropFlags) -> bool {
-        let mut raw_option : u32 = 0;
-        let result = unsafe { c::xmp_iterator_next(self.ptr, schema.as_mut_ptr(),
-                                                   name.as_mut_ptr(),
-                                                   value.as_mut_ptr(),
-                                                   &mut raw_option) };
+    pub fn next(
+        &mut self,
+        schema: &mut XmpString,
+        name: &mut XmpString,
+        value: &mut XmpString,
+        option: &mut PropFlags,
+    ) -> bool {
+        let mut raw_option: u32 = 0;
+        let result = unsafe {
+            c::xmp_iterator_next(
+                self.ptr,
+                schema.as_mut_ptr(),
+                name.as_mut_ptr(),
+                value.as_mut_ptr(),
+                &mut raw_option,
+            )
+        };
         *option = PropFlags::from_bits(raw_option).unwrap_or(PROP_NONE);
         result
     }
@@ -114,11 +125,14 @@ impl Drop for XmpIterator {
 #[cfg(test)]
 #[test]
 fn iterator_works() {
-
     let inited = super::init();
     assert!(inited);
 
     let mut xmp = Xmp::new();
-    XmpIterator::new(&mut xmp, "http://ns.adobe.com/xap/1.0/", "keyword",
-                     IterFlags::from_bits(0).unwrap_or(ITER_NONE));
+    XmpIterator::new(
+        &mut xmp,
+        "http://ns.adobe.com/xap/1.0/",
+        "keyword",
+        IterFlags::from_bits(0).unwrap_or(ITER_NONE),
+    );
 }
