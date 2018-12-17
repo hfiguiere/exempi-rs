@@ -1,30 +1,30 @@
-extern crate libc;
 extern crate exempi_sys as c;
+extern crate libc;
 #[macro_use]
 extern crate bitflags;
 
 mod xmp;
-mod xmpstring;
 mod xmpfile;
 mod xmpiterator;
+mod xmpstring;
 
-use std::ffi::{CString};
 use std::cmp::Ordering;
+use std::ffi::CString;
 use std::mem::transmute;
 use std::result;
 use std::sync::{Once, ONCE_INIT};
 
-pub use xmp::Xmp as Xmp;
-pub use xmpfile::XmpFile as XmpFile;
-pub use xmpstring::XmpString as XmpString;
-pub use xmpiterator::XmpIterator as XmpIterator;
-pub use c::FileType as FileType;
-pub use c::XmpError as Error;
 pub use c::consts::*;
+pub use c::FileType;
 pub use c::TzSign as XmpTzSign;
+pub use c::XmpError as Error;
+pub use xmp::Xmp;
+pub use xmpfile::XmpFile;
+pub use xmpiterator::XmpIterator;
+pub use xmpstring::XmpString;
 // all the flags.
-pub use xmpfile::flags::*;
 pub use xmp::flags::*;
+pub use xmpfile::flags::*;
 pub use xmpiterator::flags::*;
 
 /// Result type
@@ -66,10 +66,8 @@ pub fn terminate() {
 pub fn get_error() -> Error {
     let err = unsafe { c::xmp_get_error() };
     match err {
-        -15...0 |
-        -110...-101 |
-        -211...-201 => unsafe { transmute(err) },
-        _ => Error::TBD
+        -15...0 | -110...-101 | -211...-201 => unsafe { transmute(err) },
+        _ => Error::TBD,
     }
 }
 
@@ -79,8 +77,9 @@ pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
     let s_uri = CString::new(uri).unwrap();
     let s_prefix = CString::new(prefix).unwrap();
     let mut reg_prefix = XmpString::new();
-    if unsafe { c::xmp_register_namespace(s_uri.as_ptr(), s_prefix.as_ptr(),
-                                          reg_prefix.as_mut_ptr()) } {
+    if unsafe {
+        c::xmp_register_namespace(s_uri.as_ptr(), s_prefix.as_ptr(), reg_prefix.as_mut_ptr())
+    } {
         Some(reg_prefix)
     } else {
         None
@@ -112,7 +111,7 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
 /// A wrapper around the C type DateTime
 #[derive(Clone, Debug, Default)]
 pub struct DateTime {
-    c: c::XmpDateTime
+    c: c::XmpDateTime,
 }
 
 impl DateTime {
@@ -182,37 +181,40 @@ impl DateTime {
 impl PartialEq for DateTime {
     fn eq(&self, other: &DateTime) -> bool {
         unsafe {
-            c::xmp_datetime_compare(&self.c as *const c::XmpDateTime,
-                                    &other.c as *const c::XmpDateTime) == 0
+            c::xmp_datetime_compare(
+                &self.c as *const c::XmpDateTime,
+                &other.c as *const c::XmpDateTime,
+            ) == 0
         }
     }
 }
 impl PartialOrd for DateTime {
     fn partial_cmp(&self, other: &DateTime) -> Option<Ordering> {
         match unsafe {
-            c::xmp_datetime_compare(&self.c as *const c::XmpDateTime,
-                                    &other.c as *const c::XmpDateTime)
+            c::xmp_datetime_compare(
+                &self.c as *const c::XmpDateTime,
+                &other.c as *const c::XmpDateTime,
+            )
         } {
             0 => Some(Ordering::Equal),
             n if n < 0 => Some(Ordering::Less),
             n if n > 0 => Some(Ordering::Greater),
-            _ => None
+            _ => None,
         }
     }
 }
-impl Eq for DateTime {
-
-}
+impl Eq for DateTime {}
 impl Ord for DateTime {
     fn cmp(&self, other: &DateTime) -> Ordering {
         match unsafe {
-            c::xmp_datetime_compare(&self.c as *const c::XmpDateTime,
-                                    &other.c as *const c::XmpDateTime)
+            c::xmp_datetime_compare(
+                &self.c as *const c::XmpDateTime,
+                &other.c as *const c::XmpDateTime,
+            )
         } {
             n if n < 0 => Ordering::Less,
             n if n > 0 => Ordering::Greater,
-            _ => Ordering::Equal
+            _ => Ordering::Equal,
         }
     }
 }
-

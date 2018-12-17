@@ -1,8 +1,7 @@
-
 use c;
+use std::ffi::CStr;
 use std::fmt;
 use std::str;
-use std::ffi::{CStr};
 
 /// The string wrapper from Exempi. It is meant to be used for output parameter.
 /// But gives you ownership of the string.
@@ -27,12 +26,14 @@ use std::ffi::{CStr};
 /// ```
 #[derive(Debug)]
 pub struct XmpString {
-    ptr: *mut c::XmpString
+    ptr: *mut c::XmpString,
 }
 
 impl Default for XmpString {
     fn default() -> XmpString {
-        XmpString { ptr: unsafe { c::xmp_string_new() } }
+        XmpString {
+            ptr: unsafe { c::xmp_string_new() },
+        }
     }
 }
 
@@ -89,9 +90,7 @@ impl Drop for XmpString {
     }
 }
 
-impl Eq for XmpString {
-
-}
+impl Eq for XmpString {}
 impl PartialEq for XmpString {
     fn eq(&self, other: &XmpString) -> bool {
         self.to_str() == other.to_str()

@@ -1,12 +1,12 @@
 extern crate libc;
 
+use super::Result;
 use c;
-use xmp::Xmp;
-use xmpstring::XmpString;
-use std::ffi::{CString};
 use c::FileType;
 use c::XmpPacketInfo as PacketInfo;
-use super::Result;
+use std::ffi::CString;
+use xmp::Xmp;
+use xmpstring::XmpString;
 
 pub mod flags {
     bitflags! {
@@ -54,36 +54,34 @@ pub mod flags {
         pub flags FormatOptionFlags: u32 {
             const FORMAT_NONE = 0,
             /// Can inject first-time XMP into an existing file.
-	    const FORMAT_CAN_INJECT_XMP = 0x0000_0001,
+        const FORMAT_CAN_INJECT_XMP = 0x0000_0001,
             /// Can expand XMP or other metadata in an existing file.
-	    const FORMAT_CAN_EXPAND = 0x0000_0002,
+        const FORMAT_CAN_EXPAND = 0x0000_0002,
             /// Can copy one file to another, writing new metadata.
-	    const FORMAT_CAN_REWRITE = 0x0000_0004,
+        const FORMAT_CAN_REWRITE = 0x0000_0004,
             /// Can expand, but prefers in-place update.
-	    const FORMAT_PREFERS_IN_PLACE = 0x0000_0008,
+        const FORMAT_PREFERS_IN_PLACE = 0x0000_0008,
             /// Supports reconciliation between XMP and other forms.
-	    const FORMAT_CAN_RECONCILE = 0x0000_0010,
+        const FORMAT_CAN_RECONCILE = 0x0000_0010,
             /// Allows access to just the XMP, ignoring other forms.
-	    const FORMAT_ALLOWS_ONLY_XMP = 0x0000_0020,
+        const FORMAT_ALLOWS_ONLY_XMP = 0x0000_0020,
             /// File handler returns raw XMP packet information.
-	    const FORMAT_RETURNS_RAW_PACKET = 0x0000_0040,
+        const FORMAT_RETURNS_RAW_PACKET = 0x0000_0040,
             /// The file handler does the file open and close.
-	    const FORMAT_HANDLER_OWNS_FILE = 0x0000_0100,
+        const FORMAT_HANDLER_OWNS_FILE = 0x0000_0100,
             /// The file handler allows crash-safe file updates.
-	    const FORMAT_ALLOW_SAFE_UPDATE = 0x0000_0200,
+        const FORMAT_ALLOW_SAFE_UPDATE = 0x0000_0200,
             /// The file format needs the XMP packet to be read-only.
-	    const FORMAT_NEEDS_READONLY_PACKET = 0x0000_0400,
+        const FORMAT_NEEDS_READONLY_PACKET = 0x0000_0400,
             /// The file handler uses a "sidecar" file for the XMP.
-	    const FORMAT_USE_SIDECAR_XMP = 0x0000_0800,
+        const FORMAT_USE_SIDECAR_XMP = 0x0000_0800,
             /// The format is folder oriented, for example the P2 video format.
-	    const FORMAT_FOLDER_BASED_FORMAT = 0x0000_1000,
+        const FORMAT_FOLDER_BASED_FORMAT = 0x0000_1000,
         }
     }
 }
 
-use self::flags::{ FormatOptionFlags, FORMAT_NONE,
-                   OpenFlags, OPEN_NONE,
-                   CloseFlags };
+use self::flags::{CloseFlags, FormatOptionFlags, OpenFlags, FORMAT_NONE, OPEN_NONE};
 
 pub struct XmpFile {
     ptr: *mut c::XmpFile,
@@ -91,7 +89,9 @@ pub struct XmpFile {
 
 impl Default for XmpFile {
     fn default() -> XmpFile {
-        XmpFile { ptr: unsafe { c::xmp_files_new() } }
+        XmpFile {
+            ptr: unsafe { c::xmp_files_new() },
+        }
     }
 }
 
@@ -106,9 +106,7 @@ impl XmpFile {
     /// Return Err in case of failure
     pub fn open_new(p: &str, options: OpenFlags) -> Result<XmpFile> {
         let pp = CString::new(p).unwrap();
-        let ptr = unsafe {
-            c::xmp_files_open_new(pp.as_ptr(), options.bits())
-        };
+        let ptr = unsafe { c::xmp_files_open_new(pp.as_ptr(), options.bits()) };
         if ptr.is_null() {
             return Err(super::get_error());
         }
@@ -121,9 +119,7 @@ impl XmpFile {
             return Err(super::Error::BadObject);
         }
         let pp = CString::new(path).unwrap();
-        if unsafe {
-            c::xmp_files_open(self.ptr, pp.as_ptr(), options.bits())
-        } {
+        if unsafe { c::xmp_files_open(self.ptr, pp.as_ptr(), options.bits()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -135,9 +131,7 @@ impl XmpFile {
         if self.is_null() {
             return Err(super::Error::BadObject);
         }
-        if unsafe {
-            c::xmp_files_close(self.ptr, options.bits())
-        } {
+        if unsafe { c::xmp_files_close(self.ptr, options.bits()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -151,9 +145,7 @@ impl XmpFile {
 
     /// Get a new Xmp fronm the currently open file
     pub fn get_new_xmp(&self) -> Result<Xmp> {
-        let ptr = unsafe {
-            c::xmp_files_get_new_xmp(self.ptr)
-        };
+        let ptr = unsafe { c::xmp_files_get_new_xmp(self.ptr) };
         if ptr.is_null() {
             return Err(super::get_error());
         }
@@ -173,14 +165,12 @@ impl XmpFile {
     }
 
     /// Get the xmp packet as a string.
-    pub fn get_xmp_xmpstring(&self, packet: &mut XmpString,
-                             info: &mut PacketInfo) -> Result<()> {
+    pub fn get_xmp_xmpstring(&self, packet: &mut XmpString, info: &mut PacketInfo) -> Result<()> {
         if self.is_null() || packet.is_null() {
             return Err(super::Error::BadObject);
         }
-        if unsafe { c::xmp_files_get_xmp_xmpstring(self.ptr,
-                                                packet.as_mut_ptr(),
-                                                   info as *mut PacketInfo)
+        if unsafe {
+            c::xmp_files_get_xmp_xmpstring(self.ptr, packet.as_mut_ptr(), info as *mut PacketInfo)
         } {
             Ok(())
         } else {
@@ -201,8 +191,7 @@ impl XmpFile {
         if self.is_null() || xmp_packet.is_null() {
             return false;
         }
-        unsafe { c::xmp_files_can_put_xmp_xmpstring(self.ptr,
-                                                    xmp_packet.as_ptr()) }
+        unsafe { c::xmp_files_can_put_xmp_xmpstring(self.ptr, xmp_packet.as_ptr()) }
     }
 
     /// Return true if it can put the XmpString packet into the XmpFile.
@@ -211,8 +200,7 @@ impl XmpFile {
             return false;
         }
         let pp = CString::new(xmp_packet).unwrap();
-        unsafe { c::xmp_files_can_put_xmp_cstr(self.ptr,
-                                               pp.as_ptr(), xmp_packet.len()) }
+        unsafe { c::xmp_files_can_put_xmp_cstr(self.ptr, pp.as_ptr(), xmp_packet.len()) }
     }
 
     /// Put the Xmp into the XmpFile
@@ -228,24 +216,31 @@ impl XmpFile {
     }
 
     /// Get info from the XmpFile.
-    pub fn get_file_info(&self, file_path: &mut String,
-                         options: &mut OpenFlags, format: &mut FileType,
-                         handler_flags: &mut FormatOptionFlags) -> bool {
+    pub fn get_file_info(
+        &self,
+        file_path: &mut String,
+        options: &mut OpenFlags,
+        format: &mut FileType,
+        handler_flags: &mut FormatOptionFlags,
+    ) -> bool {
         if self.is_null() {
             return false;
         }
         let mut s = XmpString::new();
 
-        let mut raw_options : u32 = 0;
-        let mut raw_handler_flags : u32 = 0;
+        let mut raw_options: u32 = 0;
+        let mut raw_handler_flags: u32 = 0;
         let result = unsafe {
-            c::xmp_files_get_file_info(self.ptr, s.as_mut_ptr(),
-                                       &mut raw_options, format,
-                                       &mut raw_handler_flags)
+            c::xmp_files_get_file_info(
+                self.ptr,
+                s.as_mut_ptr(),
+                &mut raw_options,
+                format,
+                &mut raw_handler_flags,
+            )
         };
         *options = OpenFlags::from_bits(raw_options).unwrap_or(OPEN_NONE);
-        *handler_flags = FormatOptionFlags::from_bits(raw_handler_flags)
-            .unwrap_or(FORMAT_NONE);
+        *handler_flags = FormatOptionFlags::from_bits(raw_handler_flags).unwrap_or(FORMAT_NONE);
 
         file_path.push_str(s.to_str());
         result
@@ -266,7 +261,6 @@ impl XmpFile {
             Err(super::get_error())
         }
     }
-
 }
 
 impl Drop for XmpFile {
@@ -277,7 +271,6 @@ impl Drop for XmpFile {
         }
     }
 }
-
 
 #[test]
 fn it_works() {

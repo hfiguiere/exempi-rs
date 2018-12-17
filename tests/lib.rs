@@ -9,8 +9,7 @@ fn libary_tests() {
     assert!(exempi::get_error() == Error::Unknown);
 
     // namespace registration tests.
-    let result = exempi::register_namespace("http://rust.figuiere.net/ns/rust/",
-                                     "rust");
+    let result = exempi::register_namespace("http://rust.figuiere.net/ns/rust/", "rust");
     assert!(result != None);
     assert!(exempi::get_error() == Error::Unknown);
     let prefix = result.unwrap();
@@ -31,18 +30,22 @@ fn libary_tests() {
     assert!(!xmpblock.is_null());
 
     assert!(!xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
-    assert!(xmpblock.set_property("http://rust.figuiere.net/ns/rust/", "test",
-                                   "foobar", PROP_NONE).is_ok());
+    assert!(xmpblock
+        .set_property(
+            "http://rust.figuiere.net/ns/rust/",
+            "test",
+            "foobar",
+            PROP_NONE
+        )
+        .is_ok());
     assert!(xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
     let mut optionbits: PropFlags = PROP_NONE;
-    let value = xmpblock.get_property("http://rust.figuiere.net/ns/rust/",
-                                      "test", &mut optionbits);
+    let value = xmpblock.get_property("http://rust.figuiere.net/ns/rust/", "test", &mut optionbits);
     assert!(value.is_ok());
     assert!(value.unwrap().to_str() == "foobar");
     assert!(optionbits == PROP_NONE);
 
-    let result = xmpblock.serialize(SERIAL_OMITPACKETWRAPPER |
-                                    SERIAL_USECOMPACTFORMAT, 0);
+    let result = xmpblock.serialize(SERIAL_OMITPACKETWRAPPER | SERIAL_USECOMPACTFORMAT, 0);
     assert!(result.is_ok());
     println!("{}", result.unwrap().to_str());
 
