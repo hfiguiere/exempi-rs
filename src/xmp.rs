@@ -128,6 +128,9 @@ pub struct Xmp {
     ptr: *mut c::Xmp,
 }
 
+unsafe impl Send for Xmp {
+}
+
 impl Default for Xmp {
     fn default() -> Xmp {
         Xmp {
