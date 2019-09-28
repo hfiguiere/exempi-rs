@@ -6,7 +6,7 @@ license = "BSD-2-Clause"
 keywords = ["metadata", "tags", "xmp"]
 description = "Safe Rust bindings to Exempi 2.4."
 repository = "https://github.com/hfiguiere/exempi-rs"
-homepage = "https://libopenraw.freedesktop.org/wiki/Exempi/"
+homepage = "https://libopenraw.freedesktop.org/exempi/"
 
 [dependencies]
 bitflags = "0.5.0"
