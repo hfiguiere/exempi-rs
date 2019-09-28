@@ -1,13 +1,16 @@
-2.5.0 -
+2.5.0 - 2019/09/28
 
 - DateTime now has standard derive Clone and Debug
   - Fixed ffi struct.
+  - Now opaque.
 - xmp_iterator_new() now take a const Xmp
 - XmpIterator::next() outputs a PropFlags, not an IterFlags
 - Xmp::set_array_item() was missing.
+- Xmp is now Send.
 - exempi::init() will run only once.
 - Add exempi::force_init().
 - A more Rust like API returning Result<>.
+- Update URL for crate.
 
 2.4.4 - 2017/09/17
 
