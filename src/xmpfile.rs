@@ -83,15 +83,11 @@ pub mod flags {
 
 use self::flags::{CloseFlags, FormatOptionFlags, OpenFlags, FORMAT_NONE, OPEN_NONE};
 
-pub struct XmpFile {
-    ptr: *mut c::XmpFile,
-}
+pub struct XmpFile(*mut c::XmpFile);
 
 impl Default for XmpFile {
     fn default() -> XmpFile {
-        XmpFile {
-            ptr: unsafe { c::xmp_files_new() },
-        }
+        XmpFile(unsafe { c::xmp_files_new() })
     }
 }
 
@@ -110,7 +106,7 @@ impl XmpFile {
         if ptr.is_null() {
             return Err(super::get_error());
         }
-        Ok(XmpFile { ptr })
+        Ok(XmpFile(ptr))
     }
 
     /// Open an XmpFile. Usually called after new.
@@ -119,7 +115,7 @@ impl XmpFile {
             return Err(super::Error::BadObject);
         }
         let pp = CString::new(path).unwrap();
-        if unsafe { c::xmp_files_open(self.ptr, pp.as_ptr(), options.bits()) } {
+        if unsafe { c::xmp_files_open(self.0, pp.as_ptr(), options.bits()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -131,7 +127,7 @@ impl XmpFile {
         if self.is_null() {
             return Err(super::Error::BadObject);
         }
-        if unsafe { c::xmp_files_close(self.ptr, options.bits()) } {
+        if unsafe { c::xmp_files_close(self.0, options.bits()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -140,12 +136,12 @@ impl XmpFile {
 
     /// Return true if native pointer is null
     pub fn is_null(&self) -> bool {
-        self.ptr.is_null()
+        self.0.is_null()
     }
 
     /// Get a new Xmp fronm the currently open file
     pub fn get_new_xmp(&self) -> Result<Xmp> {
-        let ptr = unsafe { c::xmp_files_get_new_xmp(self.ptr) };
+        let ptr = unsafe { c::xmp_files_get_new_xmp(self.0) };
         if ptr.is_null() {
             return Err(super::get_error());
         }
@@ -157,7 +153,7 @@ impl XmpFile {
         if self.is_null() || xmp.is_null() {
             return Err(super::Error::BadObject);
         }
-        if unsafe { c::xmp_files_get_xmp(self.ptr, xmp.as_mut_ptr()) } {
+        if unsafe { c::xmp_files_get_xmp(self.0, xmp.as_mut_ptr()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -170,7 +166,7 @@ impl XmpFile {
             return Err(super::Error::BadObject);
         }
         if unsafe {
-            c::xmp_files_get_xmp_xmpstring(self.ptr, packet.as_mut_ptr(), info as *mut PacketInfo)
+            c::xmp_files_get_xmp_xmpstring(self.0, packet.as_mut_ptr(), info as *mut PacketInfo)
         } {
             Ok(())
         } else {
@@ -183,7 +179,7 @@ impl XmpFile {
         if self.is_null() || xmp.is_null() {
             return false;
         }
-        unsafe { c::xmp_files_can_put_xmp(self.ptr, xmp.as_ptr()) }
+        unsafe { c::xmp_files_can_put_xmp(self.0, xmp.as_ptr()) }
     }
 
     /// Return true if it can put the XmpString packet into the XmpFile.
@@ -191,7 +187,7 @@ impl XmpFile {
         if self.is_null() || xmp_packet.is_null() {
             return false;
         }
-        unsafe { c::xmp_files_can_put_xmp_xmpstring(self.ptr, xmp_packet.as_ptr()) }
+        unsafe { c::xmp_files_can_put_xmp_xmpstring(self.0, xmp_packet.as_ptr()) }
     }
 
     /// Return true if it can put the XmpString packet into the XmpFile.
@@ -200,7 +196,7 @@ impl XmpFile {
             return false;
         }
         let pp = CString::new(xmp_packet).unwrap();
-        unsafe { c::xmp_files_can_put_xmp_cstr(self.ptr, pp.as_ptr(), xmp_packet.len()) }
+        unsafe { c::xmp_files_can_put_xmp_cstr(self.0, pp.as_ptr(), xmp_packet.len()) }
     }
 
     /// Put the Xmp into the XmpFile
@@ -208,7 +204,7 @@ impl XmpFile {
         if self.is_null() || xmp.is_null() {
             return Err(super::Error::BadObject);
         }
-        if unsafe { c::xmp_files_put_xmp(self.ptr, xmp.as_ptr()) } {
+        if unsafe { c::xmp_files_put_xmp(self.0, xmp.as_ptr()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -232,7 +228,7 @@ impl XmpFile {
         let mut raw_handler_flags: u32 = 0;
         let result = unsafe {
             c::xmp_files_get_file_info(
-                self.ptr,
+                self.0,
                 s.as_mut_ptr(),
                 &mut raw_options,
                 format,
@@ -267,7 +263,7 @@ impl Drop for XmpFile {
     /// Drop the XmpFile.
     fn drop(&mut self) {
         if !self.is_null() {
-            unsafe { c::xmp_files_free(self.ptr) };
+            unsafe { c::xmp_files_free(self.0) };
         }
     }
 }

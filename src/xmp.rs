@@ -124,25 +124,21 @@ pub mod flags {
 
 use self::flags::*;
 
-pub struct Xmp {
-    ptr: *mut c::Xmp,
-}
+pub struct Xmp(*mut c::Xmp);
 
 unsafe impl Send for Xmp {
 }
 
 impl Default for Xmp {
     fn default() -> Xmp {
-        Xmp {
-            ptr: unsafe { c::xmp_new_empty() },
-        }
+        Xmp(unsafe { c::xmp_new_empty() })
     }
 }
 
 impl Xmp {
     /// Construct from a native ptr. Will own it.
     pub fn from(ptr: *mut c::Xmp) -> Xmp {
-        Xmp { ptr }
+        Xmp(ptr)
     }
     /// New Xmp object
     pub fn new() -> Xmp {
@@ -159,7 +155,7 @@ impl Xmp {
     }
     /// Parse buff into a Xmp
     pub fn parse(&mut self, buf: &[u8]) -> Result<()> {
-        if unsafe { c::xmp_parse(self.ptr, buf.as_ptr() as *const c_char, buf.len()) } {
+        if unsafe { c::xmp_parse(self.0, buf.as_ptr() as *const c_char, buf.len()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -172,7 +168,7 @@ impl Xmp {
             return Err(super::Error::BadObject);
         }
         let mut buffer = XmpString::new();
-        if unsafe { c::xmp_serialize(self.ptr, buffer.as_mut_ptr(), options.bits(), padding) } {
+        if unsafe { c::xmp_serialize(self.0, buffer.as_mut_ptr(), options.bits(), padding) } {
             return Ok(buffer);
         }
         Err(super::get_error())
@@ -195,7 +191,7 @@ impl Xmp {
         let mut buffer = XmpString::new();
         if unsafe {
             c::xmp_serialize_and_format(
-                self.ptr,
+                self.0,
                 buffer.as_mut_ptr(),
                 options.bits(),
                 padding,
@@ -222,7 +218,7 @@ impl Xmp {
         let mut property = XmpString::new();
         let result = unsafe {
             c::xmp_get_property(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 property.as_mut_ptr(),
@@ -250,7 +246,7 @@ impl Xmp {
         let mut property = DateTime::new();
         let result = unsafe {
             c::xmp_get_property_date(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 property.as_mut_ptr(),
@@ -278,7 +274,7 @@ impl Xmp {
         let mut property = 0f64;
         let result = unsafe {
             c::xmp_get_property_float(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 &mut property as *mut f64,
@@ -306,7 +302,7 @@ impl Xmp {
         let mut property = false;
         let result = unsafe {
             c::xmp_get_property_bool(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 &mut property as *mut bool,
@@ -334,7 +330,7 @@ impl Xmp {
         let mut property = 0i32;
         let result = unsafe {
             c::xmp_get_property_int32(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 &mut property as *mut i32,
@@ -362,7 +358,7 @@ impl Xmp {
         let mut property = 0i64;
         let result = unsafe {
             c::xmp_get_property_int64(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 &mut property as *mut i64,
@@ -391,7 +387,7 @@ impl Xmp {
         let mut property = XmpString::new();
         let result = unsafe {
             c::xmp_get_array_item(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 index,
@@ -420,7 +416,7 @@ impl Xmp {
         let s_value = CString::new(value).unwrap();
         if unsafe {
             c::xmp_set_property(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 s_value.as_ptr(),
@@ -445,7 +441,7 @@ impl Xmp {
         let s_name = CString::new(name).unwrap();
         if unsafe {
             c::xmp_set_property_date(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 value.as_ptr(),
@@ -470,7 +466,7 @@ impl Xmp {
         let s_name = CString::new(name).unwrap();
         if unsafe {
             c::xmp_set_property_float(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 value,
@@ -495,7 +491,7 @@ impl Xmp {
         let s_name = CString::new(name).unwrap();
         if unsafe {
             c::xmp_set_property_bool(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 value,
@@ -520,7 +516,7 @@ impl Xmp {
         let s_name = CString::new(name).unwrap();
         if unsafe {
             c::xmp_set_property_int32(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 value,
@@ -545,7 +541,7 @@ impl Xmp {
         let s_name = CString::new(name).unwrap();
         if unsafe {
             c::xmp_set_property_int64(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 value,
@@ -572,7 +568,7 @@ impl Xmp {
         let s_value = CString::new(value).unwrap();
         if unsafe {
             c::xmp_set_array_item(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 index,
@@ -601,7 +597,7 @@ impl Xmp {
         let s_value = CString::new(value).unwrap();
         if unsafe {
             c::xmp_append_array_item(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 array_options.bits(),
@@ -619,7 +615,7 @@ impl Xmp {
     pub fn delete_property(&mut self, schema: &str, name: &str) -> Result<()> {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        if unsafe { c::xmp_delete_property(self.ptr, s_schema.as_ptr(), s_name.as_ptr()) } {
+        if unsafe { c::xmp_delete_property(self.0, s_schema.as_ptr(), s_name.as_ptr()) } {
             Ok(())
         } else {
             Err(super::get_error())
@@ -630,7 +626,7 @@ impl Xmp {
     pub fn has_property(&self, schema: &str, name: &str) -> bool {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        unsafe { c::xmp_has_property(self.ptr, s_schema.as_ptr(), s_name.as_ptr()) }
+        unsafe { c::xmp_has_property(self.0, s_schema.as_ptr(), s_name.as_ptr()) }
     }
 
     /// Get localized text.
@@ -653,7 +649,7 @@ impl Xmp {
         let mut raw_propsbits = 0u32;
         let result = unsafe {
             c::xmp_get_localized_text(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 s_gen_lang.as_ptr(),
@@ -688,7 +684,7 @@ impl Xmp {
         let s_value = CString::new(value).unwrap();
         if unsafe {
             c::xmp_set_localized_text(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 s_gen_lang.as_ptr(),
@@ -717,7 +713,7 @@ impl Xmp {
         let s_spec_lang = CString::new(spec_lang).unwrap();
         if unsafe {
             c::xmp_delete_localized_text(
-                self.ptr,
+                self.0,
                 s_schema.as_ptr(),
                 s_name.as_ptr(),
                 s_gen_lang.as_ptr(),
@@ -732,17 +728,17 @@ impl Xmp {
 
     /// Return if the native pointer is null.
     pub fn is_null(&self) -> bool {
-        self.ptr.is_null()
+        self.0.is_null()
     }
 
     /// Return the native pointer.
     pub fn as_ptr(&self) -> *const c::Xmp {
-        self.ptr
+        self.0
     }
 
     /// Return the mutable native pointer.
     pub fn as_mut_ptr(&mut self) -> *mut c::Xmp {
-        self.ptr
+        self.0
     }
 }
 
@@ -750,9 +746,9 @@ impl Clone for Xmp {
     fn clone(&self) -> Self {
         if self.is_null() {
             // inside ptr is NULL. cloning a null object.
-            return Xmp::from(self.ptr);
+            return Xmp::from(self.0);
         }
-        Xmp::from(unsafe { c::xmp_copy(self.ptr) })
+        Xmp::from(unsafe { c::xmp_copy(self.0) })
     }
 }
 
@@ -760,7 +756,7 @@ impl Drop for Xmp {
     /// Will release the Xmp native pointer on Drop.
     fn drop(&mut self) {
         if !self.is_null() {
-            unsafe { c::xmp_free(self.ptr) };
+            unsafe { c::xmp_free(self.0) };
         }
     }
 }

@@ -110,9 +110,7 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
 
 /// A wrapper around the C type DateTime
 #[derive(Clone, Debug, Default)]
-pub struct DateTime {
-    c: c::XmpDateTime,
-}
+pub struct DateTime(c::XmpDateTime);
 
 impl DateTime {
     pub fn new() -> Self {
@@ -120,61 +118,61 @@ impl DateTime {
     }
     /// Construct from the native C type
     pub fn from(d: c::XmpDateTime) -> DateTime {
-        DateTime { c: d }
+        DateTime(d)
     }
     /// Return the native pointer
     pub fn as_ptr(&self) -> *const c::XmpDateTime {
-        &self.c as *const c::XmpDateTime
+        &self.0 as *const c::XmpDateTime
     }
     /// Return the native mutable pointer
     pub fn as_mut_ptr(&mut self) -> *mut c::XmpDateTime {
-        &mut self.c as *mut c::XmpDateTime
+        &mut self.0 as *mut c::XmpDateTime
     }
     /// Set date
     pub fn set_date(&mut self, year: i32, month: i32, day: i32) {
-        self.c.year = year;
-        self.c.month = month;
-        self.c.day = day;
-        self.c.has_date = 1;
+        self.0.year = year;
+        self.0.month = month;
+        self.0.day = day;
+        self.0.has_date = 1;
     }
     /// Set time
     pub fn set_time(&mut self, hour: i32, min: i32, sec: i32) {
-        self.c.hour = hour;
-        self.c.minute = min;
-        self.c.second = sec;
-        self.c.has_time = 1;
+        self.0.hour = hour;
+        self.0.minute = min;
+        self.0.second = sec;
+        self.0.has_time = 1;
     }
     /// Set nano_second
     pub fn set_nano_second(&mut self, nano_second: i32) {
-        self.c.nano_second = nano_second;
+        self.0.nano_second = nano_second;
     }
     /// Set Timezone
     pub fn set_timezone(&mut self, sign: XmpTzSign, hour: i32, min: i32) {
-        self.c.tz_sign = sign;
-        self.c.tz_hour = hour;
-        self.c.tz_minute = min;
-        self.c.has_tz = 1;
+        self.0.tz_sign = sign;
+        self.0.tz_hour = hour;
+        self.0.tz_minute = min;
+        self.0.has_tz = 1;
     }
     pub fn year(&self) -> i32 {
-        self.c.year
+        self.0.year
     }
     pub fn month(&self) -> i32 {
-        self.c.month
+        self.0.month
     }
     pub fn day(&self) -> i32 {
-        self.c.day
+        self.0.day
     }
     pub fn hour(&self) -> i32 {
-        self.c.hour
+        self.0.hour
     }
     pub fn minute(&self) -> i32 {
-        self.c.minute
+        self.0.minute
     }
     pub fn second(&self) -> i32 {
-        self.c.second
+        self.0.second
     }
     pub fn nano_second(&self) -> i32 {
-        self.c.nano_second
+        self.0.nano_second
     }
 }
 
@@ -182,8 +180,8 @@ impl PartialEq for DateTime {
     fn eq(&self, other: &DateTime) -> bool {
         unsafe {
             c::xmp_datetime_compare(
-                &self.c as *const c::XmpDateTime,
-                &other.c as *const c::XmpDateTime,
+                &self.0 as *const c::XmpDateTime,
+                &other.0 as *const c::XmpDateTime,
             ) == 0
         }
     }
@@ -192,8 +190,8 @@ impl PartialOrd for DateTime {
     fn partial_cmp(&self, other: &DateTime) -> Option<Ordering> {
         match unsafe {
             c::xmp_datetime_compare(
-                &self.c as *const c::XmpDateTime,
-                &other.c as *const c::XmpDateTime,
+                &self.0 as *const c::XmpDateTime,
+                &other.0 as *const c::XmpDateTime,
             )
         } {
             0 => Some(Ordering::Equal),
@@ -208,8 +206,8 @@ impl Ord for DateTime {
     fn cmp(&self, other: &DateTime) -> Ordering {
         match unsafe {
             c::xmp_datetime_compare(
-                &self.c as *const c::XmpDateTime,
-                &other.c as *const c::XmpDateTime,
+                &self.0 as *const c::XmpDateTime,
+                &other.0 as *const c::XmpDateTime,
             )
         } {
             n if n < 0 => Ordering::Less,

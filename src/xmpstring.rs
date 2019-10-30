@@ -25,15 +25,11 @@ use std::str;
 /// }
 /// ```
 #[derive(Debug)]
-pub struct XmpString {
-    ptr: *mut c::XmpString,
-}
+pub struct XmpString(*mut c::XmpString);
 
 impl Default for XmpString {
     fn default() -> XmpString {
-        XmpString {
-            ptr: unsafe { c::xmp_string_new() },
-        }
+        XmpString(unsafe { c::xmp_string_new() })
     }
 }
 
@@ -45,25 +41,25 @@ impl XmpString {
 
     /// Native pointer is NULL
     pub fn is_null(&self) -> bool {
-        self.ptr.is_null()
+        self.0.is_null()
     }
 
     /// Return the native pointer
     pub fn as_ptr(&self) -> *const c::XmpString {
-        self.ptr
+        self.0
     }
 
     /// Return the mutable native pointer
     pub fn as_mut_ptr(&mut self) -> *mut c::XmpString {
-        self.ptr
+        self.0
     }
 
     /// Return the length of the string
     pub fn len(&self) -> usize {
-        if self.ptr.is_null() {
+        if self.0.is_null() {
             return 0;
         }
-        unsafe { c::xmp_string_len(self.ptr) }
+        unsafe { c::xmp_string_len(self.0) }
     }
 
     pub fn is_empty(&self) -> bool {
@@ -74,7 +70,7 @@ impl XmpString {
     // XXX properly deal with the utf8 error
     pub fn to_str(&self) -> &str {
         unsafe {
-            let s = CStr::from_ptr(c::xmp_string_cstr(self.ptr));
+            let s = CStr::from_ptr(c::xmp_string_cstr(self.0));
             // we are supposed to receive UTF8 from the library.
             str::from_utf8_unchecked(s.to_bytes())
         }
@@ -85,7 +81,7 @@ impl Drop for XmpString {
     /// Will deallocate properly the underlying object
     fn drop(&mut self) {
         if !self.is_null() {
-            unsafe { c::xmp_string_free(self.ptr) };
+            unsafe { c::xmp_string_free(self.0) };
         }
     }
 }

@@ -45,35 +45,31 @@ pub mod flags {
 
 use self::flags::*;
 
-pub struct XmpIterator {
-    ptr: *mut c::XmpIterator,
-}
+pub struct XmpIterator(*mut c::XmpIterator);
 
 impl XmpIterator {
     /// Construct a new `XmpIterator` from a native pointer
     pub fn new(xmp: &Xmp, schema: &str, name: &str, propsbits: IterFlags) -> XmpIterator {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
-        XmpIterator {
-            ptr: unsafe {
+        XmpIterator(unsafe {
                 c::xmp_iterator_new(
                     xmp.as_ptr(),
                     s_schema.as_ptr(),
                     s_name.as_ptr(),
                     propsbits.bits(),
                 )
-            },
-        }
+        })
     }
 
     /// Whether native pointer is null
     pub fn is_null(&self) -> bool {
-        self.ptr.is_null()
+        self.0.is_null()
     }
 
     /// Return native pointer.
     pub fn as_ptr(&self) -> *mut c::XmpIterator {
-        self.ptr
+        self.0
     }
 
     /// Iterate to the next element following the option set by the iterator
@@ -92,7 +88,7 @@ impl XmpIterator {
         let mut raw_option: u32 = 0;
         let result = unsafe {
             c::xmp_iterator_next(
-                self.ptr,
+                self.0,
                 schema.as_mut_ptr(),
                 name.as_mut_ptr(),
                 value.as_mut_ptr(),
@@ -108,7 +104,7 @@ impl XmpIterator {
         if self.is_null() {
             return false;
         }
-        unsafe { c::xmp_iterator_skip(self.ptr, option.bits()) }
+        unsafe { c::xmp_iterator_skip(self.0, option.bits()) }
     }
 }
 
@@ -117,7 +113,7 @@ impl XmpIterator {
 impl Drop for XmpIterator {
     fn drop(&mut self) {
         if !self.is_null() {
-            unsafe { c::xmp_iterator_free(self.ptr) };
+            unsafe { c::xmp_iterator_free(self.0) };
         }
     }
 }
