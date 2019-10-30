@@ -12,7 +12,7 @@ use std::cmp::Ordering;
 use std::ffi::CString;
 use std::mem::transmute;
 use std::result;
-use std::sync::{Once, ONCE_INIT};
+use std::sync::Once;
 
 pub use c::consts::*;
 pub use c::FileType;
@@ -30,7 +30,7 @@ pub use xmpiterator::flags::*;
 /// Result type
 pub type Result<T> = result::Result<T, Error>;
 
-static START: Once = ONCE_INIT;
+static START: Once = Once::new();
 
 /// Initialize the library.
 ///
@@ -66,7 +66,7 @@ pub fn terminate() {
 pub fn get_error() -> Error {
     let err = unsafe { c::xmp_get_error() };
     match err {
-        -15...0 | -110...-101 | -211...-201 => unsafe { transmute(err) },
+        -15..=0 | -110..=-101 | -211..=-201 => unsafe { transmute(err) },
         _ => Error::TBD,
     }
 }
