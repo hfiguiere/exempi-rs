@@ -126,8 +126,7 @@ use self::flags::*;
 
 pub struct Xmp(*mut c::Xmp);
 
-unsafe impl Send for Xmp {
-}
+unsafe impl Send for Xmp {}
 
 impl Default for Xmp {
     fn default() -> Xmp {

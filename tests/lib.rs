@@ -30,14 +30,15 @@ fn libary_tests() {
     assert!(!xmpblock.is_null());
 
     assert!(!xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
-    assert!(xmpblock
-        .set_property(
-            "http://rust.figuiere.net/ns/rust/",
-            "test",
-            "foobar",
-            PROP_NONE
-        )
-        .is_ok());
+    assert!(
+        xmpblock
+            .set_property(
+                "http://rust.figuiere.net/ns/rust/",
+                "test",
+                "foobar",
+                PROP_NONE
+            ).is_ok()
+    );
     assert!(xmpblock.has_property("http://rust.figuiere.net/ns/rust/", "test"));
     let mut optionbits: PropFlags = PROP_NONE;
     let value = xmpblock.get_property("http://rust.figuiere.net/ns/rust/", "test", &mut optionbits);

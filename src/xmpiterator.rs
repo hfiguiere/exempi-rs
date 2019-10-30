@@ -53,12 +53,12 @@ impl XmpIterator {
         let s_schema = CString::new(schema).unwrap();
         let s_name = CString::new(name).unwrap();
         XmpIterator(unsafe {
-                c::xmp_iterator_new(
-                    xmp.as_ptr(),
-                    s_schema.as_ptr(),
-                    s_name.as_ptr(),
-                    propsbits.bits(),
-                )
+            c::xmp_iterator_new(
+                xmp.as_ptr(),
+                s_schema.as_ptr(),
+                s_name.as_ptr(),
+                propsbits.bits(),
+            )
         })
     }
 
