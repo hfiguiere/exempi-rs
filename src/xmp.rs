@@ -1,6 +1,6 @@
 extern crate libc;
 
-use super::Result;
+use crate::Result;
 use c;
 use libc::c_char;
 use std::ffi::CString;
@@ -148,7 +148,7 @@ impl Xmp {
     pub fn from_buffer(buf: &[u8]) -> Result<Xmp> {
         let ptr = unsafe { c::xmp_new(buf.as_ptr() as *const c_char, buf.len()) };
         if ptr.is_null() {
-            return Err(super::get_error());
+            return Err(crate::get_error());
         }
         Ok(Xmp::from(ptr))
     }
@@ -157,20 +157,20 @@ impl Xmp {
         if unsafe { c::xmp_parse(self.0, buf.as_ptr() as *const c_char, buf.len()) } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
     /// Serialize the Xmp to an XmpString.
     pub fn serialize(&self, options: SerialFlags, padding: u32) -> Result<XmpString> {
         if self.is_null() {
-            return Err(super::Error::BadObject);
+            return Err(crate::Error::BadObject);
         }
         let mut buffer = XmpString::new();
         if unsafe { c::xmp_serialize(self.0, buffer.as_mut_ptr(), options.bits(), padding) } {
             return Ok(buffer);
         }
-        Err(super::get_error())
+        Err(crate::get_error())
     }
 
     /// Serialize the Xmp to an XmpString with some formatting options.
@@ -183,7 +183,7 @@ impl Xmp {
         indent: i32,
     ) -> Result<XmpString> {
         if self.is_null() {
-            return Err(super::Error::BadObject);
+            return Err(crate::Error::BadObject);
         }
         let s_newline = CString::new(newline).unwrap();
         let s_tab = CString::new(tab).unwrap();
@@ -201,7 +201,7 @@ impl Xmp {
         } {
             return Ok(buffer);
         }
-        Err(super::get_error())
+        Err(crate::get_error())
     }
 
     /// Get property as a XmpString.
@@ -228,7 +228,7 @@ impl Xmp {
         if result {
             Ok(property)
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -256,7 +256,7 @@ impl Xmp {
         if result {
             Ok(property)
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -284,7 +284,7 @@ impl Xmp {
         if result {
             Ok(property)
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -312,7 +312,7 @@ impl Xmp {
         if result {
             Ok(property)
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -340,7 +340,7 @@ impl Xmp {
         if result {
             Ok(property)
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -368,7 +368,7 @@ impl Xmp {
         if result {
             Ok(property)
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -398,7 +398,7 @@ impl Xmp {
         if result {
             Ok(property)
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -424,7 +424,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -449,7 +449,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -474,7 +474,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -499,7 +499,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -524,7 +524,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -549,7 +549,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -577,7 +577,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -606,7 +606,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -617,7 +617,7 @@ impl Xmp {
         if unsafe { c::xmp_delete_property(self.0, s_schema.as_ptr(), s_name.as_ptr()) } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -662,7 +662,7 @@ impl Xmp {
         if result {
             Ok((actual_lang, value))
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -694,7 +694,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
@@ -721,7 +721,7 @@ impl Xmp {
         } {
             Ok(())
         } else {
-            Err(super::get_error())
+            Err(crate::get_error())
         }
     }
 
