@@ -50,7 +50,7 @@ pub mod flags {
     }
 
     bitflags! {
-        /// Result flage for file / format infos.
+        /// Result flag for file / format infos.
         pub flags FormatOptionFlags: u32 {
             const FORMAT_NONE = 0,
             /// Can inject first-time XMP into an existing file.

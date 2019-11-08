@@ -113,6 +113,7 @@ pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
 pub struct DateTime(c::XmpDateTime);
 
 impl DateTime {
+    /// Create a new DateTime
     pub fn new() -> Self {
         DateTime::default()
     }
@@ -153,24 +154,31 @@ impl DateTime {
         self.0.tz_minute = min;
         self.0.has_tz = 1;
     }
+    /// Year of the DateTime
     pub fn year(&self) -> i32 {
         self.0.year
     }
+    /// Month of the DateTime
     pub fn month(&self) -> i32 {
         self.0.month
     }
+    /// Day of the DateTime
     pub fn day(&self) -> i32 {
         self.0.day
     }
+    /// Hour of the DateTime
     pub fn hour(&self) -> i32 {
         self.0.hour
     }
+    /// Minute of the DateTime
     pub fn minute(&self) -> i32 {
         self.0.minute
     }
+    /// Seconds of the DateTime
     pub fn second(&self) -> i32 {
         self.0.second
     }
+    /// nano seconds of the DateTime
     pub fn nano_second(&self) -> i32 {
         self.0.nano_second
     }

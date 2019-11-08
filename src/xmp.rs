@@ -124,6 +124,7 @@ pub mod flags {
 
 use self::flags::*;
 
+/// The XMP Packet
 pub struct Xmp(*mut c::Xmp);
 
 unsafe impl Send for Xmp {}
