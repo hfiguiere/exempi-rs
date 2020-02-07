@@ -8,80 +8,79 @@ use std::ffi::CString;
 use xmp::Xmp;
 use xmpstring::XmpString;
 
-pub mod flags {
-    bitflags! {
-        /// Flag options for opening files.
-        pub flags OpenFlags: u32 {
-            /// No open option
-            const OPEN_NONE = 0x0000_0000,
-            /// Open for read-only access.
-            const OPEN_READ = 0x0000_0001,
-            /// Open for reading and writing.
-            const OPEN_FOR_UPDATE = 0x0000_0002,
-            /// Only the XMP is wanted, allows space/time optimizations.
-            const OPEN_ONLY_XMP = 0x0000_0004,
-            /// Cache thumbnail if possible, GetThumbnail will be called.
-            const OPEN_CACHE_TNAIL = 0x0000_0008,
-            /// Be strict about locating XMP and reconciling with other forms.
-            const OPEN_STRICTLY = 0x0000_0010,
-            /// Require the use of a smart handler.
-            const OPEN_USE_SMART_HANDLER = 0x0000_0020,
-            /// Force packet scanning, don't use a smart handler.
-            const OPEN_USE_PACKET_SCANNING = 0x0000_0040,
-            /// Only packet scan files "known" to need scanning.
-            const OPEN_LIMITED_SCANNING = 0x0000_0080,
-            /// Attempt to repair a file opened for update, default is to not open (throw an exception).
-            const OPEN_REPAIR_FILE = 0x0000_0100,
-            /// Optimize MPEG4 to support stream when updating This can take some time
-            const OPEN_OPTIMIZE_FILE_LAYOUT = 0x0000_0200,
-            /// Set if calling from background thread.
-            const OPEN_IN_BACKGROUND = 0x1000_0000,
-        }
-    }
-
-    bitflags! {
-        /// Flag options to close files.
-        pub flags CloseFlags: u32 {
-            /// No close option
-            const CLOSE_NONE = 0x0000,
-            /// Write into a temporary file and swap for crash safety.
-            const CLOSE_SAFE_UPDATE = 0x0001,
-        }
-    }
-
-    bitflags! {
-        /// Result flag for file / format infos.
-        pub flags FormatOptionFlags: u32 {
-            const FORMAT_NONE = 0,
-            /// Can inject first-time XMP into an existing file.
-        const FORMAT_CAN_INJECT_XMP = 0x0000_0001,
-            /// Can expand XMP or other metadata in an existing file.
-        const FORMAT_CAN_EXPAND = 0x0000_0002,
-            /// Can copy one file to another, writing new metadata.
-        const FORMAT_CAN_REWRITE = 0x0000_0004,
-            /// Can expand, but prefers in-place update.
-        const FORMAT_PREFERS_IN_PLACE = 0x0000_0008,
-            /// Supports reconciliation between XMP and other forms.
-        const FORMAT_CAN_RECONCILE = 0x0000_0010,
-            /// Allows access to just the XMP, ignoring other forms.
-        const FORMAT_ALLOWS_ONLY_XMP = 0x0000_0020,
-            /// File handler returns raw XMP packet information.
-        const FORMAT_RETURNS_RAW_PACKET = 0x0000_0040,
-            /// The file handler does the file open and close.
-        const FORMAT_HANDLER_OWNS_FILE = 0x0000_0100,
-            /// The file handler allows crash-safe file updates.
-        const FORMAT_ALLOW_SAFE_UPDATE = 0x0000_0200,
-            /// The file format needs the XMP packet to be read-only.
-        const FORMAT_NEEDS_READONLY_PACKET = 0x0000_0400,
-            /// The file handler uses a "sidecar" file for the XMP.
-        const FORMAT_USE_SIDECAR_XMP = 0x0000_0800,
-            /// The format is folder oriented, for example the P2 video format.
-        const FORMAT_FOLDER_BASED_FORMAT = 0x0000_1000,
-        }
+bitflags! {
+    /// Flag options for opening files.
+    #[derive(Default)]
+    pub struct OpenFlags: u32 {
+        /// No open option
+        const OPEN_NONE = 0x0000_0000;
+        /// Open for read-only access.
+        const OPEN_READ = 0x0000_0001;
+        /// Open for reading and writing.
+        const OPEN_FOR_UPDATE = 0x0000_0002;
+        /// Only the XMP is wanted, allows space/time optimizations.
+        const OPEN_ONLY_XMP = 0x0000_0004;
+        /// Cache thumbnail if possible, GetThumbnail will be called.
+        const OPEN_CACHE_TNAIL = 0x0000_0008;
+        /// Be strict about locating XMP and reconciling with other forms.
+        const OPEN_STRICTLY = 0x0000_0010;
+        /// Require the use of a smart handler.
+        const OPEN_USE_SMART_HANDLER = 0x0000_0020;
+        /// Force packet scanning, don't use a smart handler.
+        const OPEN_USE_PACKET_SCANNING = 0x0000_0040;
+        /// Only packet scan files "known" to need scanning.
+        const OPEN_LIMITED_SCANNING = 0x0000_0080;
+        /// Attempt to repair a file opened for update, default is to not open (throw an exception).
+        const OPEN_REPAIR_FILE = 0x0000_0100;
+        /// Optimize MPEG4 to support stream when updating This can take some time
+        const OPEN_OPTIMIZE_FILE_LAYOUT = 0x0000_0200;
+        /// Set if calling from background thread.
+        const OPEN_IN_BACKGROUND = 0x1000_0000;
     }
 }
 
-use self::flags::{CloseFlags, FormatOptionFlags, OpenFlags, FORMAT_NONE, OPEN_NONE};
+bitflags! {
+    /// Flag options to close files.
+    #[derive(Default)]
+    pub struct CloseFlags: u32 {
+        /// No close option
+        const CLOSE_NONE = 0x0000;
+        /// Write into a temporary file and swap for crash safety.
+        const CLOSE_SAFE_UPDATE = 0x0001;
+    }
+}
+
+bitflags! {
+    /// Result flag for file / format infos.
+    #[derive(Default)]
+    pub struct FormatOptionFlags: u32 {
+        const FORMAT_NONE = 0;
+        /// Can inject first-time XMP into an existing file.
+        const FORMAT_CAN_INJECT_XMP = 0x0000_0001;
+        /// Can expand XMP or other metadata in an existing file.
+        const FORMAT_CAN_EXPAND = 0x0000_0002;
+        /// Can copy one file to another, writing new metadata.
+        const FORMAT_CAN_REWRITE = 0x0000_0004;
+        /// Can expand, but prefers in-place update.
+        const FORMAT_PREFERS_IN_PLACE = 0x0000_0008;
+        /// Supports reconciliation between XMP and other forms.
+        const FORMAT_CAN_RECONCILE = 0x0000_0010;
+        /// Allows access to just the XMP, ignoring other forms.
+        const FORMAT_ALLOWS_ONLY_XMP = 0x0000_0020;
+        /// File handler returns raw XMP packet information.
+        const FORMAT_RETURNS_RAW_PACKET = 0x0000_0040;
+        /// The file handler does the file open and close.
+        const FORMAT_HANDLER_OWNS_FILE = 0x0000_0100;
+        /// The file handler allows crash-safe file updates.
+        const FORMAT_ALLOW_SAFE_UPDATE = 0x0000_0200;
+        /// The file format needs the XMP packet to be read-only.
+        const FORMAT_NEEDS_READONLY_PACKET = 0x0000_0400;
+        /// The file handler uses a "sidecar" file for the XMP.
+        const FORMAT_USE_SIDECAR_XMP = 0x0000_0800;
+        /// The format is folder oriented, for example the P2 video format.
+        const FORMAT_FOLDER_BASED_FORMAT = 0x0000_1000;
+    }
+}
 
 pub struct XmpFile(*mut c::XmpFile);
 
@@ -235,8 +234,8 @@ impl XmpFile {
                 &mut raw_handler_flags,
             )
         };
-        *options = OpenFlags::from_bits(raw_options).unwrap_or(OPEN_NONE);
-        *handler_flags = FormatOptionFlags::from_bits(raw_handler_flags).unwrap_or(FORMAT_NONE);
+        *options = OpenFlags::from_bits(raw_options).unwrap_or_default();
+        *handler_flags = FormatOptionFlags::from_bits(raw_handler_flags).unwrap_or_default();
 
         file_path.push_str(s.to_str());
         result
@@ -252,7 +251,7 @@ impl XmpFile {
     pub fn get_format_info(format: FileType) -> Result<FormatOptionFlags> {
         let mut raw_options: u32 = 0;
         if unsafe { c::xmp_files_get_format_info(format, &mut raw_options) } {
-            Ok(FormatOptionFlags::from_bits(raw_options).unwrap_or(FORMAT_NONE))
+            Ok(FormatOptionFlags::from_bits(raw_options).unwrap_or_default())
         } else {
             Err(crate::get_error())
         }

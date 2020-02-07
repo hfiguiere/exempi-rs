@@ -9,6 +9,6 @@ repository = "https://github.com/hfiguiere/exempi-rs"
 homepage = "https://libopenraw.freedesktop.org/exempi/"
 
 [dependencies]
-bitflags = "0.5.0"
+bitflags = "1.2.1"
 libc = "0.2"
 exempi-sys = { path = "exempi-sys", version = "2.5.0" }

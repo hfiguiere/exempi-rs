@@ -18,14 +18,10 @@ pub use c::consts::*;
 pub use c::FileType;
 pub use c::TzSign as XmpTzSign;
 pub use c::XmpError as Error;
-pub use xmp::Xmp;
+pub use xmp::{PropFlags, SerialFlags, Xmp};
 pub use xmpfile::XmpFile;
 pub use xmpiterator::XmpIterator;
 pub use xmpstring::XmpString;
-// all the flags.
-pub use xmp::flags::*;
-pub use xmpfile::flags::*;
-pub use xmpiterator::flags::*;
 
 /// Result type
 pub type Result<T> = result::Result<T, Error>;
