@@ -113,10 +113,6 @@ impl DateTime {
     pub fn new() -> Self {
         DateTime::default()
     }
-    /// Construct from the native C type
-    pub fn from(d: c::XmpDateTime) -> DateTime {
-        DateTime(d)
-    }
     /// Return the native pointer
     pub fn as_ptr(&self) -> *const c::XmpDateTime {
         &self.0 as *const c::XmpDateTime
@@ -177,6 +173,13 @@ impl DateTime {
     /// nano seconds of the DateTime
     pub fn nano_second(&self) -> i32 {
         self.0.nano_second
+    }
+}
+
+impl From<c::XmpDateTime> for DateTime {
+    /// Construct from the native C type
+    fn from(d: c::XmpDateTime) -> DateTime {
+        DateTime(d)
     }
 }
 

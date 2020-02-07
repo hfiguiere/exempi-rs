@@ -127,17 +127,7 @@ pub struct Xmp(*mut c::Xmp);
 
 unsafe impl Send for Xmp {}
 
-impl Default for Xmp {
-    fn default() -> Xmp {
-        Xmp(unsafe { c::xmp_new_empty() })
-    }
-}
-
 impl Xmp {
-    /// Construct from a native ptr. Will own it.
-    pub fn from(ptr: *mut c::Xmp) -> Xmp {
-        Xmp(ptr)
-    }
     /// New Xmp object
     pub fn new() -> Xmp {
         Xmp::default()
@@ -737,6 +727,20 @@ impl Xmp {
     /// Return the mutable native pointer.
     pub fn as_mut_ptr(&mut self) -> *mut c::Xmp {
         self.0
+    }
+}
+
+impl Default for Xmp {
+    /// Return a valid but empty XMP packet.
+    fn default() -> Xmp {
+        Xmp(unsafe { c::xmp_new_empty() })
+    }
+}
+
+impl From<*mut c::Xmp> for Xmp {
+    /// Construct from a native ptr. Will own it.
+    fn from(ptr: *mut c::Xmp) -> Xmp {
+        Xmp(ptr)
     }
 }
 
