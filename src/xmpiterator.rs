@@ -7,25 +7,25 @@ bitflags! {
     #[derive(Default)]
     pub struct IterFlags: u32 {
         /// No iterator flag
-        const ITER_NONE = 0;
+        const NONE = 0;
         /// The low 8 bits are an enum of what data structure to iterate.
-        const ITER_CLASS_MASK = 0x00FFu32;
+        const CLASS_MASK = 0x00FFu32;
         /// Iterate the property tree of a Xmp object.
-        const ITER_PROPERTIES = 0x0000u32;
+        const PROPERTIES = 0x0000u32;
         /// Iterate the global alias table.
-        const ITER_ALIASES = 0x0001u32;
+        const ALIASES = 0x0001u32;
         /// Iterate the global namespace table.
-        const ITER_NAMESPACES = 0x0002u32;
+        const NAMESPACES = 0x0002u32;
         /// Just do the immediate children of the root, default is subtree.
-        const ITER_JUST_CHILDREN = 0x0100u32;
+        const JUST_CHILDREN = 0x0100u32;
         /// Just do the leaf nodes, default is all nodes in the subtree.
-        const ITER_JUST_LEAF_NODES = 0x0200u32;
+        const JUST_LEAF_NODES = 0x0200u32;
         /// Return just the leaf part of the path, default is the full path.
-        const ITER_JUST_LEAF_NAME = 0x0400u32;
+        const JUST_LEAF_NAME = 0x0400u32;
         /// Include aliases, default is justactual properties.
-        const ITER_INCLUDE_ALIASES = 0x0800u32;
+        const INCLUDE_ALIASES = 0x0800u32;
         /// Omit all qualifiers.
-        const ITER_OMIT_QUALIFIERS = 0x1000u32;
+        const OMIT_QUALIFIERS = 0x1000u32;
     }
 }
 
@@ -33,12 +33,12 @@ bitflags! {
     #[derive(Default)]
     pub struct IterSkipFlags: u32 {
         /// Not flags.
-        const ITER_SKIP_NONE = 0;
+        const NONE = 0;
         /// Skip the subtree below the current node.
-        const ITER_SKIP_SUBTREE = 0x0001u32;
+        const SUBTREE = 0x0001u32;
         /// Skip the subtree below and remaining siblings
         /// of the current node.
-        const ITER_SKIP_SIBLINGS = 0x0002u32;
+        const SIBLINGS = 0x0002u32;
     }
 }
 

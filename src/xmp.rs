@@ -11,73 +11,62 @@ bitflags! {
     #[derive(Default)]
     pub struct PropFlags: u32 {
         /// The property has no bit set.
-        const PROP_NONE = 0;
+        const NONE = 0;
         /// The value is a URI, use rdf:resource attribute. DISCOURAGED
-        const PROP_VALUE_IS_URI     = 0x0000_0002u32;
+        const VALUE_IS_URI     = 0x0000_0002u32;
         /** Options relating to qualifiers attached to a property. */
         /// The property has qualifiers, includes rdf:type and xml:lang.
-        const PROP_HAS_QUALIFIERS   = 0x0000_0010u32;
+        const HAS_QUALIFIERS   = 0x0000_0010u32;
         /// This is a qualifier, includes rdf:type and xml:lang.
-        const PROP_IS_QUALIFIER     = 0x0000_0020u32;
+        const IS_QUALIFIER     = 0x0000_0020u32;
         /// Implies `PROP_HAS_QUALIFIERS`, property has xml:lang.
-        const PROP_HAS_LANG         = 0x0000_0040u32;
+        const HAS_LANG         = 0x0000_0040u32;
         /// Implies `PROP_HAS_QUALIFIERS`, property has rdf:type.
-        const PROP_HAS_TYPE         = 0x0000_0080u32;
+        const HAS_TYPE         = 0x0000_0080u32;
 
         /* Options relating to the data structure form. */
         /// The value is a structure with nested fields.
-        const PROP_VALUE_IS_STRUCT = 0x0000_0100u32;
+        const VALUE_IS_STRUCT = 0x0000_0100u32;
         /// The value is an array (RDF alt/bag/seq).
-        const PROP_VALUE_IS_ARRAY  = 0x0000_0200u32;
+        const VALUE_IS_ARRAY  = 0x0000_0200u32;
         /// The item order does not matter.*/
-        const PROP_ARRAY_IS_UNORDERED = PropFlags::PROP_VALUE_IS_ARRAY.bits;
+        const ARRAY_IS_UNORDERED = PropFlags::VALUE_IS_ARRAY.bits;
         /// Implies `PROP_VALUE_IS_ARRAY`, item order matters.
-        const PROP_ARRAY_IS_ORDERED = 0x0000_0400u32;
+        const ARRAY_IS_ORDERED = 0x0000_0400u32;
         /// Implies `PROP_ARRAY_IS_ORDERED`, items are alternates.
-        const PROP_ARRAY_IS_ALT    = 0x0000_0800u32;
+        const ARRAY_IS_ALT    = 0x0000_0800u32;
         /** Additional struct and array options. */
         /// Implies `PROP_ARRAY_IS_ALT`, items are localized text.
-        const PROP_ARRAY_IS_ALTTEXT = 0x0000_1000u32;
+        const ARRAY_IS_ALTTEXT = 0x0000_1000u32;
         /// Used by array functions.
-        const PROP_ARRAY_INSERT_BEFORE = 0x0000_4000u32;
+        const ARRAY_INSERT_BEFORE = 0x0000_4000u32;
         /// Used by array functions. */
-        const PROP_ARRAY_INSERT_AFTER = 0x0000_8000u32;
+        const ARRAY_INSERT_AFTER = 0x0000_8000u32;
 
         /* Other miscellaneous options. */
         /// This property is an alias name for another property.
-        const PROP_IS_ALIAS         = 0x0001_0000u32;
+        const IS_ALIAS         = 0x0001_0000u32;
         /// This property is the base value for a set of aliases.
-        const PROP_HAS_ALIASES      = 0x0002_0000u32;
+        const HAS_ALIASES      = 0x0002_0000u32;
         /// This property is an "internal" property, owned by applications.
-        const PROP_IS_INTERNAL      = 0x0004_0000u32;
+        const IS_INTERNAL      = 0x0004_0000u32;
         /// This property is not derived from the document content.
-        const PROP_IS_STABLE        = 0x0010_0000u32;
+        const IS_STABLE        = 0x0010_0000u32;
         /// This property is derived from the document content.
-        const PROP_IS_DERIVED       = 0x0020_0000u32;
+        const IS_DERIVED       = 0x0020_0000u32;
         // kXMPUtil_AllowCommas   = 0x10000000u32,  ! Used by TXMPUtils::CatenateArrayItems and ::SeparateArrayItems.
         // kXMP_DeleteExisting    = 0x20000000u32,  ! Used by TXMPMeta::SetXyz functions to delete any pre-existing property.
         // kXMP_SchemaNode        = 0x80000000u32,  ! Returned by iterators - #define to avoid warnings
 
         /* Masks that are multiple flags. */
-        const PROP_ARRAY_FORM_MASK  =
-            PropFlags::PROP_VALUE_IS_ARRAY.bits | PropFlags::PROP_ARRAY_IS_ORDERED.bits
-            | PropFlags::PROP_ARRAY_IS_ALT.bits | PropFlags::PROP_ARRAY_IS_ALTTEXT.bits;
+        const ARRAY_FORM_MASK  =
+            PropFlags::VALUE_IS_ARRAY.bits | PropFlags::ARRAY_IS_ORDERED.bits
+            | PropFlags::ARRAY_IS_ALT.bits | PropFlags::ARRAY_IS_ALTTEXT.bits;
         /// Is it simple or composite (array or struct)?
-        const PROP_COMPOSITE_MASK   = PropFlags::PROP_VALUE_IS_STRUCT.bits
-            | PropFlags::PROP_ARRAY_FORM_MASK.bits;
+        const COMPOSITE_MASK   = PropFlags::VALUE_IS_STRUCT.bits
+            | PropFlags::ARRAY_FORM_MASK.bits;
         /// Reserved for transient use by the implementation.
-        const IMPL_RESERVED_MASK    = 0x7000_0000u32;
-
-        /// Array is a ordered.
-        const ARRAY_IS_ORDERED = 0x0000_0400u32;
-        /// Array is alternate values
-        const ARRAY_IS_ALT    = 0x0000_0800u32;
-        /// Array is alternate text.
-        const ARRAY_IS_ALTTEXT = 0x0000_1000u32;
-
-        const ITEM_IS_STRUCT = 0x0000_0100u32;
-        /// The value is an array (RDF alt/bag/seq).
-        const ITEM_IS_ARRAY  = 0x0000_0200u32;
+        const _IMPL_RESERVED_MASK    = 0x7000_0000u32;
     }
 }
 
@@ -85,38 +74,38 @@ bitflags! {
     #[derive(Default)]
     pub struct SerialFlags: u32 {
         /// Omit the XML packet wrapper.
-        const SERIAL_OMITPACKETWRAPPER   = 0x0010u32;
+        const OMITPACKETWRAPPER   = 0x0010u32;
         /// Default is a writeable packet.
-        const SERIAL_READONLYPACKET      = 0x0020u32;
+        const READONLYPACKET      = 0x0020u32;
         /// Use a compact form of RDF.
-        const SERIAL_USECOMPACTFORMAT    = 0x0040u32;
+        const USECOMPACTFORMAT    = 0x0040u32;
         /// Include a padding allowance for a thumbnail image.
-        const SERIAL_INCLUDETHUMBNAILPAD = 0x0100u32;
+        const INCLUDETHUMBNAILPAD = 0x0100u32;
         /// The padding parameter is the overall packet length.
-        const SERIAL_EXACTPACKETLENGTH   = 0x0200u32;
+        const EXACTPACKETLENGTH   = 0x0200u32;
         /// Show aliases as XML comments.
-        const SERIAL_WRITEALIASCOMMENTS  = 0x0400u32;
+        const WRITEALIASCOMMENTS  = 0x0400u32;
         /// Omit all formatting whitespace.
-        const SERIAL_OMITALLFORMATTING   = 0x0800u32;
+        const OMITALLFORMATTING   = 0x0800u32;
 
         /* ! Don't use directly, see the combined values below! */
         const _LITTLEENDIAN_BIT    = 0x0001u32;
         const _UTF16_BIT           = 0x0002u32;
         const _UTF32_BIT           = 0x0004u32;
 
-        const SERIAL_ENCODINGMASK        = 0x0007u32;
+        const ENCODINGMASK        = 0x0007u32;
         /// Serialize to UTF-8 (default)
-        const SERIAL_ENCODEUTF8          = 0u32;
+        const ENCODEUTF8          = 0u32;
         /// Serialize to UTF-16 BE (big endian)
-        const SERIAL_ENCODEUTF16BIG      = SerialFlags::_UTF16_BIT.bits;
+        const ENCODEUTF16BIG      = SerialFlags::_UTF16_BIT.bits;
         /// Serialize to UTF-16 LE (little endian)
-        const SERIAL_ENCODEUTF16LITTLE   =
+        const ENCODEUTF16LITTLE   =
             SerialFlags::_UTF16_BIT.bits
             | SerialFlags::_LITTLEENDIAN_BIT.bits;
         /// Serialize to UTF-32 BE (big endian)
-        const SERIAL_ENCODEUTF32BIG      = SerialFlags::_UTF32_BIT.bits;
+        const ENCODEUTF32BIG      = SerialFlags::_UTF32_BIT.bits;
         /// Serialize to UTF-32 LE (little endian)
-        const SERIAL_ENCODEUTF32LITTLE   =
+        const ENCODEUTF32LITTLE   =
             SerialFlags::_UTF32_BIT.bits
             | SerialFlags::_LITTLEENDIAN_BIT.bits;
     }
