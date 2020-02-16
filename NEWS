@@ -1,3 +1,10 @@
+2.6.0 -
+
+- Xmp C types are wrapped into a tuple instead of named field in struct.
+- Fixed some Rust deprecation warnings: range in patterns and Sync::Once.
+- Flags are now defined using bitflags 1.5.0 and therefor namespaces into
+  their struct.
+
 2.5.0 - 2019/09/28
 
 - DateTime now has standard derive Clone and Debug
@@ -19,21 +26,21 @@
 
 2.4.3 - 2017/06/20
 
--TzSign is public
+- TzSign is public
 
 2.4.2 - 2017/06/20
 
--XmpDateTime: the c struct is public.
+- XmpDateTime: the c struct is public.
 
 2.4.1 - 2017/06/04
 
--XmpIterator::new() declaration was wrong. Also xmp_iterator_new()
--Export NS_* from the -sys crate.
+- XmpIterator::new() declaration was wrong. Also xmp_iterator_new()
+- Export NS_* from the -sys crate.
 
 2.4.0 - 2017/01/07
 
--Added WEBP type.
+- Added WEBP type.
 
 2.3.0 - 2016/03/22
 
--Initial release.
+- Initial release.
