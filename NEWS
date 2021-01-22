@@ -6,6 +6,7 @@
   their struct.
 - Flags values are now simplified to not duplicate the namespace.
 - Now the crate use Rust 2018.
+- Error is now its own type and support the Error protocol.
 
 2.5.0 - 2019/09/28
 

@@ -3,9 +3,10 @@ use std::ffi::CString;
 use c::FileType;
 use c::XmpPacketInfo as PacketInfo;
 
+use crate::error::Error;
+use crate::Result;
 use crate::xmp::Xmp;
 use crate::xmpstring::XmpString;
-use crate::Result;
 
 bitflags! {
     /// Flag options for opening files.
@@ -110,7 +111,7 @@ impl XmpFile {
     /// Open an XmpFile. Usually called after new.
     pub fn open(&mut self, path: &str, options: OpenFlags) -> Result<()> {
         if self.is_null() {
-            return Err(crate::Error::BadObject);
+            return Err(Error::from(c::XmpError::BadObject));
         }
         let pp = CString::new(path).unwrap();
         if unsafe { c::xmp_files_open(self.0, pp.as_ptr(), options.bits()) } {
@@ -123,7 +124,7 @@ impl XmpFile {
     /// Close the XmpFile
     pub fn close(&mut self, options: CloseFlags) -> Result<()> {
         if self.is_null() {
-            return Err(crate::Error::BadObject);
+            return Err(Error::from(c::XmpError::BadObject));
         }
         if unsafe { c::xmp_files_close(self.0, options.bits()) } {
             Ok(())
@@ -149,7 +150,7 @@ impl XmpFile {
     /// Get the xmp data an Xmp.
     pub fn get_xmp(&self, xmp: &mut Xmp) -> Result<()> {
         if self.is_null() || xmp.is_null() {
-            return Err(crate::Error::BadObject);
+            return Err(Error::from(c::XmpError::BadObject));
         }
         if unsafe { c::xmp_files_get_xmp(self.0, xmp.as_mut_ptr()) } {
             Ok(())
@@ -161,7 +162,7 @@ impl XmpFile {
     /// Get the xmp packet as a string.
     pub fn get_xmp_xmpstring(&self, packet: &mut XmpString, info: &mut PacketInfo) -> Result<()> {
         if self.is_null() || packet.is_null() {
-            return Err(crate::Error::BadObject);
+            return Err(Error::from(c::XmpError::BadObject));
         }
         if unsafe {
             c::xmp_files_get_xmp_xmpstring(self.0, packet.as_mut_ptr(), info as *mut PacketInfo)
@@ -200,7 +201,7 @@ impl XmpFile {
     /// Put the Xmp into the XmpFile
     pub fn put_xmp(&mut self, xmp: &Xmp) -> Result<()> {
         if self.is_null() || xmp.is_null() {
-            return Err(crate::Error::BadObject);
+            return Err(Error::from(c::XmpError::BadObject));
         }
         if unsafe { c::xmp_files_put_xmp(self.0, xmp.as_ptr()) } {
             Ok(())
@@ -268,7 +269,7 @@ impl Drop for XmpFile {
 
 #[test]
 fn it_works() {
-    use c::XmpError;
+    use error::Error;
 
     let inited = crate::init();
 
@@ -277,5 +278,5 @@ fn it_works() {
     let xf = XmpFile::new();
     assert!(!xf.is_null());
 
-    assert!(crate::get_error() == XmpError::Unknown);
+    assert!(crate::get_error() == Error::from(c::XmpError::Unknown));
 }

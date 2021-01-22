@@ -2,6 +2,7 @@ use libc::c_char;
 use std::ffi::CString;
 
 use crate::xmpstring::XmpString;
+use crate::error::Error;
 use crate::DateTime;
 use crate::Result;
 
@@ -140,7 +141,7 @@ impl Xmp {
     /// Serialize the Xmp to an XmpString.
     pub fn serialize(&self, options: SerialFlags, padding: u32) -> Result<XmpString> {
         if self.is_null() {
-            return Err(crate::Error::BadObject);
+            return Err(Error::from(c::XmpError::BadObject));
         }
         let mut buffer = XmpString::new();
         if unsafe { c::xmp_serialize(self.0, buffer.as_mut_ptr(), options.bits(), padding) } {
@@ -159,7 +160,7 @@ impl Xmp {
         indent: i32,
     ) -> Result<XmpString> {
         if self.is_null() {
-            return Err(crate::Error::BadObject);
+            return Err(Error::from(c::XmpError::BadObject));
         }
         let s_newline = CString::new(newline).unwrap();
         let s_tab = CString::new(tab).unwrap();

@@ -1,29 +1,31 @@
 extern crate exempi;
+extern crate exempi_sys;
 
+use exempi_sys as c;
 use exempi::*;
 
 #[test]
 fn libary_tests() {
     assert!(exempi::init());
 
-    assert!(exempi::get_error() == Error::Unknown);
+    assert!(exempi::get_error() == Error::from(c::XmpError::Unknown));
 
     // namespace registration tests.
     let result = exempi::register_namespace("http://rust.figuiere.net/ns/rust/", "rust");
     assert!(result != None);
-    assert!(exempi::get_error() == Error::Unknown);
+    assert!(exempi::get_error() == Error::from(c::XmpError::Unknown));
     let prefix = result.unwrap();
     assert!(prefix.to_str() != "");
     let result = exempi::namespace_prefix("http://rust.figuiere.net/ns/rust/");
     assert!(result != None);
     let prefix2 = result.unwrap();
-    assert!(exempi::get_error() == Error::Unknown);
+    assert!(exempi::get_error() == Error::from(c::XmpError::Unknown));
     assert!(prefix2 == prefix);
 
     let result = exempi::prefix_namespace(prefix.to_str());
     assert!(result != None);
     let ns = result.unwrap();
-    assert!(exempi::get_error() == Error::Unknown);
+    assert!(exempi::get_error() == Error::from(c::XmpError::Unknown));
     assert!(ns.to_str() == "http://rust.figuiere.net/ns/rust/");
 
     let mut xmpblock = Xmp::new();

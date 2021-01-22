@@ -2,6 +2,7 @@ extern crate exempi_sys as c;
 #[macro_use]
 extern crate bitflags;
 
+mod error;
 mod xmp;
 mod xmpfile;
 mod xmpiterator;
@@ -16,7 +17,7 @@ use std::sync::Once;
 pub use c::consts::*;
 pub use c::FileType;
 pub use c::TzSign as XmpTzSign;
-pub use c::XmpError as Error;
+pub use error::Error;
 pub use xmp::{PropFlags, SerialFlags, Xmp};
 pub use xmpfile::{CloseFlags, FormatOptionFlags, OpenFlags, XmpFile};
 pub use xmpiterator::{IterFlags, IterSkipFlags, XmpIterator};
@@ -60,10 +61,10 @@ pub fn terminate() {
 /// Set when a function return false or None.
 pub fn get_error() -> Error {
     let err = unsafe { c::xmp_get_error() };
-    match err {
+    Error::from(match err {
         -15..=0 | -110..=-101 | -211..=-201 => unsafe { transmute(err) },
-        _ => Error::TBD,
-    }
+        _ => c::XmpError::TBD,
+    })
 }
 
 /// Register namespace with uri and suggested prefix
