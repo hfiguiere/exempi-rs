@@ -1,5 +1,4 @@
 extern crate exempi_sys as c;
-extern crate libc;
 #[macro_use]
 extern crate bitflags;
 
@@ -19,7 +18,7 @@ pub use c::FileType;
 pub use c::TzSign as XmpTzSign;
 pub use c::XmpError as Error;
 pub use xmp::{PropFlags, SerialFlags, Xmp};
-pub use xmpfile::{OpenFlags, CloseFlags, FormatOptionFlags, XmpFile};
+pub use xmpfile::{CloseFlags, FormatOptionFlags, OpenFlags, XmpFile};
 pub use xmpiterator::{IterFlags, IterSkipFlags, XmpIterator};
 pub use xmpstring::XmpString;
 

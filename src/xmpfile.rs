@@ -1,12 +1,11 @@
-extern crate libc;
+use std::ffi::CString;
 
-use crate::Result;
-use c;
 use c::FileType;
 use c::XmpPacketInfo as PacketInfo;
-use std::ffi::CString;
-use xmp::Xmp;
-use xmpstring::XmpString;
+
+use crate::xmp::Xmp;
+use crate::xmpstring::XmpString;
+use crate::Result;
 
 bitflags! {
     /// Flag options for opening files.
@@ -271,12 +270,12 @@ impl Drop for XmpFile {
 fn it_works() {
     use c::XmpError;
 
-    let inited = ::init();
+    let inited = crate::init();
 
     assert!(inited);
 
     let xf = XmpFile::new();
     assert!(!xf.is_null());
 
-    assert!(::get_error() == XmpError::Unknown);
+    assert!(crate::get_error() == XmpError::Unknown);
 }

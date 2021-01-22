@@ -1,7 +1,6 @@
-use c;
+use crate::xmp::{PropFlags, Xmp};
+use crate::xmpstring::XmpString;
 use std::ffi::CString;
-use xmp::{PropFlags, Xmp};
-use xmpstring::XmpString;
 
 bitflags! {
     #[derive(Default)]

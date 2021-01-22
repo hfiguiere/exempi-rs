@@ -1,11 +1,9 @@
-extern crate libc;
-
-use crate::Result;
-use c;
 use libc::c_char;
 use std::ffi::CString;
-use xmpstring::XmpString;
-use DateTime;
+
+use crate::xmpstring::XmpString;
+use crate::DateTime;
+use crate::Result;
 
 bitflags! {
     #[derive(Default)]

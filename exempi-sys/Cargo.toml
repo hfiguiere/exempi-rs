@@ -8,6 +8,7 @@ description = "Unsafe Rust bindings to Exempi 2.4. Part of exempi-rs."
 keywords = ["xmp", "metadata"]
 repository = "https://github.com/hfiguiere/exempi-rs"
 homepage = "https://libopenraw.freedesktop.org/exempi/"
+edition = "2018"
 
 [dependencies]
 libc = "0.2"

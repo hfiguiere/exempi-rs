@@ -1,4 +1,3 @@
-use c;
 use std::ffi::CStr;
 use std::fmt;
 use std::str;

@@ -7,6 +7,7 @@ keywords = ["metadata", "tags", "xmp"]
 description = "Safe Rust bindings to Exempi 2.4."
 repository = "https://github.com/hfiguiere/exempi-rs"
 homepage = "https://libopenraw.freedesktop.org/exempi/"
+edition = "2018"
 
 [dependencies]
 bitflags = "1.2.1"

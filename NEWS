@@ -5,6 +5,7 @@
 - Flags are now defined using bitflags 1.5.0 and therefor namespaces into
   their struct.
 - Flags values are now simplified to not duplicate the namespace.
+- Now the crate use Rust 2018.
 
 2.5.0 - 2019/09/28
 
