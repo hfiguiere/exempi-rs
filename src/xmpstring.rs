@@ -11,7 +11,7 @@ use std::str;
 /// XmpString support several of the standard traits.
 ///
 /// ```no_run
-/// use exempi::{Xmp,PropFlags};
+/// use exempi2::{Xmp,PropFlags};
 ///
 /// let xmp = Xmp::new();
 /// let mut flags = PropFlags::empty();

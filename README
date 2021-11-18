@@ -1,5 +1,7 @@
-exempi-rs
-=========
+exempi2
+=======
+
+This is a renaming of the crate previously known as `exempi`
 
 Rust binding for Exempi, an XMP library.
 
@@ -7,11 +9,6 @@ Exempi can be found at http://libopenraw.freedesktop.org/wiki/Exempi/
 
 Exempi-sys provide unsafe binding to the C API and Exempis-rs a safe
 Rust API.
-
-Versioning
-----------
-
-The Rust crate will not match the upstream version.
 
 Source
 ------

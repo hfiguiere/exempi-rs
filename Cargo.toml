@@ -1,6 +1,6 @@
 [package]
-name = "exempi"
-version = "2.6.0"
+name = "exempi2"
+version = "0.1.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 keywords = ["metadata", "tags", "xmp"]

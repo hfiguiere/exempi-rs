@@ -1,12 +1,14 @@
-2.6.0 -
+0.1.0 -
 
-- Xmp C types are wrapped into a tuple instead of named field in struct.
-- Fixed some Rust deprecation warnings: range in patterns and Sync::Once.
-- Flags are now defined using bitflags 1.5.0 and therefor namespaces into
+Crate renamed exempi2
+
+- API: Xmp C types are wrapped into a tuple instead of named field in struct.
+- API: Flags are now defined using bitflags 1.5.0 and therefor namespaced into
   their struct.
-- Flags values are now simplified to not duplicate the namespace.
+- API: Flags values are now simplified to not duplicate the namespace.
+- API: Error is now its own type and support the Error protocol.
 - Now the crate use Rust 2018.
-- Error is now its own type and support the Error protocol.
+- Fixed some Rust deprecation warnings: range in patterns and Sync::Once.
 
 2.5.0 - 2019/09/28
 
