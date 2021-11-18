@@ -5,7 +5,7 @@ fn main() {
         Ok(_) => (),
         Err(e) => {
             println!("Exempi not found");
-            panic!(e);
+            panic!("{}", e);
         }
     }
 }
