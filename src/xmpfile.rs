@@ -269,7 +269,7 @@ impl Drop for XmpFile {
 
 #[test]
 fn it_works() {
-    use error::Error;
+    use crate::error::Error;
 
     let inited = crate::init();
 
