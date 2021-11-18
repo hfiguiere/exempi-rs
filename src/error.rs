@@ -1,4 +1,3 @@
-
 pub use c::XmpError;
 
 #[derive(Debug, PartialEq)]

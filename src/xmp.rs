@@ -1,8 +1,8 @@
 use libc::c_char;
 use std::ffi::CString;
 
-use crate::xmpstring::XmpString;
 use crate::error::Error;
+use crate::xmpstring::XmpString;
 use crate::DateTime;
 use crate::Result;
 

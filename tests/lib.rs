@@ -1,8 +1,8 @@
 extern crate exempi2;
 extern crate exempi_sys;
 
-use exempi_sys as c;
 use exempi2::*;
+use exempi_sys as c;
 
 #[test]
 fn libary_tests() {

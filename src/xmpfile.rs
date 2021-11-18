@@ -4,9 +4,9 @@ use c::FileType;
 use c::XmpPacketInfo as PacketInfo;
 
 use crate::error::Error;
-use crate::Result;
 use crate::xmp::Xmp;
 use crate::xmpstring::XmpString;
+use crate::Result;
 
 bitflags! {
     /// Flag options for opening files.
