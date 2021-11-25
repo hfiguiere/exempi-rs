@@ -122,7 +122,8 @@ impl Xmp {
     }
     /// New Xmp object a byte buffer.
     /// Return None if parsing failed.
-    pub fn from_buffer(buf: &[u8]) -> Result<Xmp> {
+    pub fn from_buffer<T: AsRef<[u8]>>(buf: T) -> Result<Xmp> {
+        let buf = buf.as_ref();
         let ptr = unsafe { c::xmp_new(buf.as_ptr() as *const c_char, buf.len()) };
         if ptr.is_null() {
             return Err(crate::get_error());
@@ -130,7 +131,9 @@ impl Xmp {
         Ok(Xmp::from(ptr))
     }
     /// Parse buff into a Xmp
-    pub fn parse(&mut self, buf: &[u8]) -> Result<()> {
+    pub fn parse<T: AsRef<[u8]>>(&mut self, buf: T) -> Result<()> {
+        assert!(!self.0.is_null());
+        let buf = buf.as_ref();
         if unsafe { c::xmp_parse(self.0, buf.as_ptr() as *const c_char, buf.len()) } {
             Ok(())
         } else {

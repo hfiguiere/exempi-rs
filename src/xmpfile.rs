@@ -1,7 +1,8 @@
 use std::ffi::CString;
+use std::os::unix::ffi::OsStrExt;
 
 use c::FileType;
-use c::XmpPacketInfo as PacketInfo;
+use c::XmpPacketInfo;
 
 use crate::error::Error;
 use crate::xmp::Xmp;
@@ -82,6 +83,23 @@ bitflags! {
     }
 }
 
+/// Wrap an XmpPacketInfo
+pub struct PacketInfo(pub XmpPacketInfo);
+
+impl Default for PacketInfo {
+    fn default() -> PacketInfo {
+        PacketInfo( XmpPacketInfo{
+            offset: 0,
+            length: 0,
+            pad_size: 0,
+            char_form: 0,
+            writeable: false,
+            has_wrapper: false,
+            pad: 0
+        })
+    }
+}
+
 pub struct XmpFile(*mut c::XmpFile);
 
 impl Default for XmpFile {
@@ -99,8 +117,9 @@ impl XmpFile {
     /// Create and open a new XmpFile
     /// Equivalent to calling new then open.
     /// Return Err in case of failure
-    pub fn open_new(p: &str, options: OpenFlags) -> Result<XmpFile> {
-        let pp = CString::new(p).unwrap();
+    pub fn new_from_file<P: AsRef<std::ffi::OsStr>>(path: P, options: OpenFlags) -> Result<XmpFile> {
+        let path = path.as_ref().as_bytes();
+        let pp = CString::new(path).unwrap();
         let ptr = unsafe { c::xmp_files_open_new(pp.as_ptr(), options.bits()) };
         if ptr.is_null() {
             return Err(crate::get_error());
@@ -109,10 +128,11 @@ impl XmpFile {
     }
 
     /// Open an XmpFile. Usually called after new.
-    pub fn open(&mut self, path: &str, options: OpenFlags) -> Result<()> {
+    pub fn open<P: AsRef<std::ffi::OsStr>>(&mut self, path: P, options: OpenFlags) -> Result<()> {
         if self.is_null() {
             return Err(Error::from(c::XmpError::BadObject));
         }
+        let path = path.as_ref().as_bytes();
         let pp = CString::new(path).unwrap();
         if unsafe { c::xmp_files_open(self.0, pp.as_ptr(), options.bits()) } {
             Ok(())
@@ -148,26 +168,29 @@ impl XmpFile {
     }
 
     /// Get the xmp data an Xmp.
-    pub fn get_xmp(&self, xmp: &mut Xmp) -> Result<()> {
-        if self.is_null() || xmp.is_null() {
+    pub fn get_xmp(&self) -> Result<Xmp> {
+        if self.is_null() {
             return Err(Error::from(c::XmpError::BadObject));
         }
+        let mut xmp = Xmp::default();
         if unsafe { c::xmp_files_get_xmp(self.0, xmp.as_mut_ptr()) } {
-            Ok(())
+            Ok(xmp)
         } else {
             Err(crate::get_error())
         }
     }
 
     /// Get the xmp packet as a string.
-    pub fn get_xmp_xmpstring(&self, packet: &mut XmpString, info: &mut PacketInfo) -> Result<()> {
-        if self.is_null() || packet.is_null() {
+    pub fn get_xmp_xmpstring(&self) -> Result<(XmpString, PacketInfo)> {
+        if self.is_null() {
             return Err(Error::from(c::XmpError::BadObject));
         }
+        let mut packet = XmpString::new();
+        let mut info = PacketInfo::default();
         if unsafe {
-            c::xmp_files_get_xmp_xmpstring(self.0, packet.as_mut_ptr(), info as *mut PacketInfo)
+            c::xmp_files_get_xmp_xmpstring(self.0, packet.as_mut_ptr(), &mut info.0 as *mut XmpPacketInfo)
         } {
-            Ok(())
+            Ok((packet, info))
         } else {
             Err(crate::get_error())
         }
@@ -237,12 +260,13 @@ impl XmpFile {
         *options = OpenFlags::from_bits(raw_options).unwrap_or_default();
         *handler_flags = FormatOptionFlags::from_bits(raw_handler_flags).unwrap_or_default();
 
-        file_path.push_str(s.to_str());
+        file_path.push_str(&s.to_string());
         result
     }
 
     /// Check the file format for the specified path
-    pub fn check_file_format(path: &str) -> FileType {
+    pub fn check_file_format<P: AsRef<std::ffi::OsStr>>(path: P) -> FileType {
+        let path = path.as_ref().as_bytes();
         let pp = CString::new(path).unwrap();
         unsafe { c::xmp_files_check_file_format(pp.as_ptr()) }
     }

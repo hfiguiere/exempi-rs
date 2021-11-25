@@ -19,7 +19,7 @@ use std::str;
 /// if let Ok(ref xmpstring) = xmp.get_property("http://rust.figuiere.net/ns/rust/", "rust", &mut flags) {
 ///    println!("property value is {}, flags {}", xmpstring, flags.bits());
 ///    println!("string len: {}", xmpstring.len());
-///    let s = String::from(xmpstring.to_str());
+///    let s = String::from(xmpstring);
 ///    println!("converted to std::String: {}", s);
 /// }
 /// ```
@@ -27,6 +27,7 @@ use std::str;
 pub struct XmpString(*mut c::XmpString);
 
 impl Default for XmpString {
+    /// Default XmpString is allocated and ready to use
     fn default() -> XmpString {
         XmpString(unsafe { c::xmp_string_new() })
     }
@@ -67,11 +68,24 @@ impl XmpString {
 
     /// Convert to a str
     // XXX properly deal with the utf8 error
-    pub fn to_str(&self) -> &str {
+    pub fn to_str(&self) -> Option<&str> {
         unsafe {
             let s = CStr::from_ptr(c::xmp_string_cstr(self.0));
             // we are supposed to receive UTF8 from the library.
-            str::from_utf8_unchecked(s.to_bytes())
+            str::from_utf8(s.to_bytes()).ok()
+        }
+    }
+}
+
+impl From<&XmpString> for String {
+    /// Convert an XmpString safely to string.
+    /// The result is lossy in it is not utf-8.
+    fn from(s: &XmpString) -> String {
+        unsafe {
+            let s = CStr::from_ptr(c::xmp_string_cstr(s.0));
+            // we are supposed to receive UTF8 from the library.
+            // be we'll play it safe.
+            String::from_utf8_lossy(s.to_bytes()).to_string()
         }
     }
 }
@@ -94,6 +108,26 @@ impl PartialEq for XmpString {
 
 impl fmt::Display for XmpString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.to_str())
+        write!(f, "{}", String::from(self))
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::XmpString;
+
+    #[test]
+    fn test_xmpstring() {
+        let s = XmpString::default();
+
+        assert!(!s.is_null());
+        assert!(s.is_empty());
+        assert_eq!(s.len(), 0);
+
+        let s2 = XmpString::new();
+        assert_eq!(s, s2);
+
+        let string = String::from(&s2);
+        assert_eq!(string, "".to_owned());
     }
 }

@@ -12,4 +12,4 @@ edition = "2018"
 [dependencies]
 bitflags = "1.2.1"
 libc = "0.2"
-exempi-sys = { path = "exempi-sys", version = "2.5.0" }
+exempi-sys = { path = "exempi-sys", version = "^2.5.0" }

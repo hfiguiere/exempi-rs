@@ -41,13 +41,52 @@ bitflags! {
     }
 }
 
+
+///
+/// XmpIterator iterates over properties in the XMP Packet
+///
+/// ```no_run
+/// use exempi2::{Xmp,XmpIterator};
+/// use exempi2::{IterFlags, NS_EXIF};
+///
+/// let xmp = Xmp::new();
+///
+/// let iter = XmpIterator::new(&xmp, "http://ns.adobe.com/exif/1.0/",
+///                             [], IterFlags::PROPERTIES);
+///
+/// iter.for_each(|value| {
+///     println!("{}:{} = {} / {}", value.schema, value.name, value.value, value.option.bits());
+/// });
+/// ```
+///
 pub struct XmpIterator(*mut c::XmpIterator);
+
+/// Value returned by th XmpIterator
+#[derive(Debug, Default, PartialEq)]
+pub struct IteratorValue {
+    /// Schema of the property
+    pub schema: XmpString,
+    /// Name of the property
+    pub name: XmpString,
+    /// Value of the property
+    pub value: XmpString,
+    /// Property flags
+    pub option: PropFlags,
+}
+
+impl IteratorValue {
+    pub fn new() -> IteratorValue {
+        IteratorValue::default()
+    }
+}
 
 impl XmpIterator {
     /// Construct a new `XmpIterator` from a native pointer
-    pub fn new(xmp: &Xmp, schema: &str, name: &str, propsbits: IterFlags) -> XmpIterator {
-        let s_schema = CString::new(schema).unwrap();
-        let s_name = CString::new(name).unwrap();
+    pub fn new<S, N>(xmp: &Xmp, schema: S, name: N, propsbits: IterFlags) -> XmpIterator
+        where S: AsRef<[u8]>, N: AsRef<[u8]>
+    {
+        let s_schema = CString::new(schema.as_ref()).unwrap();
+        let s_name = CString::new(name.as_ref()).unwrap();
         XmpIterator(unsafe {
             c::xmp_iterator_new(
                 xmp.as_ptr(),
@@ -68,33 +107,6 @@ impl XmpIterator {
         self.0
     }
 
-    /// Iterate to the next element following the option set by the iterator
-    ///
-    /// schema, name, value will be output with the respective info
-    /// option will be output with property flags.
-    /// return false when reaching the end
-    ///
-    pub fn next(
-        &mut self,
-        schema: &mut XmpString,
-        name: &mut XmpString,
-        value: &mut XmpString,
-        option: &mut PropFlags,
-    ) -> bool {
-        let mut raw_option: u32 = 0;
-        let result = unsafe {
-            c::xmp_iterator_next(
-                self.0,
-                schema.as_mut_ptr(),
-                name.as_mut_ptr(),
-                value.as_mut_ptr(),
-                &mut raw_option,
-            )
-        };
-        *option = PropFlags::from_bits(raw_option).unwrap_or_default();
-        result
-    }
-
     /// Skip the poperties following the option bitset from `IterSkipBits`
     pub fn skip(&mut self, option: IterSkipFlags) -> bool {
         if self.is_null() {
@@ -102,6 +114,32 @@ impl XmpIterator {
         }
         unsafe { c::xmp_iterator_skip(self.0, option.bits()) }
     }
+}
+
+impl Iterator for XmpIterator {
+    type Item = IteratorValue;
+
+    /// Iterate to the next element following the option set by the iterator
+    ///
+    fn next(&mut self) -> Option<Self::Item> {
+        let mut value = IteratorValue::new();
+        let mut raw_option: u32 = 0;
+        if unsafe {
+            c::xmp_iterator_next(
+                self.0,
+                value.schema.as_mut_ptr(),
+                value.name.as_mut_ptr(),
+                value.value.as_mut_ptr(),
+                &mut raw_option,
+            )
+        } {
+            value.option = PropFlags::from_bits(raw_option).unwrap_or_default();
+            Some(value)
+        } else {
+            None
+        }
+    }
+
 }
 
 /// `XmpIterator` implements the `Drop` trait to release the memory
@@ -121,10 +159,12 @@ fn iterator_works() {
     assert!(inited);
 
     let mut xmp = Xmp::new();
-    XmpIterator::new(
+    let mut iter = XmpIterator::new(
         &mut xmp,
         "http://ns.adobe.com/xap/1.0/",
         "keyword",
         IterFlags::from_bits(0).unwrap_or_default(),
     );
+
+    assert_eq!(iter.next(), None);
 }
