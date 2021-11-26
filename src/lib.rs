@@ -70,9 +70,9 @@ pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
 }
 
 /// Return the prefix for the namespace uri.
-pub fn namespace_prefix(uri: &str) -> Option<XmpString> {
+pub fn namespace_prefix<U: AsRef<[u8]>>(uri: U) -> Option<XmpString> {
     init();
-    let s = CString::new(uri).unwrap();
+    let s = CString::new(uri.as_ref()).unwrap();
     let mut prefix = XmpString::new();
     if unsafe { c::xmp_namespace_prefix(s.as_ptr(), prefix.as_mut_ptr()) } {
         Some(prefix)
@@ -82,9 +82,9 @@ pub fn namespace_prefix(uri: &str) -> Option<XmpString> {
 }
 
 /// Return the namespace uri for the prefix.
-pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
+pub fn prefix_namespace<P: AsRef<[u8]>>(prefix: P) -> Option<XmpString> {
     init();
-    let s = CString::new(prefix).unwrap();
+    let s = CString::new(prefix.as_ref()).unwrap();
     let mut uri = XmpString::new();
     if unsafe { c::xmp_prefix_namespace_uri(s.as_ptr(), uri.as_mut_ptr()) } {
         Some(uri)
