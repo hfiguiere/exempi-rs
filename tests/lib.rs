@@ -6,8 +6,6 @@ use exempi_sys as c;
 
 #[test]
 fn libary_tests() {
-    assert!(exempi2::init());
-
     assert!(exempi2::get_error() == Error::from(c::XmpError::Unknown));
 
     // namespace registration tests.
@@ -57,6 +55,4 @@ fn libary_tests() {
     );
     assert!(result.is_ok());
     println!("{}", result.unwrap().to_string());
-
-    exempi2::terminate();
 }

@@ -123,6 +123,8 @@ impl Xmp {
     /// New Xmp object a byte buffer.
     /// Return None if parsing failed.
     pub fn from_buffer<T: AsRef<[u8]>>(buf: T) -> Result<Xmp> {
+        super::init();
+
         let buf = buf.as_ref();
         let ptr = unsafe { c::xmp_new(buf.as_ptr() as *const c_char, buf.len()) };
         if ptr.is_null() {
@@ -724,6 +726,7 @@ impl Xmp {
 impl Default for Xmp {
     /// Return a valid but empty XMP packet.
     fn default() -> Xmp {
+        super::init();
         Xmp(unsafe { c::xmp_new_empty() })
     }
 }

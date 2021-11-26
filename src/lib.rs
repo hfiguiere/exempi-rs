@@ -32,29 +32,15 @@ static START: Once = Once::new();
 ///
 /// This will ensure xmp_init() is called only once so that
 /// concurrent calls are exclusive.
-pub fn init() -> bool {
+///
+/// It is automatically called by any entry point to the library.
+pub(crate) fn init() -> bool {
     let mut inited = true;
     START.call_once(|| {
         // run initialization here
         inited = unsafe { c::xmp_init() };
     });
     inited
-}
-
-/// Force initialize the library.
-///
-/// Can be safely called more than once or after `init()`
-/// but can't be called concurrently from different threads.
-pub fn force_init() -> bool {
-    unsafe { c::xmp_init() }
-}
-
-/// Terminate the library. (use is discouraged)
-///
-/// As a side effect, you can't counter balance it with a `init()`
-/// hence its use is discouraged.
-pub fn terminate() {
-    unsafe { c::xmp_terminate() }
 }
 
 /// Get the last error code on the thread
@@ -70,6 +56,7 @@ pub fn get_error() -> Error {
 /// Register namespace with uri and suggested prefix
 /// Returns the actual registered prefix.
 pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
+    init();
     let s_uri = CString::new(uri).unwrap();
     let s_prefix = CString::new(prefix).unwrap();
     let mut reg_prefix = XmpString::new();
@@ -84,6 +71,7 @@ pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
 
 /// Return the prefix for the namespace uri.
 pub fn namespace_prefix(uri: &str) -> Option<XmpString> {
+    init();
     let s = CString::new(uri).unwrap();
     let mut prefix = XmpString::new();
     if unsafe { c::xmp_namespace_prefix(s.as_ptr(), prefix.as_mut_ptr()) } {
@@ -95,6 +83,7 @@ pub fn namespace_prefix(uri: &str) -> Option<XmpString> {
 
 /// Return the namespace uri for the prefix.
 pub fn prefix_namespace(prefix: &str) -> Option<XmpString> {
+    init();
     let s = CString::new(prefix).unwrap();
     let mut uri = XmpString::new();
     if unsafe { c::xmp_prefix_namespace_uri(s.as_ptr(), uri.as_mut_ptr()) } {

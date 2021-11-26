@@ -104,6 +104,8 @@ pub struct XmpFile(*mut c::XmpFile);
 
 impl Default for XmpFile {
     fn default() -> XmpFile {
+        super::init();
+
         XmpFile(unsafe { c::xmp_files_new() })
     }
 }
@@ -118,6 +120,8 @@ impl XmpFile {
     /// Equivalent to calling new then open.
     /// Return Err in case of failure
     pub fn new_from_file<P: AsRef<std::ffi::OsStr>>(path: P, options: OpenFlags) -> Result<XmpFile> {
+        super::init();
+
         let path = path.as_ref().as_bytes();
         let pp = CString::new(path).unwrap();
         let ptr = unsafe { c::xmp_files_open_new(pp.as_ptr(), options.bits()) };
