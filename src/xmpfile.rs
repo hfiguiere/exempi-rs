@@ -174,14 +174,13 @@ impl XmpFile {
         Ok(Xmp::from(ptr))
     }
 
-    /// Get the xmp data an Xmp.
-    pub fn get_xmp(&self) -> Result<Xmp> {
-        if self.is_null() {
+    /// Get the xmp data into an existing Xmp.
+    pub fn get_xmp(&self, xmp: &mut Xmp) -> Result<()> {
+        if self.is_null() || xmp.is_null() {
             return Err(Error::from(c::XmpError::BadObject));
         }
-        let mut xmp = Xmp::default();
         if unsafe { c::xmp_files_get_xmp(self.0, xmp.as_mut_ptr()) } {
-            Ok(xmp)
+            Ok(())
         } else {
             Err(crate::get_error())
         }
