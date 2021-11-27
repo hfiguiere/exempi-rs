@@ -88,14 +88,14 @@ pub struct PacketInfo(pub XmpPacketInfo);
 
 impl Default for PacketInfo {
     fn default() -> PacketInfo {
-        PacketInfo( XmpPacketInfo{
+        PacketInfo(XmpPacketInfo {
             offset: 0,
             length: 0,
             pad_size: 0,
             char_form: 0,
             writeable: false,
             has_wrapper: false,
-            pad: 0
+            pad: 0,
         })
     }
 }
@@ -119,7 +119,10 @@ impl XmpFile {
     /// Create and open a new XmpFile
     /// Equivalent to calling new then open.
     /// Return Err in case of failure
-    pub fn new_from_file<P: AsRef<std::ffi::OsStr>>(path: P, options: OpenFlags) -> Result<XmpFile> {
+    pub fn new_from_file<P: AsRef<std::ffi::OsStr>>(
+        path: P,
+        options: OpenFlags,
+    ) -> Result<XmpFile> {
         super::init();
 
         let path = path.as_ref().as_bytes();
@@ -192,7 +195,11 @@ impl XmpFile {
         let mut packet = XmpString::new();
         let mut info = PacketInfo::default();
         if unsafe {
-            c::xmp_files_get_xmp_xmpstring(self.0, packet.as_mut_ptr(), &mut info.0 as *mut XmpPacketInfo)
+            c::xmp_files_get_xmp_xmpstring(
+                self.0,
+                packet.as_mut_ptr(),
+                &mut info.0 as *mut XmpPacketInfo,
+            )
         } {
             Ok((packet, info))
         } else {

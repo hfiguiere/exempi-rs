@@ -41,7 +41,6 @@ bitflags! {
     }
 }
 
-
 ///
 /// XmpIterator iterates over properties in the XMP Packet
 ///
@@ -83,7 +82,9 @@ impl IteratorValue {
 impl XmpIterator {
     /// Construct a new `XmpIterator` from a native pointer
     pub fn new<S, N>(xmp: &Xmp, schema: S, name: N, propsbits: IterFlags) -> XmpIterator
-        where S: AsRef<[u8]>, N: AsRef<[u8]>
+    where
+        S: AsRef<[u8]>,
+        N: AsRef<[u8]>,
     {
         let s_schema = CString::new(schema.as_ref()).unwrap();
         let s_name = CString::new(name.as_ref()).unwrap();
@@ -139,7 +140,6 @@ impl Iterator for XmpIterator {
             None
         }
     }
-
 }
 
 /// `XmpIterator` implements the `Drop` trait to release the memory
