@@ -3,6 +3,7 @@ use crate::xmpstring::XmpString;
 use std::ffi::CString;
 
 bitflags! {
+    /// Flags to select what the iterator will return.
     #[derive(Default)]
     pub struct IterFlags: u32 {
         /// No iterator flag
@@ -29,6 +30,7 @@ bitflags! {
 }
 
 bitflags! {
+    /// Define what to skip when the iterator skips.
     #[derive(Default)]
     pub struct IterSkipFlags: u32 {
         /// Not flags.
@@ -42,7 +44,7 @@ bitflags! {
 }
 
 ///
-/// XmpIterator iterates over properties in the XMP Packet
+/// Iterator for the XMP Packet
 ///
 /// ```no_run
 /// use exempi2::{Xmp,XmpIterator};

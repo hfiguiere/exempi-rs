@@ -7,6 +7,13 @@ Crate renamed exempi2
   their struct.
 - API: Flags values are now simplified to not duplicate the namespace.
 - API: Error is now its own type and support the Error protocol.
+- API: Overal rework of the API to take `AsPtr<>` whenever applicable:
+  - `AsPtr<OsStr>` for file path
+  - `AsPtr<[u8]>` for strings
+- API: make `XmpIterator` an `Iterator`.
+- API: `From<XmpString>` for `String`.
+- API: removed `init()` from public API. It is called automatically. Removed
+  `forced_init()` and `terminate()`.
 - Now the crate use Rust 2018.
 - Fixed some Rust deprecation warnings: range in patterns and Sync::Once.
 

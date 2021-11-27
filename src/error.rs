@@ -1,5 +1,6 @@
 pub use c::XmpError;
 
+/// Error from XMP
 #[derive(Debug, PartialEq)]
 pub struct Error(XmpError);
 

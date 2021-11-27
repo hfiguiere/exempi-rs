@@ -7,6 +7,7 @@ use crate::DateTime;
 use crate::Result;
 
 bitflags! {
+    /// Property flags.
     #[derive(Default)]
     pub struct PropFlags: u32 {
         /// The property has no bit set.
@@ -70,6 +71,7 @@ bitflags! {
 }
 
 bitflags! {
+    /// Serialization option flags.
     #[derive(Default)]
     pub struct SerialFlags: u32 {
         /// Omit the XML packet wrapper.

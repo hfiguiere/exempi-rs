@@ -100,6 +100,9 @@ impl Default for PacketInfo {
     }
 }
 
+/// XmpFile extracts an XMP packet and reconciles
+/// metadata from the file.
+/// It also writes back the XMP packet
 pub struct XmpFile(*mut c::XmpFile);
 
 impl Default for XmpFile {
@@ -165,7 +168,7 @@ impl XmpFile {
         self.0.is_null()
     }
 
-    /// Get a new Xmp fronm the currently open file
+    /// Get a new XMP packet from the currently open file
     pub fn get_new_xmp(&self) -> Result<Xmp> {
         let ptr = unsafe { c::xmp_files_get_new_xmp(self.0) };
         if ptr.is_null() {
