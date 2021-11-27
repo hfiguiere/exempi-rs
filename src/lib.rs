@@ -16,7 +16,7 @@ use std::sync::Once;
 
 pub use c::consts::*;
 pub use c::FileType;
-pub use c::TzSign as XmpTzSign;
+pub use c::TzSign;
 pub use error::Error;
 pub use xmp::{PropFlags, SerialFlags, Xmp};
 pub use xmpfile::{CloseFlags, FormatOptionFlags, OpenFlags, XmpFile};
@@ -45,7 +45,7 @@ pub(crate) fn init() -> bool {
 
 /// Get the last error code on the thread
 /// Set when a function return false or None.
-pub fn get_error() -> Error {
+pub(crate) fn get_error() -> Error {
     let err = unsafe { c::xmp_get_error() };
     Error::from(match err {
         -15..=0 | -110..=-101 | -211..=-201 => unsafe { transmute(err) },
@@ -55,7 +55,7 @@ pub fn get_error() -> Error {
 
 /// Register namespace with uri and suggested prefix
 /// Returns the actual registered prefix.
-pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
+pub fn register_namespace(uri: &str, prefix: &str) -> Result<XmpString> {
     init();
     let s_uri = CString::new(uri).unwrap();
     let s_prefix = CString::new(prefix).unwrap();
@@ -63,33 +63,33 @@ pub fn register_namespace(uri: &str, prefix: &str) -> Option<XmpString> {
     if unsafe {
         c::xmp_register_namespace(s_uri.as_ptr(), s_prefix.as_ptr(), reg_prefix.as_mut_ptr())
     } {
-        Some(reg_prefix)
+        Ok(reg_prefix)
     } else {
-        None
+        Err(get_error())
     }
 }
 
 /// Return the prefix for the namespace uri.
-pub fn namespace_prefix<U: AsRef<[u8]>>(uri: U) -> Option<XmpString> {
+pub fn namespace_prefix<U: AsRef<[u8]>>(uri: U) -> Result<XmpString> {
     init();
     let s = CString::new(uri.as_ref()).unwrap();
     let mut prefix = XmpString::new();
     if unsafe { c::xmp_namespace_prefix(s.as_ptr(), prefix.as_mut_ptr()) } {
-        Some(prefix)
+        Ok(prefix)
     } else {
-        None
+        Err(get_error())
     }
 }
 
 /// Return the namespace uri for the prefix.
-pub fn prefix_namespace<P: AsRef<[u8]>>(prefix: P) -> Option<XmpString> {
+pub fn prefix_namespace<P: AsRef<[u8]>>(prefix: P) -> Result<XmpString> {
     init();
     let s = CString::new(prefix.as_ref()).unwrap();
     let mut uri = XmpString::new();
     if unsafe { c::xmp_prefix_namespace_uri(s.as_ptr(), uri.as_mut_ptr()) } {
-        Some(uri)
+        Ok(uri)
     } else {
-        None
+        Err(get_error())
     }
 }
 
@@ -129,7 +129,7 @@ impl DateTime {
         self.0.nano_second = nano_second;
     }
     /// Set Timezone
-    pub fn set_timezone(&mut self, sign: XmpTzSign, hour: i32, min: i32) {
+    pub fn set_timezone(&mut self, sign: TzSign, hour: i32, min: i32) {
         self.0.tz_sign = sign;
         self.0.tz_hour = hour;
         self.0.tz_minute = min;
@@ -182,6 +182,7 @@ impl PartialEq for DateTime {
         }
     }
 }
+
 impl PartialOrd for DateTime {
     fn partial_cmp(&self, other: &DateTime) -> Option<Ordering> {
         match unsafe {
@@ -197,7 +198,9 @@ impl PartialOrd for DateTime {
         }
     }
 }
+
 impl Eq for DateTime {}
+
 impl Ord for DateTime {
     fn cmp(&self, other: &DateTime) -> Ordering {
         match unsafe {

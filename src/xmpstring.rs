@@ -2,8 +2,9 @@ use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-/// The string wrapper from Exempi. It is meant to be used for output parameter.
-/// But gives you ownership of the string.
+/// The string wrapper from Exempi.
+///
+/// It is meant to be used for output parameter. But gives you ownership of the string.
 /// Because of the way the C API of Exempi is implemented, we provide
 /// this type instead of using std::string::String to avoid copying of strings
 /// until needed.

@@ -14,6 +14,7 @@ Crate renamed exempi2
 - API: `From<XmpString>` for `String`.
 - API: removed `init()` from public API. It is called automatically. Removed
   `forced_init()` and `terminate()`.
+- API: Renamed `XmpTzSign` to `TzSign`.
 - Now the crate use Rust 2018.
 - Fixed some Rust deprecation warnings: range in patterns and Sync::Once.
 

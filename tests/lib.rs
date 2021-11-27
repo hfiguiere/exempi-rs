@@ -2,22 +2,17 @@ extern crate exempi2;
 extern crate exempi_sys;
 
 use exempi2::*;
-use exempi_sys as c;
 
 #[test]
 fn libary_tests() {
-    assert!(exempi2::get_error() == Error::from(c::XmpError::Unknown));
-
     // namespace registration tests.
     let result = exempi2::register_namespace("http://rust.figuiere.net/ns/rust/", "rust");
-    assert!(result != None);
-    assert!(exempi2::get_error() == Error::from(c::XmpError::Unknown));
+    assert!(result.is_ok());
     let prefix = result.unwrap();
     assert!(prefix.to_str() != Some(""));
     let result = exempi2::namespace_prefix("http://rust.figuiere.net/ns/rust/");
-    assert!(result != None);
+    assert!(result.is_ok());
     let prefix2 = result.unwrap();
-    assert!(exempi2::get_error() == Error::from(c::XmpError::Unknown));
     assert!(prefix2 == prefix);
 
     let result = if let Some(prefix) = prefix.to_str() {
@@ -25,9 +20,8 @@ fn libary_tests() {
     } else {
         panic!("Prefix couldn't be decoded");
     };
-    assert!(result != None);
+    assert!(result.is_ok());
     let ns = result.unwrap();
-    assert!(exempi2::get_error() == Error::from(c::XmpError::Unknown));
     assert!(ns.to_str() == Some("http://rust.figuiere.net/ns/rust/"));
 
     let mut xmpblock = Xmp::new();

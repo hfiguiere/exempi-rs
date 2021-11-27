@@ -102,7 +102,30 @@ impl Default for PacketInfo {
 
 /// XmpFile extracts an XMP packet and reconciles
 /// metadata from the file.
+///
+/// ```no_run
+/// use exempi2::{XmpFile, Xmp, CloseFlags, OpenFlags};
+///
+/// let mut xmpfile = XmpFile::new_from_file("file.jpg", OpenFlags::READ)
+///                  .expect("File to open");
+/// let xmp = xmpfile.get_new_xmp().expect("an XMP packet");
+///
+/// xmpfile.close(CloseFlags::NONE).expect("File to close");
+/// ```
+///
 /// It also writes back the XMP packet
+///
+/// ```no_run
+/// use exempi2::{XmpFile, Xmp, CloseFlags, OpenFlags, PropFlags};
+/// let mut xmpfile = XmpFile::new_from_file("file.jpg", OpenFlags::FOR_UPDATE)
+///                  .expect("File to open");
+/// let mut xmp = xmpfile.get_new_xmp().expect("an XMP packet");
+///
+/// xmp.set_property("some_schema", "some_property", "the value", PropFlags::NONE);
+/// xmpfile.put_xmp(&xmp).expect("being able to put the XMP");
+/// xmpfile.close(CloseFlags::SAFE_UPDATE);
+/// ```
+///
 pub struct XmpFile(*mut c::XmpFile);
 
 impl Default for XmpFile {
