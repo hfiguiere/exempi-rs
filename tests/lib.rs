@@ -1,3 +1,10 @@
+//
+// Copyright (c) 2016-2021, Hubert Figuière
+//
+// License: BSD-2-Clause
+// See top-level LICENSE file.
+//
+
 extern crate exempi2;
 extern crate exempi_sys;
 

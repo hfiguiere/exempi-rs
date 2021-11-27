@@ -1,3 +1,10 @@
+//
+// Copyright (c) 2016-2021, Hubert Figuière
+//
+// License: BSD-2-Clause
+// See top-level LICENSE file.
+//
+
 use libc::c_char;
 use std::ffi::CString;
 

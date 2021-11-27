@@ -1,3 +1,10 @@
+//
+// Copyright (c) 2016-2021, Hubert Figuière
+//
+// License: BSD-2-Clause
+// See top-level LICENSE file.
+//
+
 use std::ffi::CString;
 use std::os::unix::ffi::OsStrExt;
 

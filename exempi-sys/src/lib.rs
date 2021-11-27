@@ -1,3 +1,10 @@
+//
+// Copyright (c) 2016-2021, Hubert Figuière
+//
+// License: BSD-2-Clause
+// See top-level LICENSE file.
+//
+
 #[link(name = "exempi")]
 extern crate libc;
 
