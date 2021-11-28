@@ -1,6 +1,8 @@
-0.1.0 -
+0.1.0 - 2021/11/27
 
-Crate renamed exempi2
+Crate renamed exempi2.
+
+Lots of API have changed, even though they are not fundamentally different.
 
 - API: Xmp C types are wrapped into a tuple instead of named field in struct.
 - API: Flags are now defined using bitflags 1.5.0 and therefor namespaced into
