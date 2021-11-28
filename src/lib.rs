@@ -24,6 +24,7 @@ use std::sync::Once;
 pub use c::consts::*;
 pub use c::FileType;
 pub use c::TzSign;
+pub use c::XmpError;
 pub use error::Error;
 pub use xmp::{PropFlags, SerialFlags, Xmp};
 pub use xmpfile::{CloseFlags, FormatOptionFlags, OpenFlags, XmpFile};
