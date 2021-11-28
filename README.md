@@ -3,12 +3,12 @@ exempi2
 
 This is a renaming of the crate previously known as `exempi`
 
-Rust binding for Exempi, an XMP library.
+The crate provide safe Rust binding for Exempi, an XMP library that
+provide a stable ABI for Adobe XMP Toolkit.
 
-Exempi can be found at http://libopenraw.freedesktop.org/wiki/Exempi/
+Exempi2 can be found at http://libopenraw.freedesktop.org/wiki/Exempi/
 
-Exempi-sys provide unsafe binding to the C API and Exempis-rs a safe
-Rust API.
+Exempi-sys provide unsafe bindings to the C API.
 
 Source
 ------
@@ -19,8 +19,8 @@ https://github.com/hfiguiere/exempi-rs
 Dependencies
 ------------
 
--Rust 1.7.0 (tested, other versions, YMMV)
--exempi 2.3 must be installed and findable with pkg_config
+-Rust 2018 edition (tested, other versions, YMMV)
+-exempi 2.4 must be installed and findable with pkg_config
 -crates (pulled by cargo):
  -libc
  -pkg-config
