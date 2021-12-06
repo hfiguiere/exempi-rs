@@ -1,3 +1,8 @@
+0.1.1 - 2021/12/05
+
+- API: `XmpError` is publicly reexported and `Error` expose the value inside.
+- Allow building documentation without the native exempi.
+
 0.1.0 - 2021/11/27
 
 Crate renamed exempi2.
