@@ -117,7 +117,7 @@ impl XmpIterator {
         self.0
     }
 
-    /// Skip the poperties following the option bitset from `IterSkipBits`
+    /// Skip the poperties following the option from `IterSkipFlags`
     pub fn skip(&mut self, option: IterSkipFlags) -> bool {
         if self.is_null() {
             return false;
