@@ -19,12 +19,12 @@ https://github.com/hfiguiere/exempi-rs
 Dependencies
 ------------
 
--Rust 2018 edition (tested, other versions, YMMV)
--exempi 2.4 must be installed and findable with pkg_config
--crates (pulled by cargo):
- -libc
- -pkg-config
- -flagbits
+- Rust 2018 edition (tested, other versions, YMMV)
+- exempi 2.4 must be installed and findable with pkg_config
+- crates (pulled by cargo):
+ - libc
+ - pkg-config
+ - flagbits
 
 License
 -------

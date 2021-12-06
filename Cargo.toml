@@ -1,6 +1,6 @@
 [package]
 name = "exempi2"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 keywords = ["metadata", "tags", "xmp"]
@@ -12,4 +12,4 @@ edition = "2018"
 [dependencies]
 bitflags = "1.2.1"
 libc = "0.2"
-exempi-sys = { path = "exempi-sys", version = "^2.5.0" }
+exempi-sys = { path = "exempi-sys", version = "^2.5.1" }
