@@ -1,6 +1,8 @@
 exempi-rs
 =========
 
+# This crate is deprecated. Use exempi2.
+
 Rust binding for Exempi, an XMP library.
 
 Exempi can be found at http://libopenraw.freedesktop.org/wiki/Exempi/
