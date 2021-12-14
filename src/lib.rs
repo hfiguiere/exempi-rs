@@ -171,6 +171,26 @@ impl DateTime {
     pub fn nano_second(&self) -> i32 {
         self.0.nano_second
     }
+
+    /// Return if there is a timezone information
+    pub fn has_tz(&self) -> bool {
+        self.0.has_tz != 0
+    }
+
+    /// Return the timezone sign
+    pub fn tz_sign(&self) -> TzSign {
+        self.0.tz_sign
+    }
+
+    /// Return the timezone offset hours (absolute)
+    pub fn tz_hours(&self) -> i32 {
+        self.0.tz_hour
+    }
+
+    /// Return the timezone offset minutes
+    pub fn tz_minutes(&self) -> i32 {
+        self.0.tz_minute
+    }
 }
 
 impl From<c::XmpDateTime> for DateTime {
