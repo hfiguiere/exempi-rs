@@ -1,6 +1,7 @@
-0.1.2 -
+0.1.2 - 2021/12/14
 
 - Require exempi-sys 2.5.1
+- API: Expose timezone info from `XmpDateTime`.
 
 0.1.1 - 2021/12/05
 
