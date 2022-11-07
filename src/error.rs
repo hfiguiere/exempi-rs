@@ -8,7 +8,7 @@
 pub use c::XmpError;
 
 /// Error from XMP
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct Error(pub XmpError);
 
 /// Error trait to XmpError.

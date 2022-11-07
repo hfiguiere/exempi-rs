@@ -1,6 +1,6 @@
 [package]
 name = "exempi2"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 keywords = ["metadata", "tags", "xmp"]
@@ -8,8 +8,9 @@ description = "Safe Rust bindings to Exempi 2.4."
 repository = "https://github.com/hfiguiere/exempi-rs"
 homepage = "https://libopenraw.freedesktop.org/exempi/"
 edition = "2018"
+readme = "README.md"
 
 [dependencies]
 bitflags = "1.2.1"
 libc = "0.2"
-exempi-sys = { path = "exempi-sys", version = "^2.5.1" }
+exempi-sys = { path = "exempi-sys", version = "^2.5.2" }

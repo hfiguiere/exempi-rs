@@ -70,7 +70,7 @@ bitflags! {
 pub struct XmpIterator(*mut c::XmpIterator);
 
 /// Value returned by th XmpIterator
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, Eq, PartialEq)]
 pub struct IteratorValue {
     /// Schema of the property
     pub schema: XmpString,
