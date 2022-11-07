@@ -5,9 +5,6 @@
 // See top-level LICENSE file.
 //
 
-#[link(name = "exempi")]
-extern crate libc;
-
 use libc::{c_char, c_int, size_t};
 
 pub mod consts;
@@ -19,7 +16,7 @@ pub enum XmpFile {}
 pub enum XmpString {}
 pub enum XmpIterator {}
 
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, Eq, PartialEq, Debug)]
 #[repr(i32)]
 /// XMP errors.
 pub enum XmpError {
@@ -104,7 +101,7 @@ pub enum XmpError {
     BadMPEG = -211,
 }
 
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, Eq, PartialEq, Debug)]
 #[repr(i8)]
 pub enum TzSign {
     /// West of UTC
@@ -151,7 +148,7 @@ pub struct XmpPacketInfo {
     pub pad: u8,
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 #[repr(u32)]
 /// Public file formats.
 pub enum FileType {
@@ -203,6 +200,7 @@ pub enum FileType {
     Unknown = 0x20202020u32, /* '    ' */
 }
 
+#[link(name = "exempi")]
 extern "C" {
     pub fn xmp_init() -> bool;
     pub fn xmp_terminate();

@@ -1,0 +1,5 @@
+2.5.2 - 2022/11/06
+==================
+
+- Disable dependencies for `docs.rs` builds.
+- Implement `Eq` as recommended by clippy.

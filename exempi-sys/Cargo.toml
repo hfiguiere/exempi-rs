@@ -1,11 +1,12 @@
 [package]
 name = "exempi-sys"
-version = "2.5.1"
+version = "2.5.2"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 build = "build.rs"
 description = "Unsafe Rust bindings to Exempi 2.4. Part of exempi-rs."
-keywords = ["xmp", "metadata"]
+keywords = ["xmp", "metadata", "ffi"]
+documentation = "https://docs.rs/crate/exempi-sys/"
 repository = "https://github.com/hfiguiere/exempi-rs"
 homepage = "https://libopenraw.freedesktop.org/exempi/"
 edition = "2018"
@@ -15,6 +16,3 @@ libc = "0.2"
 
 [build-dependencies]
 pkg-config = "0.3"
-
-[package.metadata.docs.rs]
-features = [ "doc" ]
