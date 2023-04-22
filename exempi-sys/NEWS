@@ -1,3 +1,9 @@
+2.5.3 - 2023/04/22
+==================
+
+- Added missing const for new file types.
+- Implement `Debug` for `FileType`.
+
 2.5.2 - 2022/11/06
 ==================
 

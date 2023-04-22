@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2016-2021, Hubert Figuière
+// Copyright (c) 2016-2023, Hubert Figuière
 //
 // License: BSD-2-Clause
 // See top-level LICENSE file.
@@ -148,7 +148,7 @@ pub struct XmpPacketInfo {
     pub pad: u8,
 }
 
-#[derive(Clone, Copy, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(u32)]
 /// Public file formats.
 pub enum FileType {
@@ -178,12 +178,25 @@ pub enum FileType {
     MPEG = 0x4D504547u32,  /* 'MPEG' */
     MPEG2 = 0x4D503220u32, /* 'MP2 ' */
     MPEG4 = 0x4D503420u32, /* 'MP4 ', ISO 14494-12 and -14 */
+    MXF = 0x4D584620u32,   /* 'MXF ' */
     WMAV = 0x574D4156u32,  /* 'WMAV', Windows Media Audio and Video */
     AIFF = 0x41494646u32,  /* 'AIFF' */
+    RED = 0x52454420u32,   /* 'RED ' */
+    ARRI = 0x41525249u32,  /* 'ARRI' */
+    HEIF = 0x48454946u32,  /* 'HEIF' */
+    P2 = 0x50322020u32,    /* 'P2  ' */
+    XDCAMFam = 0x58444346u32, /* 'XDCF' */
+    XDCAMSam = 0x58444353u32, /* 'XDCS' */
+    XDCAMEx = 0x58444358u32,  /* 'XDCX' */
+    AVCHD = 0x41564844u32, /* AVHD */
+    SonyHDV = 0x53484456u32,  /* 'SHDV' */
+    CanonXF = 0x434E5846u32,  /* 'CNXF' */
+    AVCUltra = 0x41564355u32, /* 'AVCU' */
 
     HTML = 0x48544D4Cu32, /* 'HTML' */
     XML = 0x584D4C20u32,  /* 'XML ' */
     TEXT = 0x74657874u32, /* 'text' */
+    SVG = 0x53564720u32,  /* 'SVG ' */
 
     /* Adobe application file formats. */
     Photoshop = 0x50534420u32,       /* 'PSD ' */
