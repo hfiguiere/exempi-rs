@@ -11,7 +11,7 @@ use std::ffi::CString;
 
 bitflags! {
     /// Flags to select what the iterator will return.
-    #[derive(Default)]
+    #[derive(Clone, Copy, Default, Debug, Eq, Hash, PartialEq)]
     pub struct IterFlags: u32 {
         /// No iterator flag
         const NONE = 0;
@@ -38,7 +38,7 @@ bitflags! {
 
 bitflags! {
     /// Define what to skip when the iterator skips.
-    #[derive(Default)]
+    #[derive(Clone, Copy, Default, Debug, Eq, Hash, PartialEq)]
     pub struct IterSkipFlags: u32 {
         /// Not flags.
         const NONE = 0;

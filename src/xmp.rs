@@ -15,7 +15,7 @@ use crate::Result;
 
 bitflags! {
     /// Property flags.
-    #[derive(Default)]
+    #[derive(Clone, Copy, Default, Debug, Eq, Hash, PartialEq)]
     pub struct PropFlags: u32 {
         /// The property has no bit set.
         const NONE = 0;
@@ -37,7 +37,7 @@ bitflags! {
         /// The value is an array (RDF alt/bag/seq).
         const VALUE_IS_ARRAY  = 0x0000_0200u32;
         /// The item order does not matter.*/
-        const ARRAY_IS_UNORDERED = PropFlags::VALUE_IS_ARRAY.bits;
+        const ARRAY_IS_UNORDERED = PropFlags::VALUE_IS_ARRAY.bits();
         /// Implies `PROP_VALUE_IS_ARRAY`, item order matters.
         const ARRAY_IS_ORDERED = 0x0000_0400u32;
         /// Implies `PROP_ARRAY_IS_ORDERED`, items are alternates.
@@ -67,11 +67,11 @@ bitflags! {
 
         /* Masks that are multiple flags. */
         const ARRAY_FORM_MASK  =
-            PropFlags::VALUE_IS_ARRAY.bits | PropFlags::ARRAY_IS_ORDERED.bits
-            | PropFlags::ARRAY_IS_ALT.bits | PropFlags::ARRAY_IS_ALTTEXT.bits;
+            PropFlags::VALUE_IS_ARRAY.bits() | PropFlags::ARRAY_IS_ORDERED.bits()
+            | PropFlags::ARRAY_IS_ALT.bits() | PropFlags::ARRAY_IS_ALTTEXT.bits();
         /// Is it simple or composite (array or struct)?
-        const COMPOSITE_MASK   = PropFlags::VALUE_IS_STRUCT.bits
-            | PropFlags::ARRAY_FORM_MASK.bits;
+        const COMPOSITE_MASK   = PropFlags::VALUE_IS_STRUCT.bits()
+            | PropFlags::ARRAY_FORM_MASK.bits();
         /// Reserved for transient use by the implementation.
         const _IMPL_RESERVED_MASK    = 0x7000_0000u32;
     }
@@ -79,7 +79,7 @@ bitflags! {
 
 bitflags! {
     /// Serialization option flags.
-    #[derive(Default)]
+    #[derive(Clone, Copy, Default, Debug, Eq, Hash, PartialEq)]
     pub struct SerialFlags: u32 {
         /// Omit the XML packet wrapper.
         const OMITPACKETWRAPPER   = 0x0010u32;
@@ -105,17 +105,17 @@ bitflags! {
         /// Serialize to UTF-8 (default)
         const ENCODEUTF8          = 0u32;
         /// Serialize to UTF-16 BE (big endian)
-        const ENCODEUTF16BIG      = SerialFlags::_UTF16_BIT.bits;
+        const ENCODEUTF16BIG      = SerialFlags::_UTF16_BIT.bits();
         /// Serialize to UTF-16 LE (little endian)
         const ENCODEUTF16LITTLE   =
-            SerialFlags::_UTF16_BIT.bits
-            | SerialFlags::_LITTLEENDIAN_BIT.bits;
+            SerialFlags::_UTF16_BIT.bits()
+            | SerialFlags::_LITTLEENDIAN_BIT.bits();
         /// Serialize to UTF-32 BE (big endian)
-        const ENCODEUTF32BIG      = SerialFlags::_UTF32_BIT.bits;
+        const ENCODEUTF32BIG      = SerialFlags::_UTF32_BIT.bits();
         /// Serialize to UTF-32 LE (little endian)
         const ENCODEUTF32LITTLE   =
-            SerialFlags::_UTF32_BIT.bits
-            | SerialFlags::_LITTLEENDIAN_BIT.bits;
+            SerialFlags::_UTF32_BIT.bits()
+            | SerialFlags::_LITTLEENDIAN_BIT.bits();
     }
 }
 

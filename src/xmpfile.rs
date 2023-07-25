@@ -18,7 +18,7 @@ use crate::Result;
 
 bitflags! {
     /// Flag options for opening files.
-    #[derive(Default)]
+    #[derive(Clone, Copy, Default, Debug, Eq, Hash, PartialEq)]
     pub struct OpenFlags: u32 {
         /// No open option
         const NONE = 0x0000_0000;
@@ -49,7 +49,7 @@ bitflags! {
 
 bitflags! {
     /// Flag options to close files.
-    #[derive(Default)]
+    #[derive(Clone, Copy, Default, Debug, Eq, Hash, PartialEq)]
     pub struct CloseFlags: u32 {
         /// No close option
         const NONE = 0x0000;
@@ -60,7 +60,7 @@ bitflags! {
 
 bitflags! {
     /// Result flag for file / format infos.
-    #[derive(Default)]
+    #[derive(Clone, Copy, Default, Debug, Eq, Hash, PartialEq)]
     pub struct FormatOptionFlags: u32 {
         const NONE = 0;
         /// Can inject first-time XMP into an existing file.

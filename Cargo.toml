@@ -1,6 +1,6 @@
 [package]
 name = "exempi2"
-version = "0.1.4"
+version = "0.2.0"
 authors = ["Hubert Figuière <hub@figuiere.net>"]
 license = "BSD-2-Clause"
 keywords = ["metadata", "tags", "xmp"]
@@ -11,6 +11,6 @@ edition = "2018"
 readme = "README.md"
 
 [dependencies]
-bitflags = "1.2.1"
+bitflags = "2.3.3"
 libc = "0.2"
 exempi-sys = { path = "exempi-sys", version = "^2.5.3" }
