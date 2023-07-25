@@ -75,12 +75,11 @@ impl XmpString {
     }
 
     /// Convert to a str
-    // XXX properly deal with the utf8 error
-    pub fn to_str(&self) -> Option<&str> {
+    pub fn to_str(&self) -> Result<&str, std::str::Utf8Error> {
         unsafe {
             let s = CStr::from_ptr(c::xmp_string_cstr(self.0));
             // we are supposed to receive UTF8 from the library.
-            str::from_utf8(s.to_bytes()).ok()
+            str::from_utf8(s.to_bytes())
         }
     }
 }
@@ -110,7 +109,10 @@ impl Drop for XmpString {
 impl Eq for XmpString {}
 impl PartialEq for XmpString {
     fn eq(&self, other: &XmpString) -> bool {
-        self.to_str() == other.to_str()
+        unsafe {
+            CStr::from_ptr(c::xmp_string_cstr(self.0))
+                == CStr::from_ptr(c::xmp_string_cstr(other.0))
+        }
     }
 }
 
