@@ -1,3 +1,8 @@
+0.2.0 - 2023/09/01
+
+- Crate: bitflags updated to 2.3.3
+- API: `XmpString::to_str()` returns a Result<>.
+
 0.1.4 - 2023/04/22
 
 - Require exempi-sys 2.5.3
