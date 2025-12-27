@@ -1,3 +1,9 @@
+0.2.1 - 2025/12/26
+
+- Crate: Require exempi-sys =2.5.3 (as 2.6.0 is incompatible)
+
+Note: Upgrade to 0.3.0 if you can.
+
 0.2.0 - 2023/09/01
 
 - Crate: bitflags updated to 2.3.3
